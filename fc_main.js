@@ -2160,72 +2160,69 @@ function autoFrenzyClick() {
 }
 
 function autoGSBuy() {
-    if (hasClickBuff()) {
-        if (Game.Upgrades['Golden switch [off]'].unlocked &&
-            !Game.Upgrades['Golden switch [off]'].bought) {
-            Game.Upgrades['Golden switch [off]'].buy();
-        }
-    } else if (cpsBonus() <= 1) {
-        if (Game.Upgrades['Golden switch [on]'].unlocked &&
-            !Game.Upgrades['Golden switch [on]'].bought) {
-            Game.CalculateGains(); // Ensure price is updated since Frenzy ended
-            Game.Upgrades['Golden switch [on]'].buy();
-        }
-    }
+	if (hasClickBuff()) {
+		if (Game.Upgrades['Golden switch [off]'].unlocked && !Game.Upgrades['Golden switch [off]'].bought) {
+			Game.Upgrades['Golden switch [off]'].buy();
+			logEvent("AutoGS", "Turning Golden Switch off");
+		}
+	} else if (cpsBonus() <= 1) {
+		if (Game.Upgrades['Golden switch [on]'].unlocked && !Game.Upgrades['Golden switch [on]'].bought) {
+			Game.CalculateGains(); // Ensure price is updated since Frenzy ended
+			Game.Upgrades['Golden switch [on]'].buy();
+			logEvent("AutoGS", "Turning Golden Switch back on");
+		}
+	}
 }
 
-function autoGodzamokAction()
-{
-    if (!T) return; //Just leave if Pantheon isn't here yet
-    //Now has option to not trigger until current Devastation buff expires (i.e. won't rapidly buy & sell cursors throughout Godzamok duration)
-    //added Farms to autoGodzamok selling. 1 farm always left to prevent garden from disappearing
-    if (Game.hasGod('ruin') && (!Game.hasBuff('Devastation')) && hasClickBuff())
-    {
-	if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount >= 10)
-		{
-			var cursorCount = Game.Objects['Cursor'].amount; 	
-			Game.Objects['Cursor'].sell(cursorCount);
-			logEvent("AutoGodzamok", "Sold " + cursorCount + " cursors");
-		}
-        if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount >= 10)
-		{
-			var farmCount = Game.Objects['Farm'].amount-1; 	
-			Game.Objects['Farm'].sell(farmCount);
-			logEvent("AutoGodzamok", "Sold " + farmCount + " farms");
-		}
-		
-	if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount < 10) 
-		{
-			//Stop buying Cursors if at set limit
-			if ((FrozenCookies.cursorLimit) && cursorCount > FrozenCookies.cursorMax)
-				{
-					Game.Objects['Cursor'].buy(FrozenCookies.cursorMax);
-					logEvent("AutoGodzamok", "Bought " + FrozenCookies.cursorMax + " cursors");
-				}
+function autoGodzamokAction() { 	    // Where are the different AutoGodz options?
+	if (!T) return; //Just leave if Pantheon isn't here yet
+	if (Game.hasGod('ruin') && (!Game.hasBuff('Devastation')) && hasClickBuff()) {
+		if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount >= 10)
+			{
+				var cursorCount = Game.Objects['Cursor'].amount; 	
+				Game.Objects['Cursor'].sell(cursorCount);
+				logEvent("AutoGodzamok", "Sold " + cursorCount + " cursors");
+			}
+		//added Farms to autoGodzamok selling. 1 farm always left to prevent garden from disappearing
+		if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount >= 10)
+			{
+				var farmCount = Game.Objects['Farm'].amount-1; 	
+				Game.Objects['Farm'].sell(farmCount);
+				logEvent("AutoGodzamok", "Sold " + farmCount + " farms");
+			}
 
-			if ((FrozenCookies.cursorLimit) && cursorCount <= FrozenCookies.cursorMax)
-				{
-					Game.Objects['Cursor'].buy(cursorCount);
-					logEvent("AutoGodzamok", "Bought " + cursorCount + " cursors");
-				}			
-		}
-    
-	if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount < 10) 
-		{
-			//Stop buying Farms if at set limit
-			if ((FrozenCookies.farmLimit) && farmCount > FrozenCookies.farmMax)
-				{
-					Game.Objects['Farm'].buy(FrozenCookies.farmMax);
-					logEvent("AutoGodzamok", "Bought " + FrozenCookies.farmMax + " farms");
-				}
+		if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount < 10) 
+			{
+				//Stop buying Cursors if at set limit
+				if ((FrozenCookies.cursorLimit) && cursorCount > FrozenCookies.cursorMax)
+					{
+						Game.Objects['Cursor'].buy(FrozenCookies.cursorMax);
+						logEvent("AutoGodzamok", "Bought " + FrozenCookies.cursorMax + " cursors");
+					}
 
-			if ((FrozenCookies.farmLimit) && farmCount <= FrozenCookies.farmMax)
-				{
-					Game.Objects['Farm'].buy(farmCount);
-					logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
-				}			
-		}
-    }
+				if ((FrozenCookies.cursorLimit) && cursorCount <= FrozenCookies.cursorMax)
+					{
+						Game.Objects['Cursor'].buy(cursorCount);
+						logEvent("AutoGodzamok", "Bought " + cursorCount + " cursors");
+					}			
+			}
+
+		if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount < 10) 
+			{
+				//Stop buying Farms if at set limit
+				if ((FrozenCookies.farmLimit) && farmCount > FrozenCookies.farmMax)
+					{
+						Game.Objects['Farm'].buy(FrozenCookies.farmMax);
+						logEvent("AutoGodzamok", "Bought " + FrozenCookies.farmMax + " farms");
+					}
+
+				if ((FrozenCookies.farmLimit) && farmCount <= FrozenCookies.farmMax)
+					{
+						Game.Objects['Farm'].buy(farmCount);
+						logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
+					}			
+			}
+	    }
 }
 
 function goldenCookieLife() {
