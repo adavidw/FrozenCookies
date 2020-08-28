@@ -2183,40 +2183,46 @@ function autoGodzamokAction()
     {
 	if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount >= 10)
 		{
-			var count = Game.Objects['Cursor'].amount; 	
-			Game.Objects['Cursor'].sell(count); 
+			var cursorCount = Game.Objects['Cursor'].amount; 	
+			Game.Objects['Cursor'].sell(cursorCount);
+			logEvent("AutoGodzamok", "Sold " + cursorCount + " cursors");
 		}
         if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount >= 10)
 		{
-			var count2 = Game.Objects['Farm'].amount-1; 	
-			Game.Objects['Farm'].sell(count2); 
+			var farmCount = Game.Objects['Farm'].amount-1; 	
+			Game.Objects['Farm'].sell(farmCount);
+			logEvent("AutoGodzamok", "Sold " + farmCount + " farms");
 		}
 		
 	if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount < 10) 
 		{
 			//Stop buying Cursors if at set limit
-			if ((FrozenCookies.cursorLimit) && count > FrozenCookies.cursorMax)
+			if ((FrozenCookies.cursorLimit) && cursorCount > FrozenCookies.cursorMax)
 				{
 					Game.Objects['Cursor'].buy(FrozenCookies.cursorMax);
+					logEvent("AutoGodzamok", "Bought " + FrozenCookies.cursorMax + " cursors");
 				}
 
-			if ((FrozenCookies.cursorLimit) && count <= FrozenCookies.cursorMax)
+			if ((FrozenCookies.cursorLimit) && cursorCount <= FrozenCookies.cursorMax)
 				{
-					Game.Objects['Cursor'].buy(count);
+					Game.Objects['Cursor'].buy(cursorCount);
+					logEvent("AutoGodzamok", "Bought " + cursorCount + " cursors");
 				}			
 		}
     
 	if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount < 10) 
 		{
 			//Stop buying Farms if at set limit
-			if ((FrozenCookies.farmLimit) && count2 > FrozenCookies.farmMax)
+			if ((FrozenCookies.farmLimit) && farmCount > FrozenCookies.farmMax)
 				{
 					Game.Objects['Farm'].buy(FrozenCookies.farmMax);
+					logEvent("AutoGodzamok", "Bought " + FrozenCookies.farmMax + " farms");
 				}
 
-			if ((FrozenCookies.farmLimit) && count2 <= FrozenCookies.farmMax)
+			if ((FrozenCookies.farmLimit) && farmCount <= FrozenCookies.farmMax)
 				{
-					Game.Objects['Farm'].buy(count2);
+					Game.Objects['Farm'].buy(farmCount);
+					logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
 				}			
 		}
     }
