@@ -2181,7 +2181,7 @@ function autoGodzamokAction()
     //added Farms to autoGodzamok selling. 1 farm always left to prevent garden from disappearing
     if (Game.hasGod('ruin') && (!Game.hasBuff('Devastation')) && hasClickBuff())
     {
-	    if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount >= 10)
+	if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount >= 10)
 		{
 			var count = Game.Objects['Cursor'].amount; 	
 			Game.Objects['Cursor'].sell(count); 
@@ -2192,14 +2192,32 @@ function autoGodzamokAction()
 			Game.Objects['Farm'].sell(count2); 
 		}
 		
-        if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount < 10) 
+	if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount < 10) 
 		{
-			Game.Objects['Cursor'].buy(count);
+			//Stop buying Cursors if at set limit
+			if ((FrozenCookies.cursorLimit) && count > FrozenCookies.cursorMax)
+				{
+					Game.Objects['Cursor'].buy(FrozenCookies.cursorMax);
+				}
+
+			if ((FrozenCookies.cursorLimit) && count <= FrozenCookies.cursorMax)
+				{
+					Game.Objects['Cursor'].buy(count);
+				}			
 		}
-		
-        if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount < 10) 
+    
+	if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount < 10) 
 		{
-			Game.Objects['Farm'].buy(count2);
+			//Stop buying Farms if at set limit
+			if ((FrozenCookies.farmLimit) && count2 > FrozenCookies.farmMax)
+				{
+					Game.Objects['Farm'].buy(FrozenCookies.farmMax);
+				}
+
+			if ((FrozenCookies.farmLimit) && count2 <= FrozenCookies.farmMax)
+				{
+					Game.Objects['Farm'].buy(count2);
+				}			
 		}
     }
 }
