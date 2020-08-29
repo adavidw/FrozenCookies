@@ -548,7 +548,8 @@ var upgradeJson = {
     171: {'buildings': [], 'upgrades': [170,184]},
     172: {'buildings': [], 'upgrades': [171,184]},
     173: {'buildings': [], 'upgrades': [172,184]},
-    174: {'buildings': [], 'upgrades': [173,184]}
+    174: {'buildings': [], 'upgrades': [173,184]},
+    645: {'buildings': [], 'upgrades': [174,184]},
 };
 
 var blacklist = [
@@ -576,8 +577,11 @@ var blacklist = [
 
 var seasons = ['','fools','christmas','easter','halloween','valentines'];
 
+// only putting cookie multipliers in easter for now. Will figure out a plan for 222-229 later
+var easterCookies = [210,211,212,213,214,215,216,217,218,219,220,221];
 var halloweenCookies = [134,135,136,137,138,139,140];
 var christmasCookies = [143,144,145,146,147,148,149];
+var valentinesCookies = [169,170,171,172,173,174,645];
 var holidayCookies = {
     halloween: [134,135,136,137,138,139,140],
     christmas: [143,144,145,146,147,148,149],
