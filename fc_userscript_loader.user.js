@@ -2,7 +2,7 @@
 // @name           Frozen Cookies
 // @version        github-latest
 // @description    Userscript to load Frozen Cookies written by Icehawk78, forked by adavidw
-// @author         Lordshinjo
+// @author         adavidw
 // @homepage       https://github.com/adavidw/FrozenCookies
 // @include        http://orteil.dashnet.org/cookieclicker/
 // @updateURL      https://adavidw.github.io/FrozenCookies/fc_userscript_loader.user.js
