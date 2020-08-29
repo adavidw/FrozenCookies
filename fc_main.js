@@ -2210,13 +2210,13 @@ function autoGodzamokAction() { 	    // Where are the different AutoGodz options
 		if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount < 10) 
 			{
 				//Stop buying Farms if at set limit
-				if ((FrozenCookies.farmLimit) && farmCount > FrozenCookies.farmMax)
+				if ((FrozenCookies.farmLimit) && farmCount > FrozenCookies.farmMax-1)
 					{
-						Game.Objects['Farm'].buy(FrozenCookies.farmMax);
-						logEvent("AutoGodzamok", "Bought " + FrozenCookies.farmMax + " farms");
+						Game.Objects['Farm'].buy(FrozenCookies.farmMax-1);
+						logEvent("AutoGodzamok", "Bought " + FrozenCookies.farmMax-1 + " farms");
 					}
 
-				if ((FrozenCookies.farmLimit) && farmCount <= FrozenCookies.farmMax)
+				if ((FrozenCookies.farmLimit) && farmCount <= FrozenCookies.farmMax-1)
 					{
 						Game.Objects['Farm'].buy(farmCount);
 						logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
