@@ -1,16 +1,16 @@
 {
   "name": "frozencookies",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "An automated Cookie Clicker tool.",
   "main": "frozen_cookie.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mtarnuhal/FrozenCookies.git"
+    "url": "git+https://github.com/adavidw/FrozenCookies.git"
   },
-  "author": "Lordshinjo",
+  "author": "adavidw",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/Mtarnuhal/FrozenCookies/issues"
+    "url": "https://github.com/adavidw/FrozenCookies/issues"
   },
-  "homepage": "https://github.com/Mtarnuhal/FrozenCookies#readme"
+  "homepage": "https://github.com/adavidw/FrozenCookies#readme"
 }
