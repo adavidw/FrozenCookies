@@ -2164,7 +2164,7 @@ function autoGodzamokAction() {
     }
 
     if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
-        if (FrozenCookies.autoGodzamok >= 1) {
+        if (FrozenCookies.autoGodzamok = 1 || FrozenCookies.autoGodzamok = 2) {
             var cursorCount = Game.Objects.Cursor.amount;
             var farmCount = Game.Objects.Farm.amount - 1;     // 1 farm always left to prevent garden from disappearing
 
@@ -2212,22 +2212,20 @@ function autoGodzamokAction() {
                     logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
                 }
             }
+        }
 
-            if (FrozenCookies.autoGodzamok === 3) {     // "Blaze of Glory" - sell the rest of the stuff
-                FrozenCookies.autoBuy = 0;
-                Game.ObjectsById.forEach(function (b) {
-                    if (b.amount <= 10) {
-                        b.buy(100);
-                        logEvent("AutoGodzamok", "Blaze of Glory - bought 100 buildings");
-                    }
-                });
-                Game.ObjectsById.forEach(function (s) {
-                    if (s.id != 0 && s.id !=2) {
-                        s.sell(s.amount);
-                        logEvent("AutoGodzamok", "Blaze of Glory - sold all buildings");
-                    }
-                });
-            }
+        if (FrozenCookies.autoGodzamok === 3) {     // "Blaze of Glory" - sell all the things
+            FrozenCookies.autoBuy = 0;
+            Game.ObjectsById.forEach(function (b) {
+                if (b.amount <= 10) {
+                    b.buy(100);
+                    logEvent("AutoGodzamok", "Blaze of Glory - bought 100 buildings");
+                }
+            });
+            Game.ObjectsById.forEach(function (s) {
+                s.sell(s.amount);
+                logEvent("AutoGodzamok", "Blaze of Glory - sold all buildings");
+            });
         }
     }
 }
