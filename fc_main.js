@@ -2148,13 +2148,13 @@ function autoGSBuy() {
             logEvent("AutoGS", "Turning Golden Switch on");
         }
     } else if (cpsBonus() <= 1) {
-        if (FrozenCookies.autoGodzamok !== 3) {
+        // if (FrozenCookies.autoGodzamok !== 3) {
             if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
                 Game.CalculateGains(); // Ensure price is updated since Frenzy ended
                 Game.Upgrades["Golden switch [on]"].buy();
                 logEvent("AutoGS", "Turning Golden Switch back off");
             }
-        }
+        // }
     }
 }
 
@@ -2164,7 +2164,6 @@ function autoGodzamokAction() {
     }
 
     if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
-        logEvent("AutoGodzamok", "AutoGodzamok level " + FrozenCookies.autoGodzamok);
         if (FrozenCookies.autoGodzamok === 1 || FrozenCookies.autoGodzamok === 2) {
             var cursorCount = Game.Objects.Cursor.amount;
             var farmCount = Game.Objects.Farm.amount - 1;     // 1 farm always left to prevent garden from disappearing
@@ -2214,20 +2213,20 @@ function autoGodzamokAction() {
                 }
             }
         }
-
-        if (FrozenCookies.autoGodzamok === 3) {     // "Blaze of Glory" - sell all the things
-            FrozenCookies.autoBuy = 0;
-            Game.ObjectsById.forEach(function (b) {
-                if (b.amount <= 10) {
-                    b.buy(100);
-                    logEvent("AutoGodzamok", "Blaze of Glory - bought 100 buildings");
-                }
-            });
-            Game.ObjectsById.forEach(function (s) {
-                s.sell(s.amount-1);
-                logEvent("AutoGodzamok", "Blaze of Glory - sold all buildings");
-            });
-        }
+        //
+        // if (FrozenCookies.autoGodzamok === 3) {     // "Blaze of Glory" - sell all the things
+        //     FrozenCookies.autoBuy = 0;
+        //     Game.ObjectsById.forEach(function (b) {
+        //         if (b.amount <= 10) {
+        //             b.buy(100);
+        //             logEvent("AutoGodzamok", "Blaze of Glory - bought 100 buildings");
+        //         }
+        //     });
+        //     Game.ObjectsById.forEach(function (s) {
+        //         s.sell(s.amount-1);
+        //         logEvent("AutoGodzamok", "Blaze of Glory - sold all buildings");
+        //     });
+        // }
     }
 }
 

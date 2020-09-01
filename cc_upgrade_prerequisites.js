@@ -115,8 +115,8 @@ FrozenCookies.preferenceValues = {
         'default':0
     },
     'autoGodzamok':{
-        'hint':'Automatically sell all cursors and farms (except one) during Dragonflight and Click Frenzy if you worship Godzamok ("Blaze of Glory" sells every building, to rack up the most cookies in preparation for an ascension.)',
-        'display':['Auto-Godzamok OFF','Auto-Godzamok ON (Rebuy up to limit)','Auto-Godzamok ON (Rebuy all)','Auto-Godzamok (Blaze of Glory)'],
+        'hint':'Automatically sell all cursors and farms (except one) during Dragonflight and Click Frenzy if you worship Godzamok',
+        'display':['Auto-Godzamok OFF','Auto-Godzamok ON (Rebuy up to limit)','Auto-Godzamok ON (Rebuy all)'],
         'default':0
     },
     'cursorLimit':{
@@ -495,34 +495,34 @@ var upgradeJson = {
     166: {'buildings': [], 'upgrades': [152], 'santa': 1},
     168: {'buildings': [], 'upgrades': [152], 'santa': 14},
 
-    // Season switching
-    182: {'buildings': [], 'upgrades': [181]},
-    183: {'buildings': [], 'upgrades': [181]},
-    184: {'buildings': [], 'upgrades': [181]},
-    185: {'buildings': [], 'upgrades': [181]},
-    209: {'buildings': [], 'upgrades': [181]},
+    // Season switching - requires Season Switcher (181)
+    182: {'buildings': [], 'upgrades': [181]},      // Christmas
+    183: {'buildings': [], 'upgrades': [181]},      // Halloween
+    184: {'buildings': [], 'upgrades': [181]},      // Valentine's
+    185: {'buildings': [], 'upgrades': [181]},      // Business Day
+    209: {'buildings': [], 'upgrades': [181]},      // Easter
     
     // Easter season
-    210: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    211: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    212: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    213: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    214: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    215: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    216: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    217: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    218: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    219: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    220: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    221: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    222: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    223: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    224: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    225: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    226: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    227: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    228: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
-    229: {'buildings': [], 'upgrades': [69,209], 'wrinklers': 1},
+    210: {'buildings': [], 'upgrades': [209]},
+    211: {'buildings': [], 'upgrades': [209]},
+    212: {'buildings': [], 'upgrades': [209]},
+    213: {'buildings': [], 'upgrades': [209]},
+    214: {'buildings': [], 'upgrades': [209]},
+    215: {'buildings': [], 'upgrades': [209]},
+    216: {'buildings': [], 'upgrades': [209]},
+    217: {'buildings': [], 'upgrades': [209]},
+    218: {'buildings': [], 'upgrades': [209]},
+    219: {'buildings': [], 'upgrades': [209]},
+    220: {'buildings': [], 'upgrades': [209]},
+    221: {'buildings': [], 'upgrades': [209]},
+    222: {'buildings': [], 'upgrades': [209]},
+    223: {'buildings': [], 'upgrades': [209]},
+    224: {'buildings': [], 'upgrades': [209]},
+    225: {'buildings': [], 'upgrades': [209]},
+    226: {'buildings': [], 'upgrades': [209]},
+    227: {'buildings': [], 'upgrades': [209]},
+    228: {'buildings': [], 'upgrades': [209]},
+    229: {'buildings': [], 'upgrades': [209]},
 
     // Halloween season
     134: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
