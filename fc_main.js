@@ -2163,9 +2163,10 @@ function autoGodzamokAction() {
         return;     //Just leave if Pantheon isn't here yet
     }
 
+    logEvent("AutoGodzamok", "AutoGodzamok level " + FrozenCookies.autoGodzamok);
+
     if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
         if (FrozenCookies.autoGodzamok === 1 || FrozenCookies.autoGodzamok === 2) {
-            logEvent("AutoGodzamok", "AutoGodzamok level " + FrozenCookies.autoGodzamok);
             var cursorCount = Game.Objects.Cursor.amount;
             var farmCount = Game.Objects.Farm.amount - 1;     // 1 farm always left to prevent garden from disappearing
 
