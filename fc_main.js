@@ -2224,7 +2224,7 @@ function autoGodzamokAction() {
                 }
             });
             Game.ObjectsById.forEach(function (s) {
-                s.sell(s.amount);
+                s.sell(s.amount-1);
                 logEvent("AutoGodzamok", "Blaze of Glory - sold all buildings");
             });
         }
