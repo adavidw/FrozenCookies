@@ -13,7 +13,7 @@
 
 function setOverrides() {
 
-    // Set all cycleable preferencesau
+    // Set all cycleable preferences
     _.keys(FrozenCookies.preferenceValues).forEach(function(preference) {
         FrozenCookies[preference] = preferenceParse(preference, FrozenCookies.preferenceValues[preference].default);
     });
@@ -2142,69 +2142,94 @@ function autoFrenzyClick() {
 }
 
 function autoGSBuy() {
-	if (hasClickBuff()) {
-		if (Game.Upgrades['Golden switch [off]'].unlocked && !Game.Upgrades['Golden switch [off]'].bought) {
-			Game.Upgrades['Golden switch [off]'].buy();
-			logEvent("AutoGS", "Turning Golden Switch off");
-		}
-	} else if (cpsBonus() <= 1) {
-		if (Game.Upgrades['Golden switch [on]'].unlocked && !Game.Upgrades['Golden switch [on]'].bought) {
-			Game.CalculateGains(); // Ensure price is updated since Frenzy ended
-			Game.Upgrades['Golden switch [on]'].buy();
-			logEvent("AutoGS", "Turning Golden Switch back on");
-		}
-	}
+    if (hasClickBuff()) {
+        if (Game.Upgrades["Golden switch [off]"].unlocked && !Game.Upgrades["Golden switch [off]"].bought) {
+            Game.Upgrades["Golden switch [off]"].buy();
+            logEvent("AutoGS", "Turning Golden Switch on");
+        }
+    } else if (cpsBonus() <= 1) {
+        if (FrozenCookies.autoGodzamok !== 3) {
+            if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
+                Game.CalculateGains(); // Ensure price is updated since Frenzy ended
+                Game.Upgrades["Golden switch [on]"].buy();
+                logEvent("AutoGS", "Turning Golden Switch back off");
+            }
+        }
+    }
 }
 
-function autoGodzamokAction() { 	    // Where are the different AutoGodz options?
-	if (!T) return; //Just leave if Pantheon isn't here yet
-	if (Game.hasGod('ruin') && (!Game.hasBuff('Devastation')) && hasClickBuff()) {
-		if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount >= 10)
-			{
-				var cursorCount = Game.Objects['Cursor'].amount; 	
-				Game.Objects['Cursor'].sell(cursorCount);
-				logEvent("AutoGodzamok", "Sold " + cursorCount + " cursors");
-			}
-		//added Farms to autoGodzamok selling. 1 farm always left to prevent garden from disappearing
-		if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount >= 10)
-			{
-				var farmCount = Game.Objects['Farm'].amount-1; 	
-				Game.Objects['Farm'].sell(farmCount);
-				logEvent("AutoGodzamok", "Sold " + farmCount + " farms");
-			}
+function autoGodzamokAction() {
+    if (!T) {
+        return;     //Just leave if Pantheon isn't here yet
+    }
 
-		if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Cursor'].amount < 10) 
-			{
-				//Stop buying Cursors if at set limit
-				if ((FrozenCookies.cursorLimit) && cursorCount > FrozenCookies.cursorMax)
-					{
-						Game.Objects['Cursor'].buy(FrozenCookies.cursorMax);
-						logEvent("AutoGodzamok", "Bought " + FrozenCookies.cursorMax + " cursors");
-					}
+    if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
+        if (FrozenCookies.autoGodzamok >= 1) {
+            var cursorCount = Game.Objects.Cursor.amount;
+            var farmCount = Game.Objects.Farm.amount - 1;     // 1 farm always left to prevent garden from disappearing
 
-				if ((FrozenCookies.cursorLimit) && cursorCount <= FrozenCookies.cursorMax)
-					{
-						Game.Objects['Cursor'].buy(cursorCount);
-						logEvent("AutoGodzamok", "Bought " + cursorCount + " cursors");
-					}			
-			}
+            //sell the cursors and farms
+            if (Game.Objects.Cursor.amount >= 10) {
+                Game.Objects.Cursor.sell(cursorCount);
+                logEvent("AutoGodzamok", "Sold " + cursorCount + " cursors");
+            }
 
-		if ((FrozenCookies.autoGodzamok >= 1) && Game.Objects['Farm'].amount < 10) 
-			{
-				//Stop buying Farms if at set limit
-				if ((FrozenCookies.farmLimit) && farmCount > FrozenCookies.farmMax-1)
-					{
-						Game.Objects['Farm'].buy(FrozenCookies.farmMax-1);
-						logEvent("AutoGodzamok", "Bought " + FrozenCookies.farmMax-1 + " farms");
-					}
+            if (Game.Objects.Farm.amount >= 10) {
+                Game.Objects.Farm.sell(farmCount);
+                logEvent("AutoGodzamok", "Sold " + farmCount + " farms");
+            }
 
-				if ((FrozenCookies.farmLimit) && farmCount <= FrozenCookies.farmMax-1)
-					{
-						Game.Objects['Farm'].buy(farmCount);
-						logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
-					}			
-			}
-	    }
+            if (FrozenCookies.autoGodzamok === 1) {     // Rebuy up to limit
+                if (Game.Objects.Cursor.amount < 10) {
+                    if ((FrozenCookies.cursorLimit) && cursorCount > FrozenCookies.cursorMax) {
+                        Game.Objects.Cursor.buy(FrozenCookies.cursorMax);
+                        logEvent("AutoGodzamok", "Bought " + FrozenCookies.cursorMax + " cursors");
+                    } else {
+                        Game.Objects.Cursor.buy(cursorCount);
+                        logEvent("AutoGodzamok", "Bought " + cursorCount + " cursors");
+                    }
+                }
+
+                if (Game.Objects.Farm.amount < 10) {
+                    if ((FrozenCookies.farmLimit) && farmCount > (FrozenCookies.farmMax - 1)) {
+                        Game.Objects.Farm.buy(FrozenCookies.farmMax - 1);
+                        logEvent("AutoGodzamok", "Bought " + (FrozenCookies.farmMax - 1) + " farms");
+                    } else {
+                        Game.Objects.Farm.buy(farmCount);
+                        logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
+                    }
+                }
+            }
+
+            if (FrozenCookies.autoGodzamok === 2) {     // Rebuy all
+                if (Game.Objects.Cursor.amount < 10) {
+                    Game.Objects.Cursor.buy(cursorCount);
+                    logEvent("AutoGodzamok", "Bought " + cursorCount + " cursors");
+                }
+
+                if (Game.Objects.Farm.amount < 10) {
+                    Game.Objects.Farm.buy(farmCount);
+                    logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
+                }
+            }
+
+            if (FrozenCookies.autoGodzamok === 3) {     // "Blaze of Glory" - sell the rest of the stuff
+                FrozenCookies.autoBuy = 0;
+                Game.ObjectsById.forEach(function (b) {
+                    if (b.amount <= 10) {
+                        b.buy(100);
+                        logEvent("AutoGodzamok", "Blaze of Glory - bought 100 buildings");
+                    }
+                });
+                Game.ObjectsById.forEach(function (s) {
+                    if (s.id != 0 && s.id !=2) {
+                        s.sell(s.amount);
+                        logEvent("AutoGodzamok", "Blaze of Glory - sold all buildings");
+                    }
+                });
+            }
+        }
+    }
 }
 
 function goldenCookieLife() {
@@ -2487,8 +2512,6 @@ function FCStart() {
             smartTrackingStats(FrozenCookies.minDelay * 8)
         }, FrozenCookies.minDelay);
     }
-
-
 
     FCMenu();
 }

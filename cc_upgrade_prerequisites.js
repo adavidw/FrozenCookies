@@ -115,8 +115,8 @@ FrozenCookies.preferenceValues = {
         'default':0
     },
     'autoGodzamok':{
-        'hint':'Automatically sell all cursors and farms (except one) during Dragonflight and Click Frenzy if you worship Godzamok ("Sane" prevents rapid buy/sell spam)',
-        'display':['Auto-Godzamok OFF','Auto-Godzamok ON','Auto-Godzamok ON (Sane)','Auto-Godzamok (REALLY INSANE)'],
+        'hint':'Automatically sell all cursors and farms (except one) during Dragonflight and Click Frenzy if you worship Godzamok ("Blaze of Glory" sells every building, to rack up the most cookies in preparation for an ascension.)',
+        'display':['Auto-Godzamok OFF','Auto-Godzamok ON (Rebuy up to limit)','Auto-Godzamok ON (Rebuy all)','Auto-Godzamok (Blaze of Glory)'],
         'default':0
     },
     'cursorLimit':{
