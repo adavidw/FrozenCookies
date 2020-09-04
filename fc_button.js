@@ -569,6 +569,13 @@ function FCMenu() {
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
                     preferenceButtonId = preference + 'Button';
+                if (display.length === 0) {
+                    listing = $('<div>').addClass('listing');
+                    if (hint) {
+                        listing.append($('<label>' + hint.replace(/\$\{(.+)\}/g, function(s,id){return FrozenCookies[id];}) + '</label>'));
+                    }
+                    subsection.append(listing);                    
+                }
                 if (display && display.length > 0 && display.length > current) {
                     listing = $('<div>').addClass('listing');
                     listing.append($('<a class="option" id="' + preferenceButtonId + '" onclick="cyclePreference(\'' + preference + '\');">' + display[current] + '</a>'));

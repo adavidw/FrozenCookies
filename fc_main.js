@@ -1263,7 +1263,7 @@ function recommendationList(recalculate) {
                 }
             }
         }
-	//Stop buying Farms if at set limit
+        //Stop buying Farms if at set limit
         if (FrozenCookies.farmLimit && Game.Objects['Farm'].amount >= FrozenCookies.farmMax) {
             for (var i = 0; i < FrozenCookies.caches.recommendationList.length; i++) {
                 if (FrozenCookies.caches.recommendationList[i].id == 2) {
