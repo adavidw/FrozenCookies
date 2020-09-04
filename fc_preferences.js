@@ -80,24 +80,9 @@ FrozenCookies.preferenceValues = {
         'default':0
     },
 
-    //Display options
-    'displayOptions':{
-        'hint':'Display options:'
-    },
-    'numberDisplay':{
-        'hint':'Change how numbers are shortened',
-        'display':["Raw Numbers","Full Word (million, billion)","Initials (M, B)","SI Units (M, G, T)", "Scientific Notation (6.3e12)"],
-        'default':1
-    },
-    'fancyui':{
-        'hint':'As these graphics are very slow, enable it here.',
-        'display':['No graphic','Textbox only','Wheel only','Full graphics'],
-        'default':0
-    },
-
-    //Other options
-    'otherOptions':{
-        'hint':'Other options:'
+    // other auto options
+    'autoOtherOptions':{
+        'hint':'Other automatic actions:'
     },
     'autoAscend':{
         'hint':'Automatically ascend when your heavenly chip count hits a certain number. (note: this will skip the upgrade screen)',
@@ -105,18 +90,11 @@ FrozenCookies.preferenceValues = {
         'default':0,
         'extras':'<a class="option" id="chipsToAscend" onclick="updateAscendAmount(\'HCAscendAmount\');">${HCAscendAmount} heavenly chips</a>'
     },
-
     'autoWrinkler':{
         'hint':'Automatically pop wrinklers efficiently or instantly',
         'display':['Autopop Wrinklers OFF', 'Autopop Wrinklers Efficiently', 'Autopop Wrinklers Instantly'],
         'default':0
     },
-/*Not working yet
-    'shinyPop':{
-        'hint':'Protect the endangered Shiny Wrinkler from being auomatically popped',
-        'display':['Save Shiny Wrinklers ON', 'Save Shiny Wrinklers OFF'],
-        'default':0
-    },*/
     'autoSL':{
         'hint':'Automatically harvest sugar lumps when ripe, with option to automatically swap in Rigidel',
         'display':["Autoharvest SL OFF", "Autoharvest SL ON", "Autoharvest SL ON + Auto Rigidel"],
@@ -138,6 +116,32 @@ FrozenCookies.preferenceValues = {
         'default':0,
         'extras':'<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>'
     },
+        
+    //Display options
+    'displayOptions':{
+        'hint':'Display options:'
+    },
+    'numberDisplay':{
+        'hint':'Change how numbers are shortened',
+        'display':["Raw Numbers","Full Word (million, billion)","Initials (M, B)","SI Units (M, G, T)", "Scientific Notation (6.3e12)"],
+        'default':1
+    },
+    'fancyui':{
+        'hint':'As these graphics are very slow, enable it here.',
+        'display':['No graphic','Textbox only','Wheel only','Full graphics'],
+        'default':0
+    },
+
+    //Other options
+    'otherOptions':{
+        'hint':'Other options:'
+    },
+/*Not working yet
+    'shinyPop':{
+        'hint':'Protect the endangered Shiny Wrinkler from being auomatically popped',
+        'display':['Save Shiny Wrinklers ON', 'Save Shiny Wrinklers OFF'],
+        'default':0
+    },*/
     'holdSEBank':{
         'hint':'Maintain a bank for Spontaneous Edifice (already enabled if Auto Casting SE)',
         'display':["SE Bank OFF","SE Bank ON"],
