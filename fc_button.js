@@ -569,42 +569,24 @@ function FCMenu() {
                     extras = prefVal.extras,
                     current = FrozenCookies[preference],
                     preferenceButtonId = preference + 'Button';
-                // if (display && display.length === 0) {
-                //     listing = $('<div>').addClass('listing');
-                //     if (hint) {
-                //         listing.append($('<label> current: ' + current  + ' display.length: ' + display.length + ' ' + hint.replace(/\$\{(.+)\}/g, function(s,id){return FrozenCookies[id];}) + '</label>'));
-                //     }
-                //     subsection.append(listing);                    
-                // }
-                if (display && display.length > 0 && display.length > current) {
+                if (display && display.length === 1) {
+                    listing = $('<div>').addClass('listing');
+                    if (hint) {
+                        listing.append($('<label>' + hint.replace(/\$\{(.+)\}/g, function(s,id){return FrozenCookies[id];}) + '</label>'));
+                    }
+                    subsection.append(listing);                    
+                }
+                if (display && display.length > 1 && display.length > current) {
                     listing = $('<div>').addClass('listing');
                     listing.append($('<a class="option" id="' + preferenceButtonId + '" onclick="cyclePreference(\'' + preference + '\');">' + display[current] + '</a>'));
                     if (hint) {
-                        listing.append($('<label> current: ' + current  + ' display.length: ' + display.length + ' ' + hint.replace(/\$\{(.+)\}/g, function(s,id){return FrozenCookies[id];}) + '</label>'));
+                        listing.append($('<label>' + hint.replace(/\$\{(.+)\}/g, function(s,id){return FrozenCookies[id];}) + '</label>'));
                     }
                     if (extras) {
                         listing.append($(extras.replace(/\$\{(.+)\}/g, function(s,id){return FrozenCookies[id];})));
                     }
                     subsection.append(listing);
                 }
-                // if (display.length === 0) {
-                //     listing = $('<div>').addClass('listing');
-                //     if (hint) {
-                //         listing.append($('<label>' + hint.replace(/\$\{(.+)\}/g, function(s,id){return FrozenCookies[id];}) + '</label>'));
-                //     }
-                //     subsection.append(listing);                    
-                // }
-                // if (display && display.length > 0 && display.length > current) {
-                //     listing = $('<div>').addClass('listing');
-                //     listing.append($('<a class="option" id="' + preferenceButtonId + '" onclick="cyclePreference(\'' + preference + '\');">' + display[current] + '</a>'));
-                //     if (hint) {
-                //         listing.append($('<label>' + hint.replace(/\$\{(.+)\}/g, function(s,id){return FrozenCookies[id];}) + '</label>'));
-                //     }
-                //     if (extras) {
-                //         listing.append($(extras.replace(/\$\{(.+)\}/g, function(s,id){return FrozenCookies[id];})));
-                //     }
-                //     subsection.append(listing);
-                // }
             });
             menu.append(subsection);
         }

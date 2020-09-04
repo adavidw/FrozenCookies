@@ -1,7 +1,11 @@
 FrozenCookies.preferenceValues = {
 
     // clicking options
-
+    'lineBreak':{
+        'hint':'Auto clicking options:',
+        'display':[""],
+        'default':0
+    },
     'autoClick':{
         'hint':'Click the large cookie',
         'display':['Autoclick OFF', 'Autoclick ON'],
@@ -30,14 +34,12 @@ FrozenCookies.preferenceValues = {
         'default':0
     },
 
-    'lineBreak':{
-        'hint':'trying to make a line break here',
+    // autobuy options
+    'lineBreak1':{
+        'hint':'Auto buying options:',
         'display':[""],
         'default':0
     },
-
-    // autobuy options
-
     'autoBuy':{
         'hint':'Automatically buy the most efficient building when you\'ve met its cost',
         'display':["Autobuy OFF","Autobuy ON"],
@@ -82,9 +84,29 @@ FrozenCookies.preferenceValues = {
         'default':0
     },
 
+    //Display options
+    'lineBreak2':{
+        'hint':'Display options:',
+        'display':[""],
+        'default':0
+    },
+    'numberDisplay':{
+        'hint':'Change how numbers are shortened',
+        'display':["Raw Numbers","Full Word (million, billion)","Initials (M, B)","SI Units (M, G, T)", "Scientific Notation (6.3e12)"],
+        'default':1
+    },
+    'fancyui':{
+        'hint':'As these graphics are very slow, enable it here.',
+        'display':['No graphic','Textbox only','Wheel only','Full graphics'],
+        'default':0
+    },
 
-
-
+    //Other options
+    'lineBreak3':{
+        'hint':'Other options:',
+        'display':[""],
+        'default':0
+    },
     'autoAscend':{
         'hint':'Automatically ascend when your heavenly chip count hits a certain number. (note: this will skip the upgrade screen)',
         'display':["Autoascend OFF", "Autoascend ON"],
@@ -146,7 +168,6 @@ FrozenCookies.preferenceValues = {
         'default':0
     },
     */
-    
 
     'autoGS':{
         'hint':'Automatically turn on the Golden Switch during Dragonflight and Click Frenzy (and turn back off at the end)',
@@ -160,8 +181,7 @@ FrozenCookies.preferenceValues = {
     },
     'autoSpell':{
         'hint':'Automatically cast selected spell when your mana is full',
-        'display':["Auto Cast OFF","Conjure Baked Goods"],
-//        'display':["Auto Cast OFF","Conjure Baked Goods","Force the Hand of Fate","Spontaneous Edifice","Haggler's Charm (cheapest)"],
+        'display':["Auto Cast OFF","Auto Cast: Conjure Baked Goods","Auto Cast: Force the Hand of Fate","Auto Cast: Spontaneous Edifice","Auto Cast: Haggler's Charm (cheapest)"],
         'default':0,
         'extras':'<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>'
     },
@@ -185,18 +205,5 @@ FrozenCookies.preferenceValues = {
         'hint':'Season to maintain when no others have needed upgrades',
         'display':['Default Season: None','Default Season: Business Day','Default Season: Christmas','Default Season: Easter','Default Season: Halloween',"Default Season: Valentine's Day"],
         'default':0
-    },
-    
-    // display options
-
-    'numberDisplay':{
-        'hint':'Change how numbers are shortened',
-        'display':["Raw Numbers","Full Word (million, billion)","Initials (M, B)","SI Units (M, G, T)", "Scientific Notation (6.3e12)"],
-        'default':1
-    },
-    'fancyui':{
-        'hint':'As these graphics are very slow, enable it here.',
-        'display':['No graphic','Textbox only','Wheel only','Full graphics'],
-        'default':0
-    } 
+    }
 };
