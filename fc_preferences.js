@@ -1,10 +1,8 @@
 FrozenCookies.preferenceValues = {
 
     // clicking options
-    'lineBreak':{
-        'hint':'Auto clicking options:',
-        'display':[""],
-        'default':0
+    'clickingOptions':{
+        'hint':'Auto clicking options:'
     },
     'autoClick':{
         'hint':'Click the large cookie',
@@ -35,10 +33,8 @@ FrozenCookies.preferenceValues = {
     },
 
     // autobuy options
-    'lineBreak1':{
-        'hint':'Auto buying options:',
-        'display':[""],
-        'default':0
+    'buyingOptions':{
+        'hint':'Auto buying options:'
     },
     'autoBuy':{
         'hint':'Automatically buy the most efficient building when you\'ve met its cost',
@@ -85,10 +81,8 @@ FrozenCookies.preferenceValues = {
     },
 
     //Display options
-    'lineBreak2':{
-        'hint':'Display options:',
-        'display':[""],
-        'default':0
+    'displayOptions':{
+        'hint':'Display options:'
     },
     'numberDisplay':{
         'hint':'Change how numbers are shortened',
@@ -102,10 +96,8 @@ FrozenCookies.preferenceValues = {
     },
 
     //Other options
-    'lineBreak3':{
-        'hint':'Other options:',
-        'display':[""],
-        'default':0
+    'otherOptions':{
+        'hint':'Other options:'
     },
     'autoAscend':{
         'hint':'Automatically ascend when your heavenly chip count hits a certain number. (note: this will skip the upgrade screen)',
@@ -130,7 +122,38 @@ FrozenCookies.preferenceValues = {
         'display':["Autoharvest SL OFF", "Autoharvest SL ON", "Autoharvest SL ON + Auto Rigidel"],
         'default':0
     },
-
+    'autoGS':{
+        'hint':'Automatically turn on the Golden Switch during Dragonflight and Click Frenzy (and turn back off at the end)',
+        'display':['Auto-Switch OFF','Auto-Switch ON'],
+        'default':0
+    },
+    'autoGodzamok':{
+        'hint':'Automatically sell all cursors and farms (except one) during Dragonflight and Click Frenzy if you worship Godzamok',
+        'display':['Auto-Godzamok OFF','Auto-Godzamok ON (Rebuy up to limit)','Auto-Godzamok ON (Rebuy all)'],
+        'default':0
+    },
+    'autoSpell':{
+        'hint':'Automatically cast selected spell when your mana is full',
+        'display':["Auto Cast OFF","Auto Cast: Conjure Baked Goods","Auto Cast: Force the Hand of Fate","Auto Cast: Spontaneous Edifice","Auto Cast: Haggler's Charm (cheapest)"],
+        'default':0,
+        'extras':'<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>'
+    },
+    'holdSEBank':{
+        'hint':'Maintain a bank for Spontaneous Edifice (already enabled if Auto Casting SE)',
+        'display':["SE Bank OFF","SE Bank ON"],
+        'default':0
+    },
+    'setHarvestBankPlant':{
+        'hint':'Choose the plant you are going to harvest/let explode.',
+        'display':['No harvesting Bank','Bakeberry Bank','Chocoroot Bank','White Chocoroot Bank','Queenbeet Bank','Duketater Bank','Crumbspore Bank','Doughshroom Bank'],
+        'default':0
+    },
+    'setHarvestBankType':{
+        'hint':'Choose a scenario that you want for harvesting to calculate the needed Bank (no effect if no plant was selected above).',
+        'display':['No CpS multiplier','Frenzy','Building special','Frenzy + Building special'],
+        'default':0,
+        'extras':'<a class="option" id="maxSpecials" onclick="updateMaxSpecials(\'maxSpecials\');">${maxSpecials} Building specials</a>'
+    },
 
 /*  'timeTravelMethod':{
         'hint':'Time travel is unstable. This determines how time travel works. If you\'re unsure, don\'t touch this.',
@@ -169,38 +192,6 @@ FrozenCookies.preferenceValues = {
     },
     */
 
-    'autoGS':{
-        'hint':'Automatically turn on the Golden Switch during Dragonflight and Click Frenzy (and turn back off at the end)',
-        'display':['Auto-Switch OFF','Auto-Switch ON'],
-        'default':0
-    },
-    'autoGodzamok':{
-        'hint':'Automatically sell all cursors and farms (except one) during Dragonflight and Click Frenzy if you worship Godzamok',
-        'display':['Auto-Godzamok OFF','Auto-Godzamok ON (Rebuy up to limit)','Auto-Godzamok ON (Rebuy all)'],
-        'default':0
-    },
-    'autoSpell':{
-        'hint':'Automatically cast selected spell when your mana is full',
-        'display':["Auto Cast OFF","Auto Cast: Conjure Baked Goods","Auto Cast: Force the Hand of Fate","Auto Cast: Spontaneous Edifice","Auto Cast: Haggler's Charm (cheapest)"],
-        'default':0,
-        'extras':'<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>'
-    },
-    'holdSEBank':{
-        'hint':'Maintain a bank for Spontaneous Edifice (already enabled if Auto Casting SE)',
-        'display':["SE Bank OFF","SE Bank ON"],
-        'default':0
-    },
-    'setHarvestBankPlant':{
-        'hint':'Choose the plant you are going to harvest/let explode.',
-        'display':['No harvesting Bank','Bakeberry Bank','Chocoroot Bank','White Chocoroot Bank','Queenbeet Bank','Duketater Bank','Crumbspore Bank','Doughshroom Bank'],
-        'default':0
-    },
-    'setHarvestBankType':{
-        'hint':'Choose a scenario that you want for harvesting to calculate the needed Bank (no effect if no plant was selected above).',
-        'display':['No CpS multiplier','Frenzy','Building special','Frenzy + Building special'],
-        'default':0,
-        'extras':'<a class="option" id="maxSpecials" onclick="updateMaxSpecials(\'maxSpecials\');">${maxSpecials} Building specials</a>'
-    },
     'defaultSeason':{
         'hint':'Season to maintain when no others have needed upgrades',
         'display':['Default Season: None','Default Season: Business Day','Default Season: Christmas','Default Season: Easter','Default Season: Halloween',"Default Season: Valentine's Day"],
