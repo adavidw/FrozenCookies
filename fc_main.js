@@ -296,6 +296,7 @@ function timeDisplay(seconds) {
     return (days + hours + minutes + seconds).trim();
 }
 
+// want to add earth shatterer here
 function fcReset() {
     Game.CollectWrinklers();
     if (Game.HasUnlocked('Chocolate egg') && !Game.Has('Chocolate egg')) {
@@ -2400,7 +2401,7 @@ function autoCookie() {
                 }
             } else {
                 if (FrozenCookies.last_gc_state != 1) {
-                    logEvent('GC', 'Previous Frenzy x' + FrozenCookies.last_gc_state + 'interrupted.')
+                    logEvent('GC', 'Previous Frenzy x' + FrozenCookies.last_gc_state + ' interrupted.')
                 } else if (FrozenCookies.hc_gain) {
                     logEvent('HC', 'Won ' + FrozenCookies.hc_gain + ' heavenly chips outside of Frenzy. Rate: ' + (FrozenCookies.hc_gain * 1000) / (Date.now() - FrozenCookies.hc_gain_time) + ' HC/s.');
                     FrozenCookies.hc_gain_time = Date.now();

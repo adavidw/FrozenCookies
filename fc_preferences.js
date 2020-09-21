@@ -56,6 +56,7 @@ FrozenCookies.preferenceValues = {
         'display':['No Blacklist', 'Speedrun Blacklist', 'Hardcore Blacklist', 'Grandmapocalypse Mode', 'No Buildings'],
         'default':0
     },
+ // is there a way to use cumulativeBuildingCost() to automatically figure an appropriate amount for these limits, maybe based on a specified number of minutes of cps?
     'cursorLimit':{
         'hint':'Limit max number of cursors to keep Godzamok useful',
         'display':['Cursor Limit OFF','Cursor Limit ON'],
