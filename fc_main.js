@@ -91,6 +91,9 @@ function setOverrides() {
     FrozenCookies.caches.recommendationList = [];
     FrozenCookies.caches.buildings = [];
     FrozenCookies.caches.upgrades = [];
+	
+    //Whether to currently display achievement popups
+    FrozenCookies.showAchievements = true;
 
     //Whether to currently display achievement popups
     FrozenCookies.showAchievements = true;
@@ -2388,7 +2391,7 @@ function autoCookie() {
             }
         }
 
-	var fps_amounts = ['24', '30', '48', '60', '72', '88', '100', '120', '144', '200', '240', '300', '5', '10', '15'];
+	var fps_amounts = ['15', '24', '30', '48', '60', '72', '88', '100', '120', '144', '200', '240', '300', '5', '10'];
         if (parseInt(fps_amounts[FrozenCookies["fpsModifier"]]) != Game.fps) {
             Game.fps = parseInt(fps_amounts[FrozenCookies["fpsModifier"]]);
         }
