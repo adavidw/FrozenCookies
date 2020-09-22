@@ -8,7 +8,7 @@ var baseUrl = scriptElement !== null ?
 var FrozenCookies = {
     'baseUrl': baseUrl,
     'branch': '',
-    'version': '1.7.2-dev'
+    'version': '1.7.2-adw'
 };
 
 // Load external libraries
