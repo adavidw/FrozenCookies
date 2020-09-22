@@ -2170,6 +2170,17 @@ function autoGSBuy() {
     }
 }
 
+function safeBuy(bldg,count) { 
+	// If store is in Sell mode, Game.Objects[].buy will sell the building!
+	if (Game.buyMode === -1) {
+		document.getElementById('storeBulkBuy').click();
+		bldg.buy(count);
+		document.getElementById('storeBulkSell').click();
+	} else {
+		bldg.buy(count);
+	}
+}
+
 function autoGodzamokAction() {
     if (!T) {
         return;     //Just leave if Pantheon isn't here yet
@@ -2194,20 +2205,20 @@ function autoGodzamokAction() {
             if (FrozenCookies.autoGodzamok === 1) {     // Rebuy up to limit
                 if (Game.Objects.Cursor.amount < 10) {
                     if ((FrozenCookies.cursorLimit) && cursorCount > FrozenCookies.cursorMax) {
-                        Game.Objects.Cursor.buy(FrozenCookies.cursorMax);
+                        safeBuy(Game.Objects['Cursor'],FrozenCookies.cursorMax);
                         logEvent("AutoGodzamok", "Bought " + FrozenCookies.cursorMax + " cursors");
                     } else {
-                        Game.Objects.Cursor.buy(cursorCount);
+                        safeBuy(Game.Objects['Cursor'],cursorCount);
                         logEvent("AutoGodzamok", "Bought " + cursorCount + " cursors");
                     }
                 }
 
                 if (Game.Objects.Farm.amount < 10) {
                     if ((FrozenCookies.farmLimit) && farmCount > (FrozenCookies.farmMax - 1)) {
-                        Game.Objects.Farm.buy(FrozenCookies.farmMax - 1);
+                        safeBuy(Game.Objects['Farm'],FrozenCookies.farmMax - 1);
                         logEvent("AutoGodzamok", "Bought " + (FrozenCookies.farmMax - 1) + " farms");
                     } else {
-                        Game.Objects.Farm.buy(farmCount);
+                        safeBuy(Game.Objects['Farm'],farmCount);
                         logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
                     }
                 }
@@ -2215,12 +2226,12 @@ function autoGodzamokAction() {
 
             if (FrozenCookies.autoGodzamok === 2) {     // Rebuy all
                 if (Game.Objects.Cursor.amount < 10) {
-                    Game.Objects.Cursor.buy(cursorCount);
+                    safeBuy(Game.Objects['Cursor'],cursorCount);
                     logEvent("AutoGodzamok", "Bought " + cursorCount + " cursors");
                 }
 
                 if (Game.Objects.Farm.amount < 10) {
-                    Game.Objects.Farm.buy(farmCount);
+                    safeBuy(Game.Objects['Farm'],farmCount);
                     logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
                 }
             }
@@ -2345,7 +2356,7 @@ function autoCookie() {
             recommendation.purchase.clickFunction = null;
             disabledPopups = false;
             //      console.log(purchase.name + ': ' + Beautify(recommendation.efficiency) + ',' + Beautify(recommendation.delta_cps));
-            recommendation.purchase.buy();
+            if (recommendation.type == 'building') { safeBuy(recommendation.purchase); } else { recommendation.purchase.buy(); }
             FrozenCookies.autobuyCount += 1;
             if (FrozenCookies.trackStats == 5 && recommendation.type == 'upgrade') {
                 saveStats();
