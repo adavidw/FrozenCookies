@@ -727,25 +727,34 @@ function autoBlacklistOff() {
     }
 }
 
+function generateProbabilities(upgradeMult, minBase, maxMult) {
+    var cumProb = [];
+    var remainingProbability = 1;
+    var minTime = minBase * upgradeMult;
+    var maxTime = maxMult * minTime;
+    var spanTime = maxTime - minTime;
+    for (var i=0; i<maxTime; i++) {
+        var thisFrame = remainingProbability * Math.pow(Math.max(0,(i-minTime)/spanTime),5);
+        remainingProbability -= thisFrame;
+        cumProb.push(1 - remainingProbability);
+    }
+    return cumProb;
+}
+
 function getProbabilityList(listType) {
-    return cumulativeProbabilityList[listType][getProbabilityModifiers(listType)];
+    var list;
+    if (listType === "golden") {
+        list = generateProbabilities(getProbabilityModifiers(listType), 5 * 60 * Game.fps, 3);
+    } else if (listType === "reindeer") {
+        list = generateProbabilities(getProbabilityModifiers(listType), 3 * 60 * Game.fps, 2);
+    }
+    return list;
 }
 
 function getProbabilityModifiers(listType) {
     var result;
-    switch (listType) {
-        case "golden":
-            result = (Game.Has('Lucky day') ? 0.5 : 1) * (Game.Has('Serendipity') ? 0.5 : 1) * (Game.Has('Golden goose egg') ? 0.95 : 1);
-            break;
-        case "reindeer":
-            result = Game.Has('Reindeer baking grounds') ? 0.5 : 1;
-            break;
-    }
+    result = Game.shimmerTypes.golden.getTimeMod(Game.shimmerTypes.golden,10000) / 10000 / Game.fps / 60
     return result;
-}
-
-function cumulativeProbability(listType, start, stop) {
-    return 1 - ((1 - getProbabilityList(listType)[stop]) / (1 - getProbabilityList(listType)[start]));
 }
 
 function probabilitySpan(listType, start, endProbability) {

@@ -247,10 +247,7 @@ function buffDuration(buffName) {
 
 function updateTimers() {
     var chainPurchase, bankPercent, purchasePercent, bankMax, actualCps, t_draw,
-        maxColor, height,
-        gc_delay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.5) - Game.shimmerTypes.golden.time) / maxCookieTime(),
-        gc_max_delay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99) - Game.shimmerTypes.golden.time) / maxCookieTime(),
-        gc_min_delay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.01) - Game.shimmerTypes.golden.time) / maxCookieTime(),
+        maxColor, height, gc_delay, gc_max_delay, gc_min_delay,
         clot_delay = buffDuration('Clot') / maxCookieTime(),
         elder_frenzy_delay = buffDuration('Elder frenzy') / maxCookieTime(),
         frenzy_delay = buffDuration('Frenzy') / maxCookieTime(),
@@ -269,6 +266,11 @@ function updateTimers() {
         chainTotal = 0,
         chainFinished,
         chainCompletion = 0;
+    if (!Game.Has('Golden switch [off]')) {
+        gc_delay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.5) - Game.shimmerTypes.golden.time) / maxCookieTime(),
+        gc_max_delay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99) - Game.shimmerTypes.golden.time) / maxCookieTime(),
+        gc_min_delay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.01) - Game.shimmerTypes.golden.time) / maxCookieTime()
+    }
     if (nextChainedPurchase().cost > nextPurchase().cost) {
         chainPurchase = nextChainedPurchase().purchase;
         chainTotal = upgradePrereqCost(chainPurchase, true) - chainPurchase.getPrice();
