@@ -31,6 +31,7 @@ var script_list = [
     `${FrozenCookies.baseUrl}/fc_button.js`,
     `${FrozenCookies.baseUrl}/fc_spellpredict.js`,
     `${FrozenCookies.baseUrl}/fc_preferences.js`,
+    `${FrozenCookies.baseUrl}/fc_infobox.js`,
     // `${FrozenCookies.baseUrl}/fc_cyclius.js`
 ]
 

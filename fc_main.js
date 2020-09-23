@@ -1180,10 +1180,6 @@ function maxLuckyBank() {
     return Game.Has('Get lucky') ? luckyFrenzyBank() : luckyBank();
 }
 
-function maxCookieTime() {
-    return Game.shimmerTypes.golden.maxTime
-}
-
 function gcPs(gcValue) {
     var averageGCTime = probabilitySpan('golden', 0, 0.5) / Game.fps;
     gcValue /= averageGCTime;

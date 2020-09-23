@@ -129,7 +129,7 @@ FrozenCookies.preferenceValues = {
     },
     'fancyui':{
         'hint':'As these graphics are very slow, enable it here.',
-        'display':['No graphic','Textbox only','Wheel only','Full graphics'],
+        'display':['No infobox','Textbox only','Wheel only','Full graphical infobox'],
         'default':0
     },
 
