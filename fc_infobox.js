@@ -76,6 +76,7 @@ function drawCircles(t_d, x, y) {
         i_c++;
     });
 }
+
 function buildingSpecialBuffTime() {
     for (var i in Game.buffs) {
         if (Game.buffs[i].type && (Game.buffs[i].type.name == 'building buff' || Game.buffs[i].type.name == 'building debuff')) {
@@ -84,14 +85,16 @@ function buildingSpecialBuffTime() {
     }
     return 0;
 }
+
 function buildingSpecialBuffMaxTime() {
     for (var i in Game.buffs) {
         if (Game.buffs[i].type && (Game.buffs[i].type.name == 'building buff' || Game.buffs[i].type.name == 'building debuff')) {
-            return Game.buffs[i].multCpS;
+            return Game.buffs[i].maxTime;
         }
     }
     return 0;
 }
+
 function buildingSpecialBuffValue() {
     for (var i in Game.buffs) {
         if (Game.buffs[i].type && (Game.buffs[i].type.name == 'building buff' || Game.buffs[i].type.name == 'building debuff')) {
@@ -100,17 +103,21 @@ function buildingSpecialBuffValue() {
     }
     return 0;
 }
+
 function buffTime(buffName) {
     var buff = Game.hasBuff(buffName);
     return buff ? buff.time : 0;
 }
+
 function buffMaxTime(buffname) {
     var buff = Game.hasBuff(buffname);
     return buff ? buff.maxTime : 0;
 }
+
 function maxCookieDelay() {
     return probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99);
 }
+
 function updateTimers() {
     var chainPurchase, bankPercent, purchasePercent, bankMax, actualCps, t_draw,
         maxColor, height, gcDelay, gcMaxDelay, gcMinDelay,
@@ -131,6 +138,7 @@ function updateTimers() {
         cookieStormTime = buffTime('Cookie storm'),
         cookieStormMaxTime = buffMaxTime('Cookie storm'),
         buildingSpecialTime = buildingSpecialBuffTime(),
+        buildingSpecialMaxTime = buildingSpecialBuffMaxTime(),
         bankTotal = delayAmount(),
         purchaseTotal = nextPurchase().cost,
         purchaseCompletion = Game.cookies / (bankTotal + purchaseTotal),
@@ -278,10 +286,10 @@ function updateTimers() {
     }
     if (buildingSpecialTime > 0) {
         t_draw.push({
-            f_percent: buildingSpecialTime / buildingSpecialBuffMaxTime(),
+            f_percent: buildingSpecialTime / buildingSpecialMaxTime,
             c1: "rgba(0, 196, 255, 1)",
             name: "Building Special (x" + buildingSpecialBuffValue() + ") Time",
-            display: timeDisplay(buildingSpecialBuffTime() / Game.fps)
+            display: timeDisplay(buildingSpecialTime / Game.fps)
         });
     }
     height = $('#backgroundLeftCanvas').height() - 140;
