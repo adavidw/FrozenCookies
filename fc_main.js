@@ -666,45 +666,43 @@ function autoTicker(){
 function autoCast() {
     if (!M) return; //Just leave if you don't have grimoire
     if (M.magic == M.magicM) {
-        switch (FrozenCookies.autoSpell) {
-            case 0:
-                return;
-            case 1:
-                var CBG = M.spellsById[0];
-                if (M.magicM < Math.floor(CBG.costMin + CBG.costPercent*M.magicM)) return;
-                if(cpsBonus() >= FrozenCookies.minCpSMult) {
+        if(cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
+            switch (FrozenCookies.autoSpell) {
+                case 0:
+                    return;
+                case 1:
+                    var CBG = M.spellsById[0];
+                    if (M.magicM < Math.floor(CBG.costMin + CBG.costPercent*M.magicM)) return;
                     M.castSpell(CBG);
                     logEvent('AutoSpell', 'Cast Conjure Baked Goods');
-                }
-                return;
-            case 2:
-                var FTHOF = M.spellsById[1];
-                if (M.magicM < Math.floor(FTHOF.costMin + FTHOF.costPercent*M.magicM)) return;
-                if(cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
+                    return;
+                case 2:
+                    var FTHOF = M.spellsById[1];
+                    if (M.magicM < Math.floor(FTHOF.costMin + FTHOF.costPercent*M.magicM)) return;
                     M.castSpell(FTHOF);
                     logEvent('AutoSpell', 'Cast Force the Hand of Fate');
-                }
-                return;
-            case 3:
-                var SE = M.spellsById[3];
-		//Chancemaker replaced by new Fractal engine	
-                //If you don't have any Fractal engine yet, or can't cast SE, just give up.
-                if (Game.Objects['Fractal engine'].amount == 0 || M.magicM < Math.floor(SE.costMin + SE.costPercent*M.magicM)) return;
-                //If we have over 400 CM, always going to sell down to 399. If you don't have half a Chancemaker in bank, sell one
-                while (Game.Objects['Fractal engine'].amount >= 400 || Game.cookies < Game.Objects['Fractal engine'].price/2) {
-                   Game.Objects['Fractal engine'].sell(1);
-		//log event calculation outdated. sell return was reduced from .85 with earth shatterer to .5
-                   logEvent('Store', 'Sold 1 Fractal engine for ' + Beautify(Game.Objects['Fractal engine'].price*1.15*.50));
-                }
-                M.castSpell(SE);
-                logEvent('AutoSpell', 'Cast Spontaneous Edifice');
-                return;
-            case 4:
-                var hagC = M.spellsById[4];
-                if (M.magicM < Math.floor(hagC.costMin + hagC.costPercent*M.magicM)) return;
-                M.castSpell(hagC);
-                logEvent('AutoSpell', 'Cast Haggler\'s Charm');
-                return;
+                    return;
+                case 3:
+                    var SE = M.spellsById[3];
+                    //Chancemaker replaced by new Fractal engine	
+                    //If you don't have any Fractal engine yet, or can't cast SE, just give up.
+                    if (Game.Objects['Fractal engine'].amount == 0 || M.magicM < Math.floor(SE.costMin + SE.costPercent*M.magicM)) return;
+                    //If we have over 400 CM, always going to sell down to 399. If you don't have half a Chancemaker in bank, sell one
+                    while (Game.Objects['Fractal engine'].amount >= 400 || Game.cookies < Game.Objects['Fractal engine'].price/2) {
+                        Game.Objects['Fractal engine'].sell(1);
+                        //log event calculation outdated. sell return was reduced from .85 with earth shatterer to .5
+                        logEvent('Store', 'Sold 1 Fractal engine for ' + Beautify(Game.Objects['Fractal engine'].price*1.15*.50));
+                    }
+                    M.castSpell(SE);
+                    logEvent('AutoSpell', 'Cast Spontaneous Edifice');
+                    return;
+                case 4:
+                    var hagC = M.spellsById[4];
+                    if (M.magicM < Math.floor(hagC.costMin + hagC.costPercent*M.magicM)) return;
+                    M.castSpell(hagC);
+                    logEvent('AutoSpell', 'Cast Haggler\'s Charm');
+                    return;
+            }
         }
     }
 }
