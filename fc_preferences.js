@@ -137,12 +137,13 @@ FrozenCookies.preferenceValues = {
     'otherOptions':{
         'hint':'Other options:'
     },
-/*Not working yet
+    /*Not working yet
     'shinyPop':{
         'hint':'Protect the endangered Shiny Wrinkler from being auomatically popped',
         'display':['Save Shiny Wrinklers ON', 'Save Shiny Wrinklers OFF'],
         'default':0
-    },*/
+    },
+    */
     'holdSEBank':{
         'hint':'Maintain a bank for Spontaneous Edifice (already enabled if Auto Casting SE)',
         'display':["SE Bank OFF", "SE Bank ON"],
@@ -159,14 +160,14 @@ FrozenCookies.preferenceValues = {
         'default':0,
         'extras':'<a class="option" id="maxSpecials" onclick="updateMaxSpecials(\'maxSpecials\');">${maxSpecials} Building specials</a>'
     },
-
-/*  'timeTravelMethod':{
+    /*
+    'timeTravelMethod':{
         'hint':'Time travel is unstable. This determines how time travel works. If you\'re unsure, don\'t touch this.',
         'display':['Time Travel DISABLED'],//, 'Purchases by Estimated Effective CPS', 'Purchases by Simulated Real Time', 'Heavenly Chips by Estimated Effective CPS', 'Heavenly Chips by Simulated Real Time'],
         'default':0,
         'extras':'<a class="option" id="timeTravelPurchases" onclick="updateTimeTravelAmount();">Set Time Travel Amount</a>'
-    },*/
-
+    },
+    */
     'simulatedGCPercent':{
         'hint':'Assume a percentage of Golden Cookies as "clicked" for GC efficiency calculations (100% recommended)',
         'display':["0%", "100%"],
