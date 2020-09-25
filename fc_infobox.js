@@ -8,7 +8,7 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
     if (typeof (c.measureText) != "function") {
         return;
     }
-    maxRadius = 10 + 10 * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
+    maxRadius = 10 + 12 * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
     heightOffset = maxRadius + 5 - (15 * (t_d.length - 1) / 2);
     i_c = 0;
     i_tc = 0;
@@ -27,17 +27,25 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
     maxWidth = maxMeasure.width;
     maxHeight = maxMeasure.height * t_d.length;
 
-    // draw the box
+    // draw the box background
     if (FrozenCookies.fancyui % 2 == 1) {
         c.drawRect({
-            fillStyle: 'rgba(153, 153, 153, 0.6)',
+            fillStyle: 'rgba(180, 180, 180, 0.6)',
             //just the box, no wheel or text
-            x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y + maxRadius + 5,
+            x: x + (maxRadius * 2) + (maxWidth / 2) + 35, y: y, // + maxRadius + 5,
             width: maxWidth + 20, height: maxHeight + 20
         });
     }
 
     //draw the wheel and text
+    if (FrozenCookies.fancyui > 1) {    // draw the wheel background
+        c.drawArc({
+            strokeStyle: t_b[(i_c + 2) % t_b.length],
+            strokeWidth: 3,
+            x: x + (maxRadius + 5), y: y, // + maxRadius + 5,
+            radius: maxRadius + 6
+        });
+    }
     t_d.forEach(function (o_draw) {
         if (o_draw.overlay) {
             i_c--;
@@ -47,23 +55,23 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
                 c.drawArc({
                     strokeStyle: t_b[i_c % t_b.length],
                     strokeWidth: 10,
-                    x: x + (maxRadius + 5), y: y + maxRadius + 5,
-                    radius: maxRadius - i_c * 10
+                    x: x + (maxRadius + 5), y: y, //+ maxRadius + 5,
+                    radius: maxRadius - i_c * 12
                 });
                 c.drawArc({
                     strokeStyle: t_b[(i_c + 2) % t_b.length],
-                    strokeWidth: 1,
-                    x: x + (maxRadius + 5), y: y + maxRadius + 5,
-                    radius: maxRadius - 5 - (i_c) * 10
+                    strokeWidth: 3,
+                    x: x + (maxRadius + 5), y: y, // + maxRadius + 5,
+                    radius: maxRadius - 6 - (i_c) * 12
                 });
             }
         }
         if (FrozenCookies.fancyui > 1) {    // draw the time arcs on the wheel
             c.drawArc({
                 strokeStyle: o_draw.c1,
-                x: x + (maxRadius + 5), y: y + maxRadius + 5,
-                radius: maxRadius - i_c * 10,
-                strokeWidth: 7,
+                x: x + (maxRadius + 5), y: y, // + maxRadius + 5,
+                radius: maxRadius - i_c * 12,
+                strokeWidth: 10,
                 start: 0,
                 end: (360 * o_draw.f_percent)
             });
@@ -74,7 +82,7 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
                 fontSize: boxFontSize,
                 fontFamily: boxFont,
                 fillStyle: o_draw.c1,
-                x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y + heightOffset + 15 * i_tc,
+                x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y-maxRadius-5 + heightOffset + 16 * i_tc,
                 text: s_t
             });
             i_tc++;
@@ -175,7 +183,7 @@ function updateTimers() {   // update calculations and assemble output -- called
         if (chainTotal) {
             t_draw.push({
                 f_percent: chainCompletion,
-                c1: 'rgba(51, 51, 51, 1)',
+                c1: 'rgba(77, 77, 77, 1)',
                 name: "Chain Completion Time",
                 display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps))
             });
@@ -183,7 +191,7 @@ function updateTimers() {   // update calculations and assemble output -- called
         if (purchaseTotal > 0) {
             t_draw.push({
                 f_percent: purchaseCompletion,
-                c1: 'rgba(17, 17, 17, 1)',
+                c1: 'rgba(44, 44, 44, 1)',
                 name: "Purchase Completion Time",
                 display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps))
             });
@@ -301,12 +309,12 @@ function updateTimers() {   // update calculations and assemble output -- called
                 display: timeDisplay(buildingSpecialTime / Game.fps)
             });
         }
-        var len = Game.specialTabs.length;
+        var len = Game.specialTabs.length;  // if length >0, that means Santa or Krumblor icons are present
         var x = 24;
-        var y = Game.LeftBackground.canvas.height-140;
         if (len > 0) {
             x += 48;
         }
+        var y = Game.LeftBackground.canvas.height - 96;
         drawCircles(t_draw, x, y);
     }
 }
