@@ -1,8 +1,10 @@
 // functionality for the infobox
 
-function drawCircles(t_d, x, y) {
+function drawCircles(t_d, x, y) {   // draw the wheel and text box
     var maxRadius, heightOffset, i_c, i_tc, t_b, maxWidth, maxHeight, s_t,
-        c = $('#backgroundLeftCanvas');
+        c = $('#backgroundLeftCanvas'),
+        boxFont = "Arial",
+        boxFontSize = "14px";
     if (typeof (c.measureText) != "function") {
         return;
     }
@@ -17,27 +19,31 @@ function drawCircles(t_d, x, y) {
         return str.length;
     });
     var maxMeasure = c.measureText({
-        fontSize: "12px",
-        fontFamily: "Arial",
+        fontSize: boxFontSize,
+        fontFamily: boxFont,
         maxWidth: c.width,
         text: maxText
     });
     maxWidth = maxMeasure.width;
     maxHeight = maxMeasure.height * t_d.length;
-    if (FrozenCookies.fancyui % 2 == 1)
+
+    // draw the box
+    if (FrozenCookies.fancyui % 2 == 1) {
         c.drawRect({
             fillStyle: 'rgba(153, 153, 153, 0.6)',
+            //just the box, no wheel or text
             x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y + maxRadius + 5,
             width: maxWidth + 20, height: maxHeight + 20
         });
+    }
 
+    //draw the wheel and text
     t_d.forEach(function (o_draw) {
         if (o_draw.overlay) {
             i_c--;
         }
-
         else {
-            if (FrozenCookies.fancyui > 1) {
+            if (FrozenCookies.fancyui > 1) {    // draw the wheel background
                 c.drawArc({
                     strokeStyle: t_b[i_c % t_b.length],
                     strokeWidth: 10,
@@ -52,7 +58,7 @@ function drawCircles(t_d, x, y) {
                 });
             }
         }
-        if (FrozenCookies.fancyui > 1) {
+        if (FrozenCookies.fancyui > 1) {    // draw the time arcs on the wheel
             c.drawArc({
                 strokeStyle: o_draw.c1,
                 x: x + (maxRadius + 5), y: y + maxRadius + 5,
@@ -62,11 +68,11 @@ function drawCircles(t_d, x, y) {
                 end: (360 * o_draw.f_percent)
             });
         }
-        if ((FrozenCookies.fancyui % 2 == 1) && o_draw.name) {
+        if ((FrozenCookies.fancyui % 2 == 1) && o_draw.name) { // draw the text on the infobox
             s_t = o_draw.name + (o_draw.display ? ": " + o_draw.display : "");
             c.drawText({
-                fontSize: "12px",
-                fontFamily: "Arial",
+                fontSize: boxFontSize,
+                fontFamily: boxFont,
                 fillStyle: o_draw.c1,
                 x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y + heightOffset + 15 * i_tc,
                 text: s_t
@@ -77,7 +83,7 @@ function drawCircles(t_d, x, y) {
     });
 }
 
-function buildingSpecialBuffTime() {
+function buildingSpecialBuffTime() {    // calculate building special remaining time
     for (var i in Game.buffs) {
         if (Game.buffs[i].type && (Game.buffs[i].type.name == 'building buff' || Game.buffs[i].type.name == 'building debuff')) {
             return Game.buffs[i].time;
@@ -86,7 +92,7 @@ function buildingSpecialBuffTime() {
     return 0;
 }
 
-function buildingSpecialBuffMaxTime() {
+function buildingSpecialBuffMaxTime() { // calculate building special total time
     for (var i in Game.buffs) {
         if (Game.buffs[i].type && (Game.buffs[i].type.name == 'building buff' || Game.buffs[i].type.name == 'building debuff')) {
             return Game.buffs[i].maxTime;
@@ -95,7 +101,7 @@ function buildingSpecialBuffMaxTime() {
     return 0;
 }
 
-function buildingSpecialBuffValue() {
+function buildingSpecialBuffValue() {   // calculate building special multiplier
     for (var i in Game.buffs) {
         if (Game.buffs[i].type && (Game.buffs[i].type.name == 'building buff' || Game.buffs[i].type.name == 'building debuff')) {
             return Game.buffs[i].multCpS;
@@ -104,21 +110,21 @@ function buildingSpecialBuffValue() {
     return 0;
 }
 
-function buffTime(buffName) {
+function buffTime(buffName) {   // calculate buff remaining time
     var buff = Game.hasBuff(buffName);
     return buff ? buff.time : 0;
 }
 
-function buffMaxTime(buffname) {
+function buffMaxTime(buffname) {    // calculate buff total time
     var buff = Game.hasBuff(buffname);
     return buff ? buff.maxTime : 0;
 }
 
-function maxCookieDelay() {
+function maxCookieDelay() { // calculate the max amount of time reasonably expected (99% probability) until the next golden cookie
     return probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99);
 }
 
-function updateTimers() {
+function updateTimers() {   // update calculations and assemble output -- called every time Game.DrawBackground() is called
     if (FrozenCookies.fancyui === 0) {
         return
     } else {
@@ -295,7 +301,12 @@ function updateTimers() {
                 display: timeDisplay(buildingSpecialTime / Game.fps)
             });
         }
-        height = $('#backgroundLeftCanvas').height() - 140;
-        drawCircles(t_draw, 20, height);
+        var len = Game.specialTabs.length;
+        var x = 24;
+        var y = Game.LeftBackground.canvas.height-140;
+        if (len > 0) {
+            x += 48;
+        }
+        drawCircles(t_draw, x, y);
     }
 }
