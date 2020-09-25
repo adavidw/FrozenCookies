@@ -21,7 +21,7 @@ FrozenCookies.preferenceValues = {
         'display':["Autoclick GC OFF", "Autoclick GC ON"],
         'default':0
     },
-       'autoReindeer':{
+    'autoReindeer':{
         'hint':'Automatically click reindeer',
         'display':['Autoclick Reindeer OFF', 'Autoclick Reindeer ON'],
         'default':0
@@ -47,13 +47,13 @@ FrozenCookies.preferenceValues = {
         'default':0
     },
     'autoBlacklistOff':{
-        'hint':'Automatically turns off a blacklist once the goal for that blacklist is achieved',
+        'hint':'Automatically turn off a blacklist once the goal for that blacklist is achieved',
         'display':['Auto Blacklist OFF', 'Auto Blacklist ON'],
         'default':0
     },
     'blacklist':{
         'hint':'Blacklist purchases from the efficiency calculations',
-        'display':['No Blacklist', 'Speedrun Blacklist', 'Hardcore Blacklist', 'Grandmapocalypse Mode', 'No Buildings'],
+        'display':['Blacklist OFF', 'Blacklist Mode SPEEDRUN', 'Blacklist Mode HARDCORE', 'Blacklist Mode GRANDMAPOCALYPSE', 'Blacklist Mode NO BUILDINGS'],
         'default':0
     },
  // is there a way to use cumulativeBuildingCost() to automatically figure an appropriate amount for these limits, maybe based on a specified number of minutes of cps?
@@ -70,7 +70,7 @@ FrozenCookies.preferenceValues = {
         'extras':'<a class="option" id="farmMax" onclick="updateFarmMax(\'farmMax\');">${farmMax} farms</a>'
     },
     'towerLimit':{
-        'hint':'Stop Autobuying Wizard Towers at selected Max Mana, for spellcasting efficiency',
+        'hint':'Stop autobuying Wizard Towers at selected Max Mana, for spellcasting efficiency',
         'display':['Wizard Tower Cap OFF','Wizard Tower Cap ON'],
         'default':0,
         'extras':'<a class="option" id="manaMax" onclick="updateManaMax(\'manaMax\');">${manaMax} max Mana</a>'
@@ -86,24 +86,24 @@ FrozenCookies.preferenceValues = {
         'hint':'Other automatic actions:'
     },
     'autoAscend':{
-        'hint':'Automatically ascend when your heavenly chip count hits a certain number. (note: this will skip the upgrade screen)',
+        'hint':'Automatically ascend when your heavenly chip count hits a certain number. (Note: this will skip the upgrade screen)',
         'display':["Autoascend OFF", "Autoascend ON"],
         'default':0,
         'extras':'<a class="option" id="chipsToAscend" onclick="updateAscendAmount(\'HCAscendAmount\');">${HCAscendAmount} heavenly chips</a>'
     },
     'autoWrinkler':{
-        'hint':'Automatically pop wrinklers efficiently or instantly',
-        'display':['Autopop Wrinklers OFF', 'Autopop Wrinklers Efficiently', 'Autopop Wrinklers Instantly'],
+        'hint':'Automatically pop wrinklers efficiently (calculated timing to balance cookies vs. upgrades) or instantly',
+        'display':['Autopop Wrinklers OFF', 'Autopop Wrinklers EFFICIENTLY', 'Autopop Wrinklers INSTANTLY'],
         'default':0
     },
     'autoSL':{
         'hint':'Automatically harvest sugar lumps when ripe, with option to automatically swap in Rigidel',
-        'display':["Autoharvest SL OFF", "Autoharvest SL ON", "Autoharvest SL ON + Auto Rigidel"],
+        'display':["Autoharvest SL OFF", "Autoharvest SL ON", "Autoharvest SL ON + AUTO RIGIDEL"],
         'default':0
     },
     'autoGS':{
         'hint':'Automatically turn on the Golden Switch during Dragonflight and Click Frenzy (and turn back off at the end)',
-        'display':['Auto-Switch OFF','Auto-Switch ON'],
+        'display':['Auto-GS-Switch OFF','Auto-GS-Switch ON'],
         'default':0
     },
     'autoGodzamok':{
@@ -113,7 +113,7 @@ FrozenCookies.preferenceValues = {
     },
     'autoSpell':{
         'hint':'Automatically cast selected spell when your mana is full',
-        'display':["Auto Cast OFF","Auto Cast: Conjure Baked Goods","Auto Cast: Force the Hand of Fate","Auto Cast: Spontaneous Edifice","Auto Cast: Haggler's Charm (cheapest)"],
+        'display':["Auto Cast OFF","Auto Cast CONJURE BAKED GOODS","Auto Cast FORCE THE HAND OF FATE","Auto Cast SPONTANEOUS EDIFICE","Auto Cast HAGGLER'S CHARM (cheapest)"],
         'default':0,
         'extras':'<a class="option" id="minCpSMult" onclick="updateCpSMultMin(\'minCpSMult\');">x${minCpSMult} minimum Frenzy</a>'
     },
@@ -124,12 +124,12 @@ FrozenCookies.preferenceValues = {
     },
     'numberDisplay':{
         'hint':'Change how numbers are shortened',
-        'display':["Raw Numbers","Full Word (million, billion)","Initials (M, B)","SI Units (M, G, T)", "Scientific Notation (6.3e12)"],
+        'display':["Number Display RAW","Number Display FULL (million, billion)","Number Display INITIALS (M, B)","Number Display SI UNITS (M, G, T)", "Number Display SCIENTIFIC (6.3e12)"],
         'default':1
     },
     'fancyui':{
-        'hint':'As these graphics are very slow, enable it here.',
-        'display':['No infobox','Textbox only','Wheel only','Full graphical infobox'],
+        'hint':'Infobox type (can be slow)',
+        'display':['Infobox OFF','Infobox TEXT ONLY','Infobox WHEEL ONLY','Infobox WHEEL & TEXT'],
         'default':0
     },
 
@@ -149,13 +149,13 @@ FrozenCookies.preferenceValues = {
         'default':0
     },
     'setHarvestBankPlant':{
-        'hint':'Choose the plant you are going to harvest/let explode.',
-        'display':['No harvesting Bank','Bakeberry Bank','Chocoroot Bank','White Chocoroot Bank','Queenbeet Bank','Duketater Bank','Crumbspore Bank','Doughshroom Bank'],
+        'hint':'Maintain a bank for a specific plant you are going to harvest/let explode',
+        'display':['Harvesting Bank OFF','Harvesting Bank BAKEBERRY','Harvesting Bank CHOCOROOT','Harvesting Bank WHITE CHOCOROOT','Harvesting Bank QUEEENBEET','Harvesting Bank DUKETATER','Harvesting Bank CRUMBSPORE','Harvesting Bank DOUGHSHROOM'],
         'default':0
     },
     'setHarvestBankType':{
-        'hint':'Choose a scenario that you want for harvesting to calculate the needed Bank (no effect if no plant was selected above).',
-        'display':['No CpS multiplier','Frenzy','Building special','Frenzy + Building special'],
+        'hint':'Calculate the needed harvesting bank based on whether a CPS multiplier is in effect when you intend to harvest (no effect if no plant was selected above).',
+        'display':['Harvesting during NO CPS MULTIPLER','Harvesting during FRENZY','Harvesting during BUILDING SPECIAL','Harvesting during FRENZY + BUILDING SPECIAL'],
         'default':0,
         'extras':'<a class="option" id="maxSpecials" onclick="updateMaxSpecials(\'maxSpecials\');">${maxSpecials} Building specials</a>'
     },
@@ -168,13 +168,13 @@ FrozenCookies.preferenceValues = {
     },*/
 
     'simulatedGCPercent':{
-        'hint':'What percentage of Golden Cookies should be assumed as "clicked" for GC efficiency calculations (100% recommended)',
+        'hint':'Assume a percentage of Golden Cookies as "clicked" for GC efficiency calculations (100% recommended)',
         'display':["0%","100%"],
         'default':1
     },
     'fpsModifier':{
-        'hint':'The frame rate at which the game runs. 60 is twice as fast, 15 is half as fast, etc. If you\'re not sure, keep this at 30',
-        'display':['15', '24', '30', '48', '60', '72', '88', '100', '120', '144', '200', '240', '300', '5', '10'],
+        'hint':'Run the game at the selected frame rate (browser default is 30). 60 is twice as fast, 15 is half as fast, etc. If you\'re not sure, keep this at 30',
+        'display':['Frame Rate 15 fps', 'Frame Rate 24 fps', 'Frame Rate 30 fps', 'Frame Rate 48 fps', 'Frame Rate 60 fps', 'Frame Rate 2 fps', 'Frame Rate 88 fps', 'Frame Rate 100 fps', 'Frame Rate 120 fps', 'Frame Rate 144 fps', 'Frame Rate 200 fps', 'Frame Rate 240 fps', 'Frame Rate 300 fps', 'Frame Rate 5 fps', 'Frame Rate 10 fps'],
         'default':2
     },
     'logging':{
@@ -183,8 +183,8 @@ FrozenCookies.preferenceValues = {
         'default':1
     },
     'trackStats':{
-        'hint':'Track your CPS/HC earned over time during a single session to enable graphing. This may end up being *extremely* memory-intensive',
-        'display':['Tracking OFF', 'Every 60s', 'Every 30m', 'Every 1h', 'Every 24h', 'On upgrades', 'Smart Timing'],
+        'hint':'Track your CpS / HC earned over time during a single session to enable graphing. This may end up being *extremely* memory-intensive',
+        'display':['Tracking OFF', 'Tracking EVERY 60s', 'Tracking EVERY 30m', 'Tracking EVERY 1h', 'Tracking EVERY 24h', 'Tracking ON UPGRADES', 'Tracking SMART TIMING'],
         'default':0,
         'extras':'<a class="option" id="viewStats" onclick="viewStatGraphs();">View Stat Graphs</a>'
     },
@@ -198,8 +198,8 @@ FrozenCookies.preferenceValues = {
     */
 
     'defaultSeason':{
-        'hint':'Season to maintain when no others have needed upgrades',
-        'display':['Default Season: None','Default Season: Business Day','Default Season: Christmas','Default Season: Easter','Default Season: Halloween',"Default Season: Valentine's Day"],
+        'hint':'Autobuy a selected season when no others have needed upgrades',
+        'display':['Default Season OFF','Default Season BUSINESS DAY','Default Season CHRISTMAS','Default Season EASTER','Default Season HALLOWEEN',"Default Season VALENTINE'S DAY"],
         'default':0
     }
 };
