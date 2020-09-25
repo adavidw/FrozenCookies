@@ -27,22 +27,36 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
     maxWidth = maxMeasure.width;
     maxHeight = maxMeasure.height * t_d.length;
 
-    // draw the box background
+    //draw the box
     if (FrozenCookies.fancyui % 2 == 1) {
+        // draw the box background
         c.drawRect({
             fillStyle: 'rgba(180, 180, 180, 0.6)',
-            //just the box, no wheel or text
-            x: x + (maxRadius * 2) + (maxWidth / 2) + 35, y: y, // + maxRadius + 5,
+            x: x + (maxRadius * 2) + (maxWidth / 2) + 35, y: y,
             width: maxWidth + 20, height: maxHeight + 20
+        });
+        // iterate through the text items
+        t_d.forEach(function (o_draw) {
+            if (o_draw.name) {
+                s_t = o_draw.name + (o_draw.display ? ": " + o_draw.display : "");
+                c.drawText({
+                    fontSize: boxFontSize,
+                    fontFamily: boxFont,
+                    fillStyle: o_draw.c1,
+                    x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y-maxRadius-5 + heightOffset + 16 * i_tc,
+                    text: s_t
+                });
+                i_tc++;
+            }
         });
     }
 
-    //draw the wheel and text
-    if (FrozenCookies.fancyui > 1) {    // draw the wheel background
+    //draw the wheel
+    if (FrozenCookies.fancyui > 1) {    // draw the wheel outer ring
         c.drawArc({
             strokeStyle: t_b[(i_c + 2) % t_b.length],
             strokeWidth: 3,
-            x: x + (maxRadius + 5), y: y, // + maxRadius + 5,
+            x: x + (maxRadius + 5), y: y,
             radius: maxRadius + 6
         });
     }
@@ -55,13 +69,13 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
                 c.drawArc({
                     strokeStyle: t_b[i_c % t_b.length],
                     strokeWidth: 10,
-                    x: x + (maxRadius + 5), y: y, //+ maxRadius + 5,
+                    x: x + (maxRadius + 5), y: y,
                     radius: maxRadius - i_c * 12
                 });
                 c.drawArc({
                     strokeStyle: t_b[(i_c + 2) % t_b.length],
                     strokeWidth: 3,
-                    x: x + (maxRadius + 5), y: y, // + maxRadius + 5,
+                    x: x + (maxRadius + 5), y: y,
                     radius: maxRadius - 6 - (i_c) * 12
                 });
             }
@@ -69,23 +83,12 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
         if (FrozenCookies.fancyui > 1) {    // draw the time arcs on the wheel
             c.drawArc({
                 strokeStyle: o_draw.c1,
-                x: x + (maxRadius + 5), y: y, // + maxRadius + 5,
+                x: x + (maxRadius + 5), y: y,
                 radius: maxRadius - i_c * 12,
                 strokeWidth: 10,
                 start: 0,
                 end: (360 * o_draw.f_percent)
             });
-        }
-        if ((FrozenCookies.fancyui % 2 == 1) && o_draw.name) { // draw the text on the infobox
-            s_t = o_draw.name + (o_draw.display ? ": " + o_draw.display : "");
-            c.drawText({
-                fontSize: boxFontSize,
-                fontFamily: boxFont,
-                fillStyle: o_draw.c1,
-                x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y-maxRadius-5 + heightOffset + 16 * i_tc,
-                text: s_t
-            });
-            i_tc++;
         }
         i_c++;
     });
@@ -134,7 +137,7 @@ function maxCookieDelay() { // calculate the max amount of time reasonably expec
 
 function updateTimers() {   // update calculations and assemble output -- called every time Game.DrawBackground() is called
     if (FrozenCookies.fancyui === 0) {
-        return
+        return  // skip doing any calculations if the infobox isn't turned on
     } else {
         var chainPurchase, bankPercent, purchasePercent, bankMax, actualCps, t_draw,
             maxColor, height, gcDelay, gcMaxDelay, gcMinDelay,
@@ -162,10 +165,12 @@ function updateTimers() {   // update calculations and assemble output -- called
             chainTotal = 0,
             chainFinished,
             chainCompletion = 0;
-        if (!Game.Has('Golden switch [off]')) {
+        
+        // calculate min, max, and median expected times for golden cookie
+        if (!Game.Has('Golden switch [off]')) { // when golden switch is on, golden cookies don't spawn, so only calculate time for them if they can actually appear
             gcDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.5) - Game.shimmerTypes.golden.time),
-                gcMaxDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99) - Game.shimmerTypes.golden.time),
-                gcMinDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.01) - Game.shimmerTypes.golden.time);
+            gcMaxDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99) - Game.shimmerTypes.golden.time),
+            gcMinDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.01) - Game.shimmerTypes.golden.time);
         }
         if (nextChainedPurchase().cost > nextPurchase().cost) {
             chainPurchase = nextChainedPurchase().purchase;
@@ -178,6 +183,7 @@ function updateTimers() {   // update calculations and assemble output -- called
         bankMax = bankTotal / (purchaseTotal + bankTotal);
         actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
 
+        // create an array of all the elements to draw
         t_draw = [];
 
         if (chainTotal) {
@@ -309,6 +315,8 @@ function updateTimers() {   // update calculations and assemble output -- called
                 display: timeDisplay(buildingSpecialTime / Game.fps)
             });
         }
+
+        // figure out positioning
         var len = Game.specialTabs.length;  // if length >0, that means Santa or Krumblor icons are present
         var x = 24;
         if (len > 0) {
