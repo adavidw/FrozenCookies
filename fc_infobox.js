@@ -1,6 +1,12 @@
 // functionality for the infobox
 
-function drawCircles(t_d, x, y) {   // draw the wheel and text box
+var previous = {
+    maxRadius: 0,
+    maxWidth: 0,
+    maxHeight: 0,
+};
+
+function drawInfobox(t_d, x, y) {   // draw the wheel and text box
     var maxRadius, heightOffset, i_c, i_tc, t_b, maxWidth, maxHeight, s_t,
         c = $('#backgroundLeftCanvas'),
         boxFont = "Arial",
@@ -26,6 +32,12 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
     });
     maxWidth = maxMeasure.width;
     maxHeight = maxMeasure.height * t_d.length;
+    if (maxRadius > previous.maxRadius) {previous.maxRadius = maxRadius};
+    if (maxRadius < previous.maxRadius) {previous.maxRadius --};
+    if (maxWidth > previous.maxWidth)   {previous.maxWidth = maxWidth};
+    if (maxWidth < previous.maxWidth)   {previous.maxWidth --;   maxWidth = previous.maxWidth};
+    if (maxHeight > previous.maxHeight) {previous.maxHeight = maxHeight};
+    if (maxHeight < previous.maxHeight) {previous.maxHeight --;  maxHeight = previous.maxHeight};
 
     //draw the box
     if (FrozenCookies.fancyui % 2 == 1) {
@@ -56,7 +68,7 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
         c.drawArc({
             strokeStyle: t_b[(i_c + 2) % t_b.length],
             strokeWidth: 3,
-            x: x + (maxRadius + 5), y: y,
+            x: x + (maxRadius + 2), y: y,
             radius: maxRadius + 6
         });
     }
@@ -69,25 +81,33 @@ function drawCircles(t_d, x, y) {   // draw the wheel and text box
                 c.drawArc({
                     strokeStyle: t_b[i_c % t_b.length],
                     strokeWidth: 10,
-                    x: x + (maxRadius + 5), y: y,
+                    x: x + (maxRadius + 2), y: y,
                     radius: maxRadius - i_c * 12
                 });
                 c.drawArc({
                     strokeStyle: t_b[(i_c + 2) % t_b.length],
                     strokeWidth: 3,
-                    x: x + (maxRadius + 5), y: y,
+                    x: x + (maxRadius + 2), y: y,
                     radius: maxRadius - 6 - (i_c) * 12
                 });
             }
         }
         if (FrozenCookies.fancyui > 1) {    // draw the time arcs on the wheel
-            c.drawArc({
-                strokeStyle: o_draw.c1,
-                x: x + (maxRadius + 5), y: y,
+            c.drawArc({ // shadow arc
+                strokeStyle: "#222",
+                x: x + (maxRadius + 1), y: y,
                 radius: maxRadius - i_c * 12,
-                strokeWidth: 10,
+                strokeWidth: 9,
                 start: 0,
                 end: (360 * o_draw.f_percent)
+            });
+            c.drawArc({ // colored arc
+                strokeStyle: o_draw.c1,
+                x: x + (maxRadius + 2), y: y-1,
+                radius: maxRadius - i_c * 12,
+                strokeWidth: 9,
+                start: 0,
+                end: (360 * o_draw.f_percent) 
             });
         }
         i_c++;
@@ -317,12 +337,12 @@ function updateTimers() {   // update calculations and assemble output -- called
         }
 
         // figure out positioning
-        var len = Game.specialTabs.length;  // if length >0, that means Santa or Krumblor icons are present
+        var len = Game.specialTabs.length;  // if length > 0, that means Santa or Krumblor icons are present
         var x = 24;
         if (len > 0) {
             x += 48;
         }
         var y = Game.LeftBackground.canvas.height - 96;
-        drawCircles(t_draw, x, y);
+        drawInfobox(t_draw, x, y);
     }
 }
