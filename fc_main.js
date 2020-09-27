@@ -589,16 +589,16 @@ var T = Game.Objects['Temple'].minigame;
 var M = Game.Objects['Wizard tower'].minigame;
 
 function rigiSell() {
-    //Sell enough cursors to enable Rigidels effect
+    // Sell enough cursors to enable Rigidels effect
     if (Game.BuildingsOwned % 10) Game.Objects['Cursor'].sell(Game.BuildingsOwned % 10);
     return;
 }
 
-function lumpIn(mins) { //For debugging, set minutes until next lump is *ripe*
+function lumpIn(mins) { // For debugging, set minutes until next lump is *ripe*
     Game.lumpT = Date.now() - Game.lumpRipeAge + (60000 * mins)
 }
 
-function swapIn(godId, targetSlot) { //mostly code copied from minigamePantheon.js, tweaked to avoid references to "dragging"
+function swapIn(godId, targetSlot) { // mostly code copied from minigamePantheon.js, tweaked to avoid references to "dragging"
     if (T.swaps == 0) return;
     T.useSwap(1);
     T.lastSwapT = 0;
@@ -626,7 +626,7 @@ function swapIn(godId, targetSlot) { //mostly code copied from minigamePantheon.
 
 
 function autoRigidel() {
-    if (!T) return; //Exit if pantheon doesnt even exist
+    if (!T) return; // Exit if pantheon doesnt even exist
     var timeToRipe = (Game.lumpRipeAge - (Date.now() - Game.lumpT)) / 60000; //Minutes until sugar lump ripens
     var orderLvl = Game.hasGod('order') ? Game.hasGod('order') : 0;
     switch (orderLvl) {
@@ -978,10 +978,12 @@ function buildingRemaining(building, amount) {
     return Math.max(0, cost - availableCookies);
 }
 
+// currently unused
 function earnedRemaining(total) {
     return Math.max(0, total - (Game.cookiesEarned + wrinklerValue() + chocolateValue()));
 }
 
+// currently unused
 function estimatedTimeRemaining(cookies) {
     return timeDisplay(cookies / effectiveCps());
 }
