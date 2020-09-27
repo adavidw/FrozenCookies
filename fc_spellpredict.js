@@ -4,20 +4,21 @@
 // @match        http://orteil.dashnet.org/cookieclicker/
 // @source       https://www.reddit.com/r/CookieClicker/comments/6v2lz3/predict_next_hands_of_faith/
 
-(function() {   // tooltip display
-    if(Game.ObjectsById[7].minigameLoaded){
-        var lookup = setInterval(function() {
+(function () {   // tooltip display
+    if (Game.ObjectsById[7].minigameLoaded) {
+        var lookup = setInterval(function () {
             if (typeof Game.ready !== 'undefined' && Game.ready) {
                 var CastSpell = document.getElementById("grimoireSpell1");
-                CastSpell.onmouseover = function(){
-                    Game.tooltip.dynamic=1;
+                CastSpell.onmouseover = function () {
+                    Game.tooltip.dynamic = 1;
                     Game.tooltip.draw(this, Game.ObjectsById[7].minigame.spellTooltip(1)()
-                                      + '<div class="line"></div><div class="description">'
-                                      + '<b>First Spell:</b> ' + spellDisplay(0) + '<br />'
-                                      + '<b>Second Spell:</b> ' + spellDisplay(1) + '<br />'
-                                      + '<b>Third Spell:</b> ' + spellDisplay(2) + '<br />'
-                                      + '<b>Fourth Spell:</b> ' + spellDisplay(3) +'</div>','this');
-                    Game.tooltip.wobble();};
+                        + '<div class="line"></div><div class="description">'
+                        + '<b>First Spell:</b> ' + spellDisplay(0) + '<br />'
+                        + '<b>Second Spell:</b> ' + spellDisplay(1) + '<br />'
+                        + '<b>Third Spell:</b> ' + spellDisplay(2) + '<br />'
+                        + '<b>Fourth Spell:</b> ' + spellDisplay(3) + '</div>', 'this');
+                    Game.tooltip.wobble();
+                };
                 clearInterval(lookup);
             }
         }, 1000);
@@ -41,11 +42,11 @@ function spellDisplay(i) {  //format HTML for display
         "Elder Frenzy": '<b style="color:#DAA520">',
         "Blab": ''
     };
-    return '<small>' + color[nextSpell(i)] + nextSpell(i) + '</b></small>';
+    return '<small>' + color[predictNextSpell(i)] + predictNextSpell(i) + '</b></small>';
 }
 
-nextSpell = function(i) {   // calculate next spell
-    season=Game.season;
+function predictNextSpell(i) {   // calculate next spell
+    season = Game.season;
     var obj = obj || {};
     M = Game.ObjectsById[7].minigame;
     spell = M.spellsById[1];
@@ -57,8 +58,8 @@ nextSpell = function(i) {   // calculate next spell
     Math.seedrandom(Game.seed + '/' + (M.spellsCastTotal + i));
     var choices = [];
     if (!spell.fail || Math.random() < (1 - failChance)) {
-        Math.random();Math.random();
-        if (Game.season=='valentines' || Game.season=='easter'){Math.random();}
+        Math.random(); Math.random();
+        if (Game.season == 'valentines' || Game.season == 'easter') { Math.random(); }
         choices.push('Frenzy', 'Lucky');
         if (!Game.hasBuff('Dragonflight')) choices.push('Click Frenzy');
         if (Math.random() < 0.1) choices.push('Cookie Chain', 'Cookie Storm', 'Blab');
@@ -66,8 +67,8 @@ nextSpell = function(i) {   // calculate next spell
         if (Math.random() < 0.15) choices = ['Cookie Storm (Drop)'];
         if (Math.random() < 0.0001) choices.push('Sugar Lump');
     } else {
-        Math.random();Math.random();
-        if (Game.season=='valentines' || Game.season=='easter'){Math.random();}
+        Math.random(); Math.random();
+        if (Game.season == 'valentines' || Game.season == 'easter') { Math.random(); }
         choices.push('Clot', 'Ruin Cookies');
         if (Math.random() < 0.1) choices.push('Cursed Finger', 'Elder Frenzy');
         if (Math.random() < 0.003) choices.push('Sugar Lump');
