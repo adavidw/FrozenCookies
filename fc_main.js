@@ -989,13 +989,13 @@ function estimatedTimeRemaining(cookies) {
 }
 
 function canCastSE() {
-    if (M.magicM >= 80 && Game.Objects['Fractal engine'].amount > 0) return 1;
+    if (M.magicM >= 80 && Game.Objects['Javascript console'].amount > 0) return 1;
     return 0;
 }
 
 function edificeBank() {
     if (!canCastSE) return 0;
-    var cmCost = Game.Objects['Fractal engine'].price;
+    var cmCost = Game.Objects['Javascript console'].price;
     return Game.hasBuff('everything must go') ? (cmCost * (100 / 95)) / 2 : cmCost / 2;
 }
 function luckyBank() {
@@ -1027,23 +1027,23 @@ function harvestBank() {
     }
 
     if (FrozenCookies.setHarvestBankType == 2 || FrozenCookies.setHarvestBankType == 3) {
-        var harvestBuildingArray =
-            [Game.Objects['Cursor'].amount,
-            Game.Objects['Grandma'].amount,
-            Game.Objects['Farm'].amount,
-            Game.Objects['Mine'].amount,
-            Game.Objects['Factory'].amount,
-            Game.Objects['Bank'].amount,
-            Game.Objects['Temple'].amount,
-            Game.Objects['Wizard tower'].amount,
-            Game.Objects['Shipment'].amount,
-            Game.Objects['Alchemy lab'].amount,
-            Game.Objects['Portal'].amount,
-            Game.Objects['Time machine'].amount,
-            Game.Objects['Antimatter condenser'].amount,
-            Game.Objects['Prism'].amount,
-            Game.Objects['Chancemaker'].amount,
-            Game.Objects['Fractal engine'].amount];
+        var harvestBuildingArray = [Game.Objects['Cursor'].amount,
+        Game.Objects['Grandma'].amount,
+        Game.Objects['Farm'].amount,
+        Game.Objects['Mine'].amount,
+        Game.Objects['Factory'].amount,
+        Game.Objects['Bank'].amount,
+        Game.Objects['Temple'].amount,
+        Game.Objects['Wizard tower'].amount,
+        Game.Objects['Shipment'].amount,
+        Game.Objects['Alchemy lab'].amount,
+        Game.Objects['Portal'].amount,
+        Game.Objects['Time machine'].amount,
+        Game.Objects['Antimatter condenser'].amount,
+        Game.Objects['Prism'].amount,
+        Game.Objects['Chancemaker'].amount,
+        Game.Objects['Fractal engine'].amount,
+        Game.Objects['Javascript console'].amount];
         harvestBuildingArray.sort(function (a, b) { return b - a });
 
         for (var buildingLoop = 0; buildingLoop < FrozenCookies.maxSpecials; buildingLoop++) {
