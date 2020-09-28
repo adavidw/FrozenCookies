@@ -44,7 +44,7 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
         // draw the box background
         c.drawRect({
             fillStyle: 'rgba(180, 180, 180, 0.6)',
-            x: x + (maxRadius * 2) + (maxWidth / 2) + 35, y: y,
+            x: x + (maxRadius * 2) + (maxWidth / 2) + 30, y: y,
             width: maxWidth + 20, height: maxHeight + 20
         });
         // iterate through the text items
@@ -55,7 +55,7 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
                     fontSize: boxFontSize,
                     fontFamily: boxFont,
                     fillStyle: o_draw.c1,
-                    x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y-maxRadius-5 + heightOffset + 16 * i_tc,
+                    x: x + maxRadius * 2 + maxWidth / 2 + 30, y: y-maxRadius-5 + heightOffset + 16 * i_tc,
                     text: s_t
                 });
                 i_tc++;
@@ -68,7 +68,7 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
         c.drawArc({
             strokeStyle: t_b[(i_c + 2) % t_b.length],
             strokeWidth: 3,
-            x: x + (maxRadius + 2), y: y,
+            x: x + (maxRadius + 0), y: y,
             radius: maxRadius + 6
         });
     }
@@ -81,13 +81,13 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
                 c.drawArc({
                     strokeStyle: t_b[i_c % t_b.length],
                     strokeWidth: 10,
-                    x: x + (maxRadius + 2), y: y,
+                    x: x + (maxRadius + 0), y: y,
                     radius: maxRadius - i_c * 12
                 });
                 c.drawArc({
                     strokeStyle: t_b[(i_c + 2) % t_b.length],
                     strokeWidth: 3,
-                    x: x + (maxRadius + 2), y: y,
+                    x: x + (maxRadius + 0), y: y,
                     radius: maxRadius - 6 - (i_c) * 12
                 });
             }
@@ -95,7 +95,7 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
         if (FrozenCookies.fancyui > 1) {    // draw the time arcs on the wheel
             c.drawArc({ // shadow arc
                 strokeStyle: "#222",
-                x: x + (maxRadius + 1), y: y,
+                x: x + (maxRadius - 1), y: y,
                 radius: maxRadius - i_c * 12,
                 strokeWidth: 9,
                 start: 0,
@@ -103,7 +103,7 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
             });
             c.drawArc({ // colored arc
                 strokeStyle: o_draw.c1,
-                x: x + (maxRadius + 2), y: y-1,
+                x: x + (maxRadius + 0), y: y-1,
                 radius: maxRadius - i_c * 12,
                 strokeWidth: 9,
                 start: 0,
@@ -210,7 +210,7 @@ function updateTimers() {   // update calculations and assemble output -- called
             t_draw.push({
                 f_percent: chainCompletion,
                 c1: 'rgba(77, 77, 77, 1)',
-                name: "Chain Completion Time",
+                name: "Chain Time (" + chainPurchase.name + ")",
                 display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps))
             });
         }
@@ -218,7 +218,7 @@ function updateTimers() {   // update calculations and assemble output -- called
             t_draw.push({
                 f_percent: purchaseCompletion,
                 c1: 'rgba(44, 44, 44, 1)',
-                name: "Purchase Completion Time",
+                name: "Purchase Time (" + nextPurchase().purchase.name + ")",
                 display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps))
             });
         }
