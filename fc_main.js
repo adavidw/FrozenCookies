@@ -670,23 +670,42 @@ function autoTicker() {
 function autoCast() {
     if (!M) return; // Just leave if you don't have grimoire
     if (M.magic == M.magicM) {
-        if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
-            switch (FrozenCookies.autoSpell) {
-                case 0:
-                    return;
-                case 1:
+        switch (FrozenCookies.autoSpell) {
+            case 0:
+                return;
+            case 1:
+                if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
                     var CBG = M.spellsById[0];
                     if (M.magicM < Math.floor(CBG.costMin + CBG.costPercent * M.magicM)) return;
                     M.castSpell(CBG);
                     logEvent('AutoSpell', 'Cast Conjure Baked Goods');
-                    return;
-                case 2:
-                    var FTHOF = M.spellsById[1];
-                    if (M.magicM < Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) return;
+                }
+                return;
+            case 2:
+                var FTHOF = M.spellsById[1];
+                if (M.magicM < Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) return;
+                if (predictNextSpell(0) === "Blab") {
                     M.castSpell(FTHOF);
                     logEvent('AutoSpell', 'Cast Force the Hand of Fate');
                     return;
-                case 3:
+                } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {
+                    M.castSpell(FTHOF);
+                    logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+                    return;
+                }
+                if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
+                    var towerCount = Game.Objects["Wizard tower"].amount;
+                    M.castSpell(FTHOF);
+                    logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+                    // temporary for my purposes
+                    if (towerCount > 21) {
+                        Game.Objects["Wizard tower"].sell(towerCount - 21);
+                        logEvent('AutoSpell', 'Sold Wizard towers');
+                    }
+                }
+                return;
+            case 3:
+                if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
                     var SE = M.spellsById[3];
                     // This code apparently works under the following assumptions:
                     //      - you want to spend your mana to get the highest value building (currently Javascript Console)
@@ -701,16 +720,21 @@ function autoCast() {
                     }
                     M.castSpell(SE);
                     logEvent('AutoSpell', 'Cast Spontaneous Edifice');
-                    return;
-                case 4:
+                } return;
+            case 4:
+                if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
                     var hagC = M.spellsById[4];
                     if (M.magicM < Math.floor(hagC.costMin + hagC.costPercent * M.magicM)) return;
                     M.castSpell(hagC);
                     logEvent('AutoSpell', 'Cast Haggler\'s Charm');
-                    return;
-            }
+                } return;
         }
     }
+    // temporary for my purposes
+    if (Game.Objects["Wizard tower"].amount < 307) {
+        safeBuy(Game.Objects["Wizard tower"], 307 - Game.Objects["Wizard tower"].amount);
+    }
+    return;
 }
 
 function autoBlacklistOff() {
@@ -2168,6 +2192,7 @@ function autoGSBuy() {
     if (hasClickBuff()) {
         if (Game.Upgrades["Golden switch [off]"].unlocked && !Game.Upgrades["Golden switch [off]"].bought) {
             Game.Upgrades["Golden switch [off]"].buy();
+            Game.Objects.Farm.minigame.freeze = 1;
             logEvent("AutoGS", "Turning Golden Switch on");
         }
     } else if (cpsBonus() <= 1) {
@@ -2175,6 +2200,7 @@ function autoGSBuy() {
         if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
             Game.CalculateGains(); // Ensure price is updated since Frenzy ended
             Game.Upgrades["Golden switch [on]"].buy();
+            Game.Objects.Farm.minigame.freeze = 0;
             logEvent("AutoGS", "Turning Golden Switch back off");
         }
         // }
@@ -2198,9 +2224,31 @@ function autoGodzamokAction() {
     }
 
     if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
+        logEvent("AutoGodzamok", "has Godz, has clickBuff, and doesn't have devastion, so let's roll");
+        // have to figure out how to ensure that the golden switch is on before these calculations
         if (FrozenCookies.autoGodzamok === 1 || FrozenCookies.autoGodzamok === 2) {
             var cursorCount = Game.Objects.Cursor.amount;
             var farmCount = Game.Objects.Farm.amount - 1;     // 1 farm always left to prevent garden from disappearing
+            var buildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount) + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount);
+            var actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
+            var expectedProd = actualCps * 10;
+            var godzamokProd = (Game.cookiesPs + (Game.mouseCps() * FrozenCookies.cookieClickSpeed * ((cursorCount + farmCount) / 100))) * 10;
+
+            if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
+                logEvent("AutoGodzamok", "Golden Switch is on");
+            } else logEvent("AutoGodzamok", "Golden Switch is off");
+            logEvent("AutoGodzamok", "Before selling, this combo should produce " + expectedProd + " cookies in 10 seconds");
+            logEvent("AutoGodzamok", "After selling, this combo would produce " + godzamokProd + " cookies in 10 seconds");
+            logEvent("AutoGodzamok", "You would earn " + (godzamokProd - expectedProd) + " more cookies, but it would cost " + buildingCost + " cookies to rebuild");
+
+            if (expectedProd > (godzamokProd - buildingCost)) {
+                logEvent("AutoGodzamok", "Not enough. Won't sell.");
+            }
+
+            // cumulativeBuildingCost
+            // clickBuffBonus
+            // cpsBonus
+            // Game.buffs
 
             //sell the cursors and farms
             if (Game.Objects.Cursor.amount >= 10) {
@@ -2233,9 +2281,7 @@ function autoGodzamokAction() {
                         logEvent("AutoGodzamok", "Bought " + farmCount + " farms");
                     }
                 }
-            }
-
-            if (FrozenCookies.autoGodzamok === 2) {     // Rebuy all
+            } else if (FrozenCookies.autoGodzamok === 2) {     // Rebuy all of what was there before
                 if (Game.Objects.Cursor.amount < 10) {
                     safeBuy(Game.Objects['Cursor'], cursorCount);
                     logEvent("AutoGodzamok", "Bought " + cursorCount + " cursors");
@@ -2262,6 +2308,7 @@ function autoGodzamokAction() {
         //     });
         // }
     }
+    return;
 }
 
 function goldenCookieLife() {
