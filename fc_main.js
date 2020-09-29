@@ -668,6 +668,24 @@ function autoTicker() {
 }
 
 function autoCast() {
+    //temporary for Aaron
+    function doubleCast(spell) {
+        var towerCount = Game.Objects["Wizard tower"].amount;
+        M.castSpell(spell);
+        logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+        if (towerCount > 21) {
+            Game.Objects["Wizard tower"].sell(towerCount - 21);
+            logEvent('AutoSpell', 'Sold Wizard towers');
+        }
+        if (M.magic >= Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) {
+            M.castSpell(spell);
+            logEvent('AutoSpell', 'Cast Force the Hand of Fate again');
+        } else logEvent('AutoSpell', 'Couldn\'t cast again');
+        if (Game.Objects["Wizard tower"].amount < 307) {
+            safeBuy(Game.Objects["Wizard tower"], 307 - Game.Objects["Wizard tower"].amount);
+        }
+        return;
+    }
     if (!M) return; // Just leave if you don't have grimoire
     if (M.magic == M.magicM) {
         switch (FrozenCookies.autoSpell) {
@@ -694,14 +712,8 @@ function autoCast() {
                     return;
                 }
                 if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
-                    var towerCount = Game.Objects["Wizard tower"].amount;
-                    M.castSpell(FTHOF);
-                    logEvent('AutoSpell', 'Cast Force the Hand of Fate');
-                    // temporary for my purposes
-                    if (towerCount > 21) {
-                        Game.Objects["Wizard tower"].sell(towerCount - 21);
-                        logEvent('AutoSpell', 'Sold Wizard towers');
-                    }
+                    doubleCast(FTHOF);
+                    logEvent('AutoSpell', 'Doublecasting...');
                 }
                 return;
             case 3:
@@ -730,11 +742,6 @@ function autoCast() {
                 } return;
         }
     }
-    // temporary for my purposes
-    if (Game.Objects["Wizard tower"].amount < 307) {
-        safeBuy(Game.Objects["Wizard tower"], 307 - Game.Objects["Wizard tower"].amount);
-    }
-    return;
 }
 
 function autoBlacklistOff() {
