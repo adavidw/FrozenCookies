@@ -7,8 +7,8 @@ var baseUrl = scriptElement !== null ?
     'https://adavidw.github.io/FrozenCookies/';
 var FrozenCookies = {
     'baseUrl': baseUrl,
-    'branch': '',
-    'version': '1.9.0-adw'
+    'branch': 'adw',
+    'version': '1.9.0'
 };
 
 // Load external libraries
