@@ -2231,6 +2231,7 @@ function autoCombo() {
         }
     } else if (cpsBonus() <= 1) {
         if (Game.Objects.Farm.minigame.freeze = 1) {
+            console.log(Game.Objects.Farm.minigame.freeze = 1);
             Game.Objects.Farm.minigame.freeze = 0;
             logEvent("AutoCombo", "Garden thawed");
         }
