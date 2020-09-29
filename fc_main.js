@@ -670,29 +670,35 @@ function autoTicker() {
 function doubleCast(spell) {
     console.log("now in the dc function");
     var towerCount = Game.Objects["Wizard tower"].amount;
-    if (M.magic >= Math.floor(spell.costMin + spell.costPercent * M.magicM)) {
+    // can you do 1 or 2?
+    if (M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM) > 21) {
         logEvent('AutoSpell', 'starting if loop. Mana at ' + M.magic);
-        M.castSpell(spell);
-        logEvent('AutoSpell', 'Cast Force the Hand of Fate (dc)');
+        if (M.castSpell(spell)) {
+            logEvent('AutoSpell', 'Cast Force the Hand of Fate (1st)');
+        }
         if (M.magic >= 21 && towerCount > 21) {
             Game.Objects["Wizard tower"].sell(towerCount - 21);
             logEvent('AutoSpell', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
-            logEvent('AutoSpell', 'Mana at ' + M.magic + ". Mana needed is " + Math.floor(spell.costMin + spell.costPercent * M.magicM) + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
+            logEvent('AutoSpell', 'Mana at ' + M.magic + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
+            console.log(M.castSpell(spell) + "trying");
+            if (M.castSpell(spell)) {
+                logEvent('AutoSpell', 'Cast Force the Hand of Fate (2nd)');
+            }
         }
         return;
     } else {
         logEvent('AutoSpell', 'In the else loop. Mana at ' + M.magic + ". Mana needed is " + Math.floor(spell.costMin + spell.costPercent * M.magicM) + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
-        logEvent('AutoSpell', 'Out of Mana. No more spell casting');
+        logEvent('AutoSpell', 'Out of Mana. No more spell casting. How did you even get to this part of the loop?');
         if (towerCount < 307) {
-            safeBuy(Game.Objects["Wizard tower"], 307 - towerCount);
-            logEvent('AutoSpell', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
-        } 
+            if (safeBuy(Game.Objects["Wizard tower"], 307 - towerCount)) {
+                logEvent('AutoSpell', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+            }
+        }
         return;
     }
 }
 
 function autoCast() {
-    //temporary for Aaron
     if (!M) return; // Just leave if you don't have grimoire
     if (M.magic == M.magicM) {
         switch (FrozenCookies.autoSpell) {
@@ -702,25 +708,31 @@ function autoCast() {
                 if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
                     var CBG = M.spellsById[0];
                     if (M.magicM < Math.floor(CBG.costMin + CBG.costPercent * M.magicM)) return;
-                    M.castSpell(CBG);
-                    logEvent('AutoSpell', 'Cast Conjure Baked Goods');
+                    if (M.castSpell(CBG)) {
+                        logEvent('AutoSpell', 'Cast Conjure Baked Goods');
+                    }
                 }
                 return;
             case 2:
                 var FTHOF = M.spellsById[1];
                 if (M.magicM < Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) return;
+                // if it's a bad cookie, just cast the spell and get it out of the way (regardless of CPS)
                 if (predictNextSpell(0) === "Blab") {
-                    M.castSpell(FTHOF);
-                    logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+                    if (M.castSpell(FTHOF)) {
+                        logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+                    }
                     return;
                 } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {
-                    M.castSpell(FTHOF);
-                    logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+                    if (M.castSpell(FTHOF)) {
+                        logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+                    }
                     return;
                 }
+                // otherwise wait until we have the right multiplier
                 if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
-                    logEvent('AutoSpell', 'Doublecasting...');
-                    doubleCast(FTHOF);
+                    if (M.castSpell(FTHOF)) {
+                        logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+                    }
                 }
                 return;
             case 3:
@@ -737,15 +749,17 @@ function autoCast() {
                         Game.Objects["Javascript console"].sell(1);
                         logEvent('Store', 'Sold 1 Javascript Console for ' + (Beautify(Game.Objects['Javascript console'].price * Game.Objects['Javascript console'].getSellMultiplier()) + ' cookies'));
                     }
-                    M.castSpell(SE);
-                    logEvent('AutoSpell', 'Cast Spontaneous Edifice');
+                    if (M.castSpell(SE)) {
+                        logEvent('AutoSpell', 'Cast Spontaneous Edifice');
+                    }
                 } return;
             case 4:
                 if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
                     var hagC = M.spellsById[4];
                     if (M.magicM < Math.floor(hagC.costMin + hagC.costPercent * M.magicM)) return;
-                    M.castSpell(hagC);
-                    logEvent('AutoSpell', 'Cast Haggler\'s Charm');
+                    if (M.castSpell(hagC)) {
+                        logEvent('AutoSpell', 'Cast Haggler\'s Charm');
+                    }
                 } return;
         }
     }
