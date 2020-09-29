@@ -668,12 +668,12 @@ function autoTicker() {
 }
 
 function autoCombo() {
-    towerCounter()
     if (hasClickBuff()) {
         if (Game.Objects.Farm.minigame.freeze === 0) {
             Game.Objects.Farm.minigame.freeze = 1;
             logEvent("AutoCombo", "Garden frozen");
         }
+        towerCounter()
     } else if (Game.Objects.Farm.minigame.freeze === 1) {
         Game.Objects.Farm.minigame.freeze = 0;
         logEvent("AutoCombo", "Garden thawed");
@@ -683,15 +683,15 @@ function autoCombo() {
 function towerCounter() {
     var spell = M.spellsById[1];
     var towerCount = Game.Objects["Wizard tower"].amount;
-    if (hasClickBuff()) {
-        if ((M.magic >= 21) && (M.magic < M.magicM) && (towerCount > 21)) {
-            Game.Objects["Wizard tower"].sell(towerCount - 21);
-            logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
-            logEvent('AutoCombo', 'Mana at ' + M.magic + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
-        }
-    } else {
+    // did a spell just get cast?
+    // if ((M.magic >= 21) && (M.magic < M.magicM) && (towerCount > 21)) {
+    if ((M.magic < M.magicM) && (M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) > 21) {
+        Game.Objects["Wizard tower"].sell(towerCount - 21);
+        logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+        logEvent('AutoCombo', 'Mana at ' + M.magic + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
+        autoCast();
         if (towerCount < 307) {
-            safeBuy(Game.Objects["Wizard tower"], 307 - towerCount);
+            safeBuy(Game.Objects["Wizard tower"], towerCount - 21);
             logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
         }
     }
@@ -715,13 +715,12 @@ function autoCast() {
             case 2:
                 var FTHOF = M.spellsById[1];
                 if (M.magicM < Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) return;
-                // if it's a bad cookie, just cast the spell and get it out of the way (regardless of CPS)
-                if (predictNextSpell(0) === "Blab") {
+                if (predictNextSpell(0) === "Blab") {   // if it's a Blab cookie, just cast the spell and get it out of the way (regardless of CPS)
                     if (M.castSpell(FTHOF)) {
                         logEvent('AutoSpell', 'Cast Force the Hand of Fate');
                     }
                     return;
-                } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {
+                } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's an actual detrimental effect, cast the spell and temporarily turn off AutoGS
                     if (M.castSpell(FTHOF)) {
                         logEvent('AutoSpell', 'Cast Force the Hand of Fate');
                     }
@@ -2603,7 +2602,7 @@ function FCStart() {
     }
 
     if (FrozenCookies.autoCombo) {
-        FrozenCookies.autoComboBot = setInterval(autoCombo, FrozenCookies.frequency)
+        FrozenCookies.autoComboBot = setInterval(autoCombo, FrozenCookies.frequency * 10)
     }
 
     if (FrozenCookies.autoGodzamok) {
