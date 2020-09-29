@@ -681,15 +681,8 @@ function autoCombo() {
 }
 
 function towerCounter() {
-    console.log("now in the extraCast function");
     var spell = M.spellsById[1];
     var towerCount = Game.Objects["Wizard tower"].amount;
-    // if (M.magic >= Math.floor(spell.costMin + spell.costPercent * M.magicM)) {
-    //     logEvent('AutoSpell', 'first calc is true, so starting if loop. Mana at ' + M.magic);
-    //     if (M.castSpell(spell)) {
-    //         logEvent('AutoCombo', 'Cast Force the Hand of Fate');
-    //     }
-    // }
     if (hasClickBuff()) {
         if ((M.magic >= 21) && (M.magic < M.magicM) && (towerCount > 21)) {
             Game.Objects["Wizard tower"].sell(towerCount - 21);
@@ -697,7 +690,6 @@ function towerCounter() {
             logEvent('AutoCombo', 'Mana at ' + M.magic + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
         }
     } else {
-        logEvent('AutoCombo', 'In the else loop. Mana at ' + M.magic + ". Mana needed is " + Math.floor(spell.costMin + spell.costPercent * M.magicM) + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
         if (towerCount < 307) {
             safeBuy(Game.Objects["Wizard tower"], 307 - towerCount);
             logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
