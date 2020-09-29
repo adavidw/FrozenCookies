@@ -2218,11 +2218,15 @@ function safeBuy(bldg, count) {
 
 function autoCombo() {
     if (hasClickBuff()) {
-        Game.Objects.Farm.minigame.freeze = 1;
-        logEvent("AutoCombo", "Garden frozen");
+        if (Game.Objects.Farm.minigame.freeze = 0) {
+            Game.Objects.Farm.minigame.freeze = 1;
+            logEvent("AutoCombo", "Garden frozen");
+        }
     } else if (cpsBonus() <= 1) {
-        Game.Objects.Farm.minigame.freeze = 0;
-        logEvent("AutoCombo", "Garden thawed");
+        if (Game.Objects.Farm.minigame.freeze = 1) {
+            Game.Objects.Farm.minigame.freeze = 0;
+            logEvent("AutoCombo", "Garden thawed");
+        }
     }
 }
 
