@@ -668,21 +668,27 @@ function autoTicker() {
 }
 
 function doubleCast(spell) {
+    console.log("now in the dc function");
     var towerCount = Game.Objects["Wizard tower"].amount;
-    M.castSpell(spell);
-    logEvent('AutoSpell', 'Cast Force the Hand of Fate');
-    if (towerCount > 21) {
-        Game.Objects["Wizard tower"].sell(towerCount - 21);
-        logEvent('AutoSpell', 'Sold Wizard towers');
-    }
-    if (M.magic >= Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) {
+    if (M.magic >= Math.floor(spell.costMin + spell.costPercent * M.magicM)) {
+        logEvent('AutoSpell', 'starting if loop. Mana at ' + M.magic);
         M.castSpell(spell);
-        logEvent('AutoSpell', 'Cast Force the Hand of Fate again');
-    } else logEvent('AutoSpell', 'Couldn\'t cast again');
-    if (Game.Objects["Wizard tower"].amount < 307) {
-        safeBuy(Game.Objects["Wizard tower"], 307 - Game.Objects["Wizard tower"].amount);
+        logEvent('AutoSpell', 'Cast Force the Hand of Fate (dc)');
+        if (M.magic >= 21 && towerCount > 21) {
+            Game.Objects["Wizard tower"].sell(towerCount - 21);
+            logEvent('AutoSpell', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+            logEvent('AutoSpell', 'Mana at ' + M.magic + ". Mana needed is " + Math.floor(spell.costMin + spell.costPercent * M.magicM) + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
+        }
+        return;
+    } else {
+        logEvent('AutoSpell', 'In the else loop. Mana at ' + M.magic + ". Mana needed is " + Math.floor(spell.costMin + spell.costPercent * M.magicM) + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
+        logEvent('AutoSpell', 'Out of Mana. No more spell casting');
+        if (towerCount < 307) {
+            safeBuy(Game.Objects["Wizard tower"], 307 - towerCount);
+            logEvent('AutoSpell', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+        } 
+        return;
     }
-    return;
 }
 
 function autoCast() {
@@ -713,8 +719,8 @@ function autoCast() {
                     return;
                 }
                 if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
-                    doubleCast(FTHOF);
                     logEvent('AutoSpell', 'Doublecasting...');
+                    doubleCast(FTHOF);
                 }
                 return;
             case 3:
