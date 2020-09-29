@@ -44,18 +44,18 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
         // draw the box background
         c.drawRect({
             fillStyle: 'rgba(180, 180, 180, 0.6)',
-            x: x + (maxRadius * 2) + (maxWidth / 2) + 30, y: y,
+            x: x + (maxRadius * 2) + (maxWidth / 2) + 35, y: y,
             width: maxWidth + 20, height: maxHeight + 20
         });
         // iterate through the text items
         t_d.forEach(function (o_draw) {
-            if (o_draw.name) {
-                s_t = o_draw.name + (o_draw.display ? ": " + o_draw.display : "");
+            if (o_draw.name || o.draw.display) {
+                s_t = o_draw.name + ((o_draw.name && o_draw.display) ? ": " : "") + o_draw.display;
                 c.drawText({
                     fontSize: boxFontSize,
                     fontFamily: boxFont,
                     fillStyle: o_draw.c1,
-                    x: x + maxRadius * 2 + maxWidth / 2 + 30, y: y-maxRadius-5 + heightOffset + 16 * i_tc,
+                    x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y - maxRadius - 5 + heightOffset + 16 * i_tc,
                     text: s_t
                 });
                 i_tc++;
@@ -173,6 +173,8 @@ function updateTimers() {   // update calculations and assemble output -- called
             clickFrenzyMaxTime = buffMaxTime('Click frenzy'),
             dragonflightTime = buffTime('Dragonflight'),
             dragonflightMaxTime = buffMaxTime('Dragonflight'),
+            devastationTime = buffTime('Devastation'),
+            devastationMaxTime = buffMaxTime('Devastation'),
             cursedFingerTime = buffTime('Cursed finger'),
             cursedFingerMaxTime = buffMaxTime('Cursed finger'),
             cookieStormTime = buffTime('Cookie storm'),
@@ -210,7 +212,7 @@ function updateTimers() {   // update calculations and assemble output -- called
             t_draw.push({
                 f_percent: chainCompletion,
                 c1: 'rgba(77, 77, 77, 1)',
-                name: "Chain Time (" + chainPurchase.name + ")",
+                name: "Chain Completion Time (" + chainPurchase.name + "):",
                 display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps))
             });
         }
@@ -325,6 +327,14 @@ function updateTimers() {   // update calculations and assemble output -- called
                 c1: "rgba(0, 196, 255, 1)",
                 name: "Cookie Storm Time",
                 display: timeDisplay(cookieStormTime / Game.fps)
+            });
+        }
+        if (devastationTime > 0) {
+            t_draw.push({
+                f_percent: devastationTime / devastationMaxTime,
+                c1: "rgba(183, 206, 49, 1)",
+                name: "Devastation (x" + Game.buffs['Devastation'].multClick + ") Time",
+                display: timeDisplay(devastationTime / Game.fps)
             });
         }
         if (buildingSpecialTime > 0) {
