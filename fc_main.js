@@ -667,34 +667,41 @@ function autoTicker() {
     }
 }
 
-function doubleCast(spell) {
+function autoCombo() {
+    var FTHOF = M.spellsById[1];
+    if (hasClickBuff()) {
+        if (Game.Objects.Farm.minigame.freeze === 0) {
+            Game.Objects.Farm.minigame.freeze = 1;
+            logEvent("AutoCombo", "Garden frozen");
+        }
+        extraCast(FTHOF);
+    } else if (Game.Objects.Farm.minigame.freeze === 1) {
+        Game.Objects.Farm.minigame.freeze = 0;
+        logEvent("AutoCombo", "Garden thawed");
+    }
+}
+
+function extraCast(spell) {
     console.log("now in the dc function");
     var towerCount = Game.Objects["Wizard tower"].amount;
-    // can you do 1 or 2?
-    if (M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM) > 21) {
-        logEvent('AutoSpell', 'starting if loop. Mana at ' + M.magic);
+    if (M.magic >= Math.floor(spell.costMin + spell.costPercent * M.magicM)) {
+        logEvent('AutoSpell', 'first calc is true, so starting if loop. Mana at ' + M.magic);
         if (M.castSpell(spell)) {
-            logEvent('AutoSpell', 'Cast Force the Hand of Fate (1st)');
+            logEvent('AutoCombo', 'Cast Force the Hand of Fate');
         }
-        if (M.magic >= 21 && towerCount > 21) {
-            Game.Objects["Wizard tower"].sell(towerCount - 21);
-            logEvent('AutoSpell', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
-            logEvent('AutoSpell', 'Mana at ' + M.magic + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
-            console.log(M.castSpell(spell) + "trying");
-            if (M.castSpell(spell)) {
-                logEvent('AutoSpell', 'Cast Force the Hand of Fate (2nd)');
-            }
-        }
-        return;
+    }
+    if (M.magic >= 21 && towerCount > 21) {
+        Game.Objects["Wizard tower"].sell(towerCount - 21);
+        logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+        logEvent('AutoCombo', 'Mana at ' + M.magic + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
     } else {
-        logEvent('AutoSpell', 'In the else loop. Mana at ' + M.magic + ". Mana needed is " + Math.floor(spell.costMin + spell.costPercent * M.magicM) + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
-        logEvent('AutoSpell', 'Out of Mana. No more spell casting. How did you even get to this part of the loop?');
+        logEvent('AutoCombo', 'In the else loop. Mana at ' + M.magic + ". Mana needed is " + Math.floor(spell.costMin + spell.costPercent * M.magicM) + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
+        // logEvent('AutoCombo', 'Out of Mana. No more spell casting. How did you even get to this part of the loop?');
         if (towerCount < 307) {
             if (safeBuy(Game.Objects["Wizard tower"], 307 - towerCount)) {
-                logEvent('AutoSpell', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+                logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
             }
         }
-        return;
     }
 }
 
@@ -2241,18 +2248,6 @@ function safeBuy(bldg, count) {
         document.getElementById('storeBulkSell').click();
     } else {
         bldg.buy(count);
-    }
-}
-
-function autoCombo() {
-    if (hasClickBuff()) {
-        if (Game.Objects.Farm.minigame.freeze === 0) {
-            Game.Objects.Farm.minigame.freeze = 1;
-            logEvent("AutoCombo", "Garden frozen");
-        }
-    } else if (Game.Objects.Farm.minigame.freeze === 1) {
-        Game.Objects.Farm.minigame.freeze = 0;
-        logEvent("AutoCombo", "Garden thawed");
     }
 }
 
