@@ -2192,7 +2192,6 @@ function autoGSBuy() {
     if (hasClickBuff()) {
         if (Game.Upgrades["Golden switch [off]"].unlocked && !Game.Upgrades["Golden switch [off]"].bought) {
             Game.Upgrades["Golden switch [off]"].buy();
-            Game.Objects.Farm.minigame.freeze = 1;
             logEvent("AutoGS", "Turning Golden Switch on");
         }
     } else if (cpsBonus() <= 1) {
@@ -2200,7 +2199,6 @@ function autoGSBuy() {
         if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
             Game.CalculateGains(); // Ensure price is updated since Frenzy ended
             Game.Upgrades["Golden switch [on]"].buy();
-            Game.Objects.Farm.minigame.freeze = 0;
             logEvent("AutoGS", "Turning Golden Switch back off");
         }
         // }
@@ -2215,6 +2213,16 @@ function safeBuy(bldg, count) {
         document.getElementById('storeBulkSell').click();
     } else {
         bldg.buy(count);
+    }
+}
+
+function autoCombo() {
+    if (hasClickBuff()) {
+        Game.Objects.Farm.minigame.freeze = 1;
+        logEvent("AutoCombo", "Garden frozen");
+    } else if (cpsBonus() <= 1) {
+        Game.Objects.Farm.minigame.freeze = 0;
+        logEvent("AutoCombo", "Garden thawed");
     }
 }
 
@@ -2527,6 +2535,11 @@ function FCStart() {
         FrozenCookies.autoGSBot = 0;
     }
 
+    if (FrozenCookies.autoComboBot) {
+        clearInterval(FrozenCookies.autoComboBot);
+        FrozenCookies.autoComboBot = 0;
+    }
+
     if (FrozenCookies.autoGodzamokBot) {
         clearInterval(FrozenCookies.autoGodzamokBot);
         FrozenCookies.autoGodzamokBot = 0;
@@ -2570,6 +2583,10 @@ function FCStart() {
 
     if (FrozenCookies.autoGS) {
         FrozenCookies.autoGSBot = setInterval(autoGSBuy, FrozenCookies.frequency)
+    }
+
+    if (FrozenCookies.autoCombo) {
+        FrozenCookies.autoComboBot = setInterval(autoCombo, FrozenCookies.frequency)
     }
 
     if (FrozenCookies.autoGodzamok) {
