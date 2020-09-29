@@ -667,25 +667,26 @@ function autoTicker() {
     }
 }
 
+function doubleCast(spell) {
+    var towerCount = Game.Objects["Wizard tower"].amount;
+    M.castSpell(spell);
+    logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+    if (towerCount > 21) {
+        Game.Objects["Wizard tower"].sell(towerCount - 21);
+        logEvent('AutoSpell', 'Sold Wizard towers');
+    }
+    if (M.magic >= Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) {
+        M.castSpell(spell);
+        logEvent('AutoSpell', 'Cast Force the Hand of Fate again');
+    } else logEvent('AutoSpell', 'Couldn\'t cast again');
+    if (Game.Objects["Wizard tower"].amount < 307) {
+        safeBuy(Game.Objects["Wizard tower"], 307 - Game.Objects["Wizard tower"].amount);
+    }
+    return;
+}
+
 function autoCast() {
     //temporary for Aaron
-    function doubleCast(spell) {
-        var towerCount = Game.Objects["Wizard tower"].amount;
-        M.castSpell(spell);
-        logEvent('AutoSpell', 'Cast Force the Hand of Fate');
-        if (towerCount > 21) {
-            Game.Objects["Wizard tower"].sell(towerCount - 21);
-            logEvent('AutoSpell', 'Sold Wizard towers');
-        }
-        if (M.magic >= Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) {
-            M.castSpell(spell);
-            logEvent('AutoSpell', 'Cast Force the Hand of Fate again');
-        } else logEvent('AutoSpell', 'Couldn\'t cast again');
-        if (Game.Objects["Wizard tower"].amount < 307) {
-            safeBuy(Game.Objects["Wizard tower"], 307 - Game.Objects["Wizard tower"].amount);
-        }
-        return;
-    }
     if (!M) return; // Just leave if you don't have grimoire
     if (M.magic == M.magicM) {
         switch (FrozenCookies.autoSpell) {
@@ -2229,11 +2230,9 @@ function autoCombo() {
             Game.Objects.Farm.minigame.freeze = 1;
             logEvent("AutoCombo", "Garden frozen");
         }
-    } else if (cpsBonus() <= 1) {
-        if (Game.Objects.Farm.minigame.freeze === 1) {
-            Game.Objects.Farm.minigame.freeze = 0;
-            logEvent("AutoCombo", "Garden thawed");
-        }
+    } else if (Game.Objects.Farm.minigame.freeze === 1) {
+        Game.Objects.Farm.minigame.freeze = 0;
+        logEvent("AutoCombo", "Garden thawed");
     }
 }
 
