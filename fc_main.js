@@ -716,7 +716,7 @@ function safeCast(spell) {
         if (cpsBonus() <= 1 && Game.shimmers.length === 0) {
             suppressNextGC = true;
             if (M.castSpell(spell)) {
-                logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+                logEvent('SafeCast', 'Cast Force the Hand of Fate');
                 return true;
             }
         }
@@ -748,11 +748,11 @@ function autoCast() {
             case 2:
                 var FTHOF = M.spellsById[1];
                 if (M.magicM < Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) return;
-                if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
-                    if (M.castSpell(FTHOF)) {
+                // if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
+                    if (safeCast(FTHOF)) {
                         logEvent('AutoSpell', 'Cast Force the Hand of Fate');
                     }
-                }
+                // }
                 return;
             case 3:
                 if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
