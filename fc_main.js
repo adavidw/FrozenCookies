@@ -669,13 +669,15 @@ function autoTicker() {
 
 function autoCombo() {
     if (hasClickBuff()) {
+        towerCounter()
         if (Game.Objects.Farm.minigame.freeze === 0) {
             Game.Objects.Farm.minigame.freeze = 1;
+            Game.Objects.Farm.minigame.computeEffs()
             logEvent("AutoCombo", "Garden frozen");
         }
-        towerCounter()
     } else if (Game.Objects.Farm.minigame.freeze === 1) {
         Game.Objects.Farm.minigame.freeze = 0;
+        Game.Objects.Farm.minigame.computeEffs();
         logEvent("AutoCombo", "Garden thawed");
     }
 }
@@ -683,18 +685,49 @@ function autoCombo() {
 function towerCounter() {
     var spell = M.spellsById[1];
     var towerCount = Game.Objects["Wizard tower"].amount;
+    M.computeMagicM()
     // did a spell just get cast?
-    // if ((M.magic >= 21) && (M.magic < M.magicM) && (towerCount > 21)) {
-    if ((M.magic < M.magicM) && (M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) > 21) {
+    if ((M.magic >= 23) && (M.magic < M.magicM) && (towerCount > 21)) {
+        if ((M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) >= 23) { // enough for another?
+            if (!safeCast(spell)) return;
+        }
         Game.Objects["Wizard tower"].sell(towerCount - 21);
         logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
         logEvent('AutoCombo', 'Mana at ' + M.magic + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
-        autoCast();
+        safeCast(spell);
         if (towerCount < 307) {
             safeBuy(Game.Objects["Wizard tower"], towerCount - 21);
-            logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+        } else {
+            safeBuy(Game.Objects["Wizard tower"], 307 - 21);
+        }
+        logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+    }
+}
+
+function safeCast(spell) {
+    M.computeMagicM()
+    if (M.magicM < Math.floor(spell.costMin + spell.costPercent * M.magicM)) return;
+    if (predictNextSpell(0) === "Blab") {   // if it's a Blab cookie, just cast the spell and get it out of the way (regardless of CPS)
+        if (M.castSpell(spell)) {
+            logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+            return true;
+        } return false;
+    } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's an actual detrimental effect, cast the spell and temporarily suppress AutoGC
+        if (cpsBonus() <= 1 && Game.shimmers.length === 0) {
+            suppressNextGC = true;
+            if (M.castSpell(spell)) {
+                logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+                return true;
+            }
         }
     }
+    // otherwise wait until we have the right multiplier
+    if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
+        if (M.castSpell(spell)) {
+            logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+            return true;
+        } return false;
+    } return false;
 }
 
 function autoCast() {
@@ -715,18 +748,6 @@ function autoCast() {
             case 2:
                 var FTHOF = M.spellsById[1];
                 if (M.magicM < Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) return;
-                if (predictNextSpell(0) === "Blab") {   // if it's a Blab cookie, just cast the spell and get it out of the way (regardless of CPS)
-                    if (M.castSpell(FTHOF)) {
-                        logEvent('AutoSpell', 'Cast Force the Hand of Fate');
-                    }
-                    return;
-                } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's an actual detrimental effect, cast the spell and temporarily turn off AutoGS
-                    if (M.castSpell(FTHOF)) {
-                        logEvent('AutoSpell', 'Cast Force the Hand of Fate');
-                    }
-                    return;
-                }
-                // otherwise wait until we have the right multiplier
                 if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
                     if (M.castSpell(FTHOF)) {
                         logEvent('AutoSpell', 'Cast Force the Hand of Fate');
@@ -2136,12 +2157,16 @@ function smartTrackingStats(delay) {
     }
 }
 
-// Unused
 function shouldClickGC() {
-    for (var i in Game.shimmers) {
-        if (Game.shimmers[i].type == 'golden') {
-            return Game.shimmers[i].life > 0 && FrozenCookies.autoGC;
+    if (Game.shimmers.length > 0) {
+        for (var i in Game.shimmers) {
+            console.log(i);
+            if (Game.shimmers[i].type == 'golden') {
+                return Game.shimmers[i].life > 0 && FrozenCookies.autoGC && !suppressNextGC;
+            }
         }
+    } else if (suppressNextGC == true) {
+        suppressNextGC = false;
     }
 }
 
@@ -2476,7 +2501,7 @@ function autoCookie() {
         }
 
         // This apparently *has* to stay here, or else fast purchases will multi-click it.
-        if (goldenCookieLife() && FrozenCookies.autoGC) {
+        if (shouldClickGC()) {
             for (var i in Game.shimmers) {
                 if (Game.shimmers[i].type == 'golden') {
                     Game.shimmers[i].pop();

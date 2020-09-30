@@ -4,6 +4,8 @@
 // @match        http://orteil.dashnet.org/cookieclicker/
 // @source       https://www.reddit.com/r/CookieClicker/comments/6v2lz3/predict_next_hands_of_faith/
 
+var suppressNextGC = false;
+
 (function () {   // tooltip display
     if (Game.ObjectsById[7].minigameLoaded) {
         var lookup = setInterval(function () {
