@@ -691,13 +691,13 @@ function towerCounter() {
     // did a spell just get cast?
     if ((M.magic >= 23) && (M.magic < M.magicM) && (towerCount > 21)) {
         if ((M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) >= 23) { // enough for another?
-            safeCast(spell);
+            if (safeCast(spell)) {logEvent('SafeCast', "Cast Force the Hand of Fate");}
             return;
         }
         Game.Objects["Wizard tower"].sell(towerCount - 21);
         logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
         logEvent('AutoCombo', 'Mana at ' + M.magic + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
-        safeCast(spell);
+        if (safeCast(spell)) {logEvent('SafeCast', "Cast Force the Hand of Fate");}
         if (towerCount < 307) {
             safeBuy(Game.Objects["Wizard tower"], towerCount - 21);
         } else {
@@ -710,13 +710,10 @@ function towerCounter() {
 function safeCast(spell) {
     M.computeMagicM()
     if (M.magicM < Math.floor(spell.costMin + spell.costPercent * M.magicM)) return;
-    if (predictNextSpell(0) === "Blab") {   // if it's a Blab cookie, just cast the spell and get it out of the way (regardless of CPS)
-        if (M.castSpell(spell)) {
-            logEvent('SafeCast', 'Cast Force the Hand of Fate');
-            return true;
-        } return false;
+    if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Sugar Lump") {   // if it's a Blab cookie, just cast the spell and get it out of the way (regardless of CPS)
+        return M.castSpell(spell);
     } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's an actual detrimental effect, cast the spell and temporarily suppress AutoGC
-        if (cpsBonus() <= 1 && Game.shimmers.length === 0) {
+        if (cpsBonus() <= 1 && Game.shimmers.length === 0) { // should we also check to see if the next GC is at least some minimum amount of time away?
             suppressNextGC = true;
             if (M.castSpell(spell)) {
                 logEvent('SafeCast', "Cast Force the Hand of Fate -- Don't click on THIS cookie");
@@ -726,12 +723,9 @@ function safeCast(spell) {
             suppressNextGC = false;
             return false;
         } return false;
-    // otherwise wait until we have the right multiplier
+        // otherwise wait until we have the right multiplier
     } else if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
-        if (M.castSpell(spell)) {
-            logEvent('SafeCast', 'Cast Force the Hand of Fate');
-            return true;
-        } return false;
+        return M.castSpell(spell);
     } return false;
 }
 
