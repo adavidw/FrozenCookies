@@ -669,7 +669,9 @@ function autoTicker() {
 
 function autoCombo() {
     if (hasClickBuff()) {
-        towerCounter()
+        if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {    // if the next one is good enough to reduce the towers for
+            towerCounter()
+        }
         if (Game.Objects.Farm.minigame.freeze === 0) {
             Game.Objects.Farm.minigame.freeze = 1;
             Game.Objects.Farm.minigame.computeEffs()
@@ -689,7 +691,8 @@ function towerCounter() {
     // did a spell just get cast?
     if ((M.magic >= 23) && (M.magic < M.magicM) && (towerCount > 21)) {
         if ((M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) >= 23) { // enough for another?
-            if (!safeCast(spell)) return;
+            safeCast(spell);
+            return;
         }
         Game.Objects["Wizard tower"].sell(towerCount - 21);
         logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
@@ -709,22 +712,24 @@ function safeCast(spell) {
     if (M.magicM < Math.floor(spell.costMin + spell.costPercent * M.magicM)) return;
     if (predictNextSpell(0) === "Blab") {   // if it's a Blab cookie, just cast the spell and get it out of the way (regardless of CPS)
         if (M.castSpell(spell)) {
-            logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+            logEvent('SafeCast', 'Cast Force the Hand of Fate');
             return true;
         } return false;
     } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's an actual detrimental effect, cast the spell and temporarily suppress AutoGC
         if (cpsBonus() <= 1 && Game.shimmers.length === 0) {
             suppressNextGC = true;
             if (M.castSpell(spell)) {
-                logEvent('SafeCast', 'Cast Force the Hand of Fate');
+                logEvent('SafeCast', "Cast Force the Hand of Fate -- Don't click on THIS cookie");
                 return true;
             }
-        }
-    }
+            // if casting failed and these next two lines get executed, rewind
+            suppressNextGC = false;
+            return false;
+        } return false;
     // otherwise wait until we have the right multiplier
-    if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
+    } else if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
         if (M.castSpell(spell)) {
-            logEvent('AutoSpell', 'Cast Force the Hand of Fate');
+            logEvent('SafeCast', 'Cast Force the Hand of Fate');
             return true;
         } return false;
     } return false;
@@ -2160,7 +2165,6 @@ function smartTrackingStats(delay) {
 function shouldClickGC() {
     if (Game.shimmers.length > 0) {
         for (var i in Game.shimmers) {
-            console.log(i);
             if (Game.shimmers[i].type == 'golden') {
                 return Game.shimmers[i].life > 0 && FrozenCookies.autoGC && !suppressNextGC;
             }
