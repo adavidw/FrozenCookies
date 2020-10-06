@@ -668,18 +668,30 @@ function autoTicker() {
 }
 
 function autoCombo() {
+    if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought && Game.Objects.Farm.minigame.freeze === 0) {
+        Game.Objects.Farm.minigame.freeze = 1;
+        Game.Objects.Farm.minigame.computeEffs()
+        logEvent("AutoCombo", "Garden frozen");
+    }
     if (hasClickBuff()) {
+        autoGSBuy();
+        autoGodzamokAction();
         if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {    // if the next one is good enough to reduce the towers for
             towerCounter()
         }
-        if (Game.Objects.Farm.minigame.freeze === 0) {
-            Game.Objects.Farm.minigame.freeze = 1;
-            Game.Objects.Farm.minigame.computeEffs()
-            logEvent("AutoCombo", "Garden frozen");
-        }
-    } else if (Game.Objects.Farm.minigame.freeze === 1) {
+    }
+    // } else if (cpsBonus() >= FrozenCookies.minCpSMult) {
+    //     if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {
+    //         towerCounter()
+    //     }
+    //     if (Game.Objects.Farm.minigame.freeze === 0) {
+    //         Game.Objects.Farm.minigame.freeze = 1;
+    //         Game.Objects.Farm.minigame.computeEffs()
+    //         logEvent("AutoCombo", "Garden frozen");
+    //     }
+    if (Game.Upgrades["Golden switch [off]"].unlocked && !Game.Upgrades["Golden switch [off]"].bought && Game.Objects.Farm.minigame.freeze === 1) {
         Game.Objects.Farm.minigame.freeze = 0;
-        Game.Objects.Farm.minigame.computeEffs();
+        Game.Objects.Farm.minigame.computeEffs()
         logEvent("AutoCombo", "Garden thawed");
     }
 }
@@ -710,7 +722,8 @@ function towerCounter() {
 function safeCast(spell) {
     M.computeMagicM()
     if (M.magicM < Math.floor(spell.costMin + spell.costPercent * M.magicM)) return;
-    if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Sugar Lump") {   // if it's a Blab cookie, just cast the spell and get it out of the way (regardless of CPS)
+    if (suppressNextGC) return;
+    if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Sugar Lump") {   // if it's a cookie where the multiplier has no effect, just cast the spell and get it out of the way (regardless of CPS)
         return M.castSpell(spell);
     } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's an actual detrimental effect, cast the spell and temporarily suppress AutoGC
         if (cpsBonus() <= 1 && Game.shimmers.length === 0) { // should we also check to see if the next GC is at least some minimum amount of time away?
@@ -724,7 +737,15 @@ function safeCast(spell) {
             return false;
         } return false;
         // otherwise wait until we have the right multiplier
-    } else if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
+    } else if (((predictNextSpell(0) === "Building Special" && predictNextSpell(1) === "Click Frenzy") ||
+                    (predictNextSpell(0) === "Click Frenzy" && predictNextSpell(1) === "Building Special")) &&
+                (cpsBonus() > FrozenCookies.minCpSMult)) {
+        return M.castSpell(spell);
+    } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy") &&
+                (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
+        return M.castSpell(spell);
+    } else if ((predictNextSpell(0) != "Building Special" && predictNextSpell(0) != "Click Frenzy") &&
+                (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
         return M.castSpell(spell);
     } return false;
 }
@@ -2274,6 +2295,8 @@ function autoGodzamokAction() {
         logEvent("AutoGodzamok", "has Godz, has clickBuff, and doesn't have devastion, so let's roll");
         // have to figure out how to ensure that the golden switch is on before these calculations
         if (FrozenCookies.autoGodzamok === 1 || FrozenCookies.autoGodzamok === 2) {
+            Game.CalculateGains();
+            Game.Objects.Farm.minigame.computeEffs()
             var cursorCount = Game.Objects.Cursor.amount;
             var farmCount = Game.Objects.Farm.amount - 1;     // 1 farm always left to prevent garden from disappearing
             var buildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount) + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount);
@@ -2284,6 +2307,7 @@ function autoGodzamokAction() {
             if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
                 logEvent("AutoGodzamok", "Golden Switch is on");
             } else logEvent("AutoGodzamok", "Golden Switch is off");
+            logEvent("AutoGodzamok","Game.cookiesPs: " + Game.cookiesPs  + ", Game.mouseCps(): " + Game.mouseCps() + "cookieClickSpeed: " + FrozenCookies.cookieClickSpeed);
             logEvent("AutoGodzamok", "Before selling, this combo should produce " + expectedProd + " cookies in 10 seconds");
             logEvent("AutoGodzamok", "After selling, this combo would produce " + godzamokProd + " cookies in 10 seconds");
             logEvent("AutoGodzamok", "You would earn " + (godzamokProd - expectedProd) + " more cookies, but it would cost " + buildingCost + " cookies to rebuild");
