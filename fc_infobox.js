@@ -353,6 +353,9 @@ function updateTimers() {   // update calculations and assemble output -- called
             x += 48;
         }
         var y = Game.LeftBackground.canvas.height - 96;
+        if (Game.specialTab != 0) {
+            y -= 130
+        }
         drawInfobox(t_draw, x, y);
     }
 }
