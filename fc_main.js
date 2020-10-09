@@ -668,6 +668,7 @@ function autoTicker() {
 }
 
 function autoCombo() {
+    var FTHOF = M.spellsById[1];
     if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought && Game.Objects.Farm.minigame.freeze === 0) {
         Game.Objects.Farm.minigame.freeze = 1;
         Game.Objects.Farm.minigame.computeEffs()
@@ -676,8 +677,8 @@ function autoCombo() {
     if (hasClickBuff()) {
         autoGSBuy();
         autoGodzamokAction();
-        if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {    // if the next one is good enough to reduce the towers for
-            towerCounter()
+        if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {    // if the next one is good enough to cast early or reduce the towers for
+            safeCast(FTHOF);
         }
     }
     // } else if (cpsBonus() >= FrozenCookies.minCpSMult) {
@@ -696,27 +697,21 @@ function autoCombo() {
     }
 }
 
-function towerCounter() {
-    var spell = M.spellsById[1];
+function doubleCast(spell) {
+    if (suppressNextGC) return;
     var towerCount = Game.Objects["Wizard tower"].amount;
     M.computeMagicM()
-    // did a spell just get cast?
-    if ((M.magic >= 23) && (M.magic < M.magicM) && (towerCount > 21)) {
-        if ((M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) >= 23) { // enough for another?
-            if (safeCast(spell)) {logEvent('SafeCast', "Cast Force the Hand of Fate");}
-            return;
-        }
+    if ((M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) >= 23) { // enough for another?
+        if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate"); } else return;
         Game.Objects["Wizard tower"].sell(towerCount - 21);
-        logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
-        logEvent('AutoCombo', 'Mana at ' + M.magic + ". (Towers at " + Game.Objects["Wizard tower"].amount + ".)");
-        if (safeCast(spell)) {logEvent('SafeCast', "Cast Force the Hand of Fate");}
+        M.computeMagicM()
+        logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount + '. Mana at ' + M.magic);
+        if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return;
         if (towerCount < 307) {
-            safeBuy(Game.Objects["Wizard tower"], towerCount - 21);
-        } else {
             safeBuy(Game.Objects["Wizard tower"], 307 - 21);
         }
         logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
-    }
+    } else return;
 }
 
 function safeCast(spell) {
@@ -738,9 +733,10 @@ function safeCast(spell) {
         } return false;
         // otherwise wait until we have the right multiplier
     } else if (((predictNextSpell(0) === "Building Special" && predictNextSpell(1) === "Click Frenzy") ||
-                    (predictNextSpell(0) === "Click Frenzy" && predictNextSpell(1) === "Building Special")) &&
+                    (predictNextSpell(0) === "Click Frenzy" && predictNextSpell(1) === "Building Special") ||
+                    (predictNextSpell(0) === "Building Special" && predictNextSpell(1) === "Building Special")) &&
                 (cpsBonus() > FrozenCookies.minCpSMult)) {
-        return M.castSpell(spell);
+        return doubleCast(spell);
     } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy") &&
                 (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
         return M.castSpell(spell);
@@ -2292,7 +2288,6 @@ function autoGodzamokAction() {
     }
 
     if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
-        logEvent("AutoGodzamok", "has Godz, has clickBuff, and doesn't have devastion, so let's roll");
         // have to figure out how to ensure that the golden switch is on before these calculations
         if (FrozenCookies.autoGodzamok === 1 || FrozenCookies.autoGodzamok === 2) {
             Game.CalculateGains();
