@@ -708,6 +708,8 @@ function doubleCast(spell) {
         logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount + '. Mana at ' + M.magic);
         if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return;
         if (towerCount < 307) {
+            safeBuy(Game.Objects["Wizard tower"], towerCount - 21);
+        } else {
             safeBuy(Game.Objects["Wizard tower"], 307 - 21);
         }
         logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
@@ -733,8 +735,8 @@ function safeCast(spell) {
             return false;
         } return false;
         // otherwise wait until we have the right multiplier
-    } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy") &&
-                (predictNextSpell(1) === "Building Special" || predictNextSpell(1) === "Click Frenzy" || predictNextSpell(1) === "Elder Frenzy") &&
+    } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy" || predictNextSpell(0) === "Cursed Finger") &&
+               (predictNextSpell(1) === "Building Special" || predictNextSpell(1) === "Click Frenzy" || predictNextSpell(1) === "Elder Frenzy" || predictNextSpell(1) === "Cursed Finger") &&
                 (cpsBonus() > FrozenCookies.minCpSMult)) {
         return doubleCast(spell);
     } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy") &&
