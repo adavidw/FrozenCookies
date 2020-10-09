@@ -678,7 +678,7 @@ function autoCombo() {
         autoGSBuy();
         autoGodzamokAction();
         if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {    // if the next one is good enough to cast early or reduce the towers for
-            safeCast(FTHOF);
+            if (safeCast(FTHOF)) {logEvent("AutoCombo", "Cast Force the Hand of Fate");}
         }
     }
     // } else if (cpsBonus() >= FrozenCookies.minCpSMult) {
@@ -711,6 +711,7 @@ function doubleCast(spell) {
             safeBuy(Game.Objects["Wizard tower"], 307 - 21);
         }
         logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+        return true;
     } else return;
 }
 
@@ -732,15 +733,14 @@ function safeCast(spell) {
             return false;
         } return false;
         // otherwise wait until we have the right multiplier
-    } else if (((predictNextSpell(0) === "Building Special" && predictNextSpell(1) === "Click Frenzy") ||
-                    (predictNextSpell(0) === "Click Frenzy" && predictNextSpell(1) === "Building Special") ||
-                    (predictNextSpell(0) === "Building Special" && predictNextSpell(1) === "Building Special")) &&
+    } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy") &&
+                (predictNextSpell(1) === "Building Special" || predictNextSpell(1) === "Click Frenzy" || predictNextSpell(1) === "Elder Frenzy") &&
                 (cpsBonus() > FrozenCookies.minCpSMult)) {
         return doubleCast(spell);
-    } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy") &&
+    } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy") &&
                 (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
         return M.castSpell(spell);
-    } else if ((predictNextSpell(0) != "Building Special" && predictNextSpell(0) != "Click Frenzy") &&
+    } else if ((predictNextSpell(0) != "Building Special" && predictNextSpell(0) != "Click Frenzy" && predictNextSpell(0) != "Elder Frenzy") &&
                 (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
         return M.castSpell(spell);
     } return false;
