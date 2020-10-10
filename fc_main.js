@@ -667,20 +667,30 @@ function autoTicker() {
     }
 }
 
-function autoCombo() {
-    var FTHOF = M.spellsById[1];
+function gardenToggle() {
     if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought && Game.Objects.Farm.minigame.freeze === 0) {
         Game.Objects.Farm.minigame.freeze = 1;
         Game.Objects.Farm.minigame.computeEffs()
-        logEvent("AutoCombo", "Garden frozen");
+        logEvent("GardenToggle", "Garden frozen");
     }
+    if (Game.Upgrades["Golden switch [off]"].unlocked && !Game.Upgrades["Golden switch [off]"].bought && Game.Objects.Farm.minigame.freeze === 1) {
+        Game.Objects.Farm.minigame.freeze = 0;
+        Game.Objects.Farm.minigame.computeEffs()
+        logEvent("GardenToggle", "Garden thawed");
+    }
+}
+
+function autoCombo() {
     if (hasClickBuff()) {
+        var FTHOF = M.spellsById[1];
         autoGSBuy();
-        autoGodzamokAction();
+        gardenToggle();
         if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {    // if the next one is good enough to cast early or reduce the towers for
             if (safeCast(FTHOF)) {logEvent("AutoCombo", "Cast Force the Hand of Fate");}
         }
-    }
+        autoGodzamokAction();
+    } else gardenToggle();
+}
 
 function doubleCast(spell) {
     if (suppressNextGC) return;
