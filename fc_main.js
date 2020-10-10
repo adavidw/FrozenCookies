@@ -2264,13 +2264,11 @@ function autoGSBuy() {
             logEvent("AutoGS", "Turning Golden Switch on");
         }
     } else if (cpsBonus() <= 1) {
-        // if (FrozenCookies.autoGodzamok !== 3) {
         if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
             Game.CalculateGains(); // Ensure price is updated since Frenzy ended
             Game.Upgrades["Golden switch [on]"].buy();
             logEvent("AutoGS", "Turning Golden Switch back off");
         }
-        // }
     }
 }
 
@@ -2291,24 +2289,51 @@ function autoGodzamokAction() {
     }
 
     if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
-        // have to figure out how to ensure that the golden switch is on before these calculations
+        if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
+            logEvent("AutoGodzamok", "Golden Switch is on. Proceeding.");
+        } else {
+            logEvent("AutoGodzamok", "Golden Switch is off. Returning.");
+            return;
+        }
+
+        if (Game.Objects.Farm.minigame.freeze) {
+            logEvent("AutoGodzamok", "Garden Frozen. Proceeding.");
+        } else {
+            logEvent("AutoGodzamok", "Garden not yet frozen. Returning.");
+            return;
+        }
+        
+        // will need some calculation to see how long the buff will last
         if (FrozenCookies.autoGodzamok === 1 || FrozenCookies.autoGodzamok === 2) {
             Game.CalculateGains();
             Game.Objects.Farm.minigame.computeEffs()
+            var clickBuffTime = 10;
             var cursorCount = Game.Objects.Cursor.amount;
             var farmCount = Game.Objects.Farm.amount - 1;     // 1 farm always left to prevent garden from disappearing
-            var buildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount) + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount);
+            var mineCount = Game.Objects.Mine.amount;
+            var factoryCount = Game.Objects.Factory.amount;
+            var bankCount = Game.Objects.Bank.amount;
+            var buildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount)
+                + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount);
+            var bigBuildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount)
+                + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount)
+                + cumulativeBuildingCost(Game.Objects['Mine'].basePrice, 0, mineCount)
+                + cumulativeBuildingCost(Game.Objects['Factory'].basePrice, 0, factoryCount)
+                + cumulativeBuildingCost(Game.Objects['Bank'].basePrice, 0, bankCount);
             var actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
-            var expectedProd = actualCps * 10;
-            var godzamokProd = (Game.cookiesPs + (Game.mouseCps() * FrozenCookies.cookieClickSpeed * ((cursorCount + farmCount) / 100))) * 10;
+            var expectedProd = actualCps * clickBuffTime;
+            var godzamokProd = (Game.cookiesPs + (Game.mouseCps() * FrozenCookies.cookieClickSpeed * ((cursorCount + farmCount) / 100))) * clickBuffTime;
+            var bigGodzamokProd = (Game.cookiesPs + (Game.mouseCps() * FrozenCookies.cookieClickSpeed * ((cursorCount + farmCount + mineCount + factoryCount + bankCount) / 100))) * clickBuffTime
 
-            if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
-                logEvent("AutoGodzamok", "Golden Switch is on");
-            } else logEvent("AutoGodzamok", "Golden Switch is off");
-            logEvent("AutoGodzamok","Game.cookiesPs: " + Game.cookiesPs  + ", Game.mouseCps(): " + Game.mouseCps() + "cookieClickSpeed: " + FrozenCookies.cookieClickSpeed);
-            logEvent("AutoGodzamok", "Before selling, this combo should produce " + expectedProd + " cookies in 10 seconds");
-            logEvent("AutoGodzamok", "After selling, this combo would produce " + godzamokProd + " cookies in 10 seconds");
+
+            logEvent("AutoGodzamok","Game.cookiesPs: " + Game.cookiesPs  + ", Game.mouseCps(): " + Game.mouseCps() + ", cookieClickSpeed: " + FrozenCookies.cookieClickSpeed);
+            logEvent("AutoGodzamok", "Before selling, this combo should produce " + expectedProd + " cookies in " + clickBuffTime + " seconds");
+            logEvent("AutoGodzamok", "After selling, this combo would produce " + godzamokProd + " cookies in " + clickBuffTime + " seconds");
             logEvent("AutoGodzamok", "You would earn " + (godzamokProd - expectedProd) + " more cookies, but it would cost " + buildingCost + " cookies to rebuild");
+            logEvent("AutoGodzamok", "After selling big, this combo would produce " + bigGodzamokProd + " cookies in " + clickBuffTime + " seconds");
+            logEvent("AutoGodzamok", "You would earn " + (bigGodzamokProd - expectedProd) + " more cookies, but it would cost " + bigBuildingCost + " cookies to rebuild");
+            logEvent("AutoGodzamok", "You would earn " + (bigGodzamokProd - expectedProd - bigBuildingCost) + " more cookies with big, and " +
+                (godzamokProd - expectedProd - buildingCost) + " more cookies with regular");
 
             if (expectedProd > (godzamokProd - buildingCost)) {
                 logEvent("AutoGodzamok", "Not enough. Won't sell.");
