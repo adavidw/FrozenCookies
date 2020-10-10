@@ -681,32 +681,23 @@ function autoCombo() {
             if (safeCast(FTHOF)) {logEvent("AutoCombo", "Cast Force the Hand of Fate");}
         }
     }
-    // } else if (cpsBonus() >= FrozenCookies.minCpSMult) {
-    //     if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {
-    //         towerCounter()
-    //     }
-    //     if (Game.Objects.Farm.minigame.freeze === 0) {
-    //         Game.Objects.Farm.minigame.freeze = 1;
-    //         Game.Objects.Farm.minigame.computeEffs()
-    //         logEvent("AutoCombo", "Garden frozen");
-    //     }
-    if (Game.Upgrades["Golden switch [off]"].unlocked && !Game.Upgrades["Golden switch [off]"].bought && Game.Objects.Farm.minigame.freeze === 1) {
-        Game.Objects.Farm.minigame.freeze = 0;
-        Game.Objects.Farm.minigame.computeEffs()
-        logEvent("AutoCombo", "Garden thawed");
-    }
-}
 
 function doubleCast(spell) {
     if (suppressNextGC) return;
     var towerCount = Game.Objects["Wizard tower"].amount;
+    var secondSpell = predictNextSpell(1);
     M.computeMagicM()
     if ((M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) >= 23) { // enough for another?
-        if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate"); } else return;
+        if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate"); } else return false;
         Game.Objects["Wizard tower"].sell(towerCount - 21);
         M.computeMagicM()
         logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount + '. Mana at ' + M.magic);
-        if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return;
+        if (predictNextSpell(0) === secondSpell) {
+            if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return false;
+        } else {
+            logEvent('DoubleCast', "Spell changed. Was " + secondSpell +". Now it's " + predictNextSpell(0) + ".");
+            return false;
+        }
         if (towerCount < 307) {
             safeBuy(Game.Objects["Wizard tower"], towerCount - 21);
         } else {
@@ -714,7 +705,7 @@ function doubleCast(spell) {
         }
         logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
         return true;
-    } else return;
+    } else return false;
 }
 
 function safeCast(spell) {
