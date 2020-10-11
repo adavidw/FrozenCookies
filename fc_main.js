@@ -688,7 +688,6 @@ function autoCombo() {
         if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {    // if the next one is good enough to cast early or reduce the towers for
             if (safeCast(FTHOF)) {logEvent("AutoCombo", "Cast Force the Hand of Fate");}
         }
-        autoGodzamokAction();
     } else gardenToggle();
 }
 
