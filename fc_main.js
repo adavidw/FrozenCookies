@@ -718,6 +718,7 @@ function doubleCast(spell) {
 }
 
 function safeCast(spell) {
+    // need to keep something from being cast during a Dragonflight if it's a click frenzy in disguise (or anything similar)
     M.computeMagicM()
     if (M.magicM < Math.floor(spell.costMin + spell.costPercent * M.magicM)) return;
     if (suppressNextGC) return;
@@ -2296,8 +2297,12 @@ function autoGodzamokAction() {
             Game.CalculateGains();
             Game.Objects.Farm.minigame.computeEffs()
             var clickBuffTime = 10;
+            console.log("Active buffs:");
             for (var i in Game.buffs) {
                 console.log(Game.buffs[i].name + ": " + timeDisplay(Game.buffs[i].time / Game.fps));
+                if ((Game.buffs[i].time / Game.fps) < clickBuffTime) {
+                    clickBuffTime = (Game.buffs[i].time / Game.fps)
+                }
             }
 
             var cursorCount = Game.Objects.Cursor.amount;
@@ -2309,13 +2314,14 @@ function autoGodzamokAction() {
                 + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount);
             var bigBuildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount)
                 + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount)
-                // + cumulativeBuildingCost(Game.Objects['Mine'].basePrice, 0, mineCount)
+                + cumulativeBuildingCost(Game.Objects['Mine'].basePrice, 0, mineCount)
                 + cumulativeBuildingCost(Game.Objects['Factory'].basePrice, 0, factoryCount)
-                + cumulativeBuildingCost(Game.Objects['Bank'].basePrice, 0, bankCount);
+                // + cumulativeBuildingCost(Game.Objects['Bank'].basePrice, 0, bankCount)
+                ;
             var actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
             var expectedProd = actualCps * clickBuffTime;
             var godzamokProd = (Game.cookiesPs + (Game.mouseCps() * FrozenCookies.cookieClickSpeed * ((cursorCount + farmCount) / 100))) * clickBuffTime;
-            var bigGodzamokProd = (Game.cookiesPs + (Game.mouseCps() * FrozenCookies.cookieClickSpeed * ((cursorCount + farmCount /* + mineCount */ + factoryCount + bankCount) / 100))) * clickBuffTime
+            var bigGodzamokProd = (Game.cookiesPs + (Game.mouseCps() * FrozenCookies.cookieClickSpeed * ((cursorCount + farmCount + mineCount + factoryCount /* + bankCount */) / 100))) * clickBuffTime
 
 
             logEvent("AutoGodzamok","Actual CPS is Game.cookiesPs: " + Beautify(Game.cookiesPs)  + ", plus Game.mouseCps(): " + Beautify(Game.mouseCps()) + " times cookieClickSpeed: " + Beautify(FrozenCookies.cookieClickSpeed));
@@ -2347,15 +2353,20 @@ function autoGodzamokAction() {
                 logEvent("AutoGodzamok", "Sold " + farmCount + " farms");
             }
 
+            if (Game.Objects.Mine.amount >= 10 && ((bigGodzamokProd - expectedProd - bigBuildingCost) > (godzamokProd - expectedProd - buildingCost))) {
+                Game.Objects.Mine.sell(mineCount);
+                logEvent("AutoGodzamok", "Sold " + mineCount + " mines");
+            }
+
             if (Game.Objects.Factory.amount >= 10 && ((bigGodzamokProd - expectedProd - bigBuildingCost) > (godzamokProd - expectedProd - buildingCost))) {
                 Game.Objects.Factory.sell(factoryCount);
                 logEvent("AutoGodzamok", "Sold " + factoryCount + " factories");
             }
 
-            if (Game.Objects.Bank.amount >= 10 && ((bigGodzamokProd - expectedProd - bigBuildingCost) > (godzamokProd - expectedProd - buildingCost))) {
-                Game.Objects.Bank.sell(bankCount);
-                logEvent("AutoGodzamok", "Sold " + bankCount + " banks");
-            }
+            // if (Game.Objects.Bank.amount >= 10 && ((bigGodzamokProd - expectedProd - bigBuildingCost) > (godzamokProd - expectedProd - buildingCost))) {
+            //     Game.Objects.Bank.sell(bankCount);
+            //     logEvent("AutoGodzamok", "Sold " + bankCount + " banks");
+            // }
 
             if (FrozenCookies.autoGodzamok === 1) {     // Rebuy up to limit
 
@@ -2379,15 +2390,20 @@ function autoGodzamokAction() {
                     }
                 }
 
+                if (Game.Objects.Mine.amount < 10) {
+                    safeBuy(Game.Objects['Mine'], mineCount);
+                    logEvent("AutoGodzamok", "Bought " + Game.Objects.Mine.amount + " mines");
+                }
+
                 if (Game.Objects.Factory.amount < 10) {
                     safeBuy(Game.Objects['Factory'], factoryCount);
                     logEvent("AutoGodzamok", "Bought " + Game.Objects.Factory.amount + " factories");
                 }
 
-                if (Game.Objects.Bank.amount < 10) {
-                    safeBuy(Game.Objects['Bank'], bankCount);
-                    logEvent("AutoGodzamok", "Bought " + Game.Objects.Bank.amount + " banks");
-                }
+                // if (Game.Objects.Bank.amount < 10) {
+                //     safeBuy(Game.Objects['Bank'], bankCount);
+                //     logEvent("AutoGodzamok", "Bought " + Game.Objects.Bank.amount + " banks");
+                // }
 
             } else if (FrozenCookies.autoGodzamok === 2) {     // Rebuy all of what was there before
 
@@ -2401,15 +2417,20 @@ function autoGodzamokAction() {
                     logEvent("AutoGodzamok", "Bought " + (Game.Objects.Farm.amount - 1) + " farms");
                 }
 
+                if (Game.Objects.Mine.amount < 10) {
+                    safeBuy(Game.Objects['Mine'], mineCount);
+                    logEvent("AutoGodzamok", "Bought " + Game.Objects.Mine.amount + " mines");
+                }
+
                 if (Game.Objects.Factory.amount < 10) {
                     safeBuy(Game.Objects['Factory'], factoryCount);
                     logEvent("AutoGodzamok", "Bought " + Game.Objects.Factory.amount + " factories");
                 }
 
-                if (Game.Objects.Bank.amount < 10) {
-                    safeBuy(Game.Objects['Bank'], bankCount);
-                    logEvent("AutoGodzamok", "Bought " + Game.Objects.Bank.amount + " banks");
-                }
+                // if (Game.Objects.Bank.amount < 10) {
+                //     safeBuy(Game.Objects['Bank'], bankCount);
+                //     logEvent("AutoGodzamok", "Bought " + Game.Objects.Bank.amount + " banks");
+                // }
 
             }
         }
