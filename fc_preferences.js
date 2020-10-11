@@ -201,8 +201,8 @@ FrozenCookies.preferenceValues = {
         'default': 0
     },
     'autoGodzamok': {
-        'hint': 'Automatically sell all cursors and farms (except one) during Dragonflight and Click Frenzy if you worship Godzamok',
-        'display': ['Auto-Godzamok OFF', 'Auto-Godzamok ON (Rebuy up to limit)', 'Auto-Godzamok ON (Rebuy all)'],
+        'hint': 'Automatically sell buildings to get the Devastation bonus during Dragonflight, Click Frenzy, and other click buffs if you worship Godzamok',
+        'display': ['Auto-Godzamok OFF', 'Auto-Godzamok ON'],
         'default': 0
     },
     'autoSpell': {

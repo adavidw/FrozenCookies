@@ -970,6 +970,10 @@ function doubleCast(spell) {
     } else return false;
 }
 
+// need logic in here to reduce towers if necessary to cast a good cookie (i.e. if you have a DragonFlight and have predicted a building special and it's only 2 mana short or something.)
+// I'm guessing I'd also need to implement the logic to calculate ideal tower amounts instead of hard coding 307 & 21
+
+
 function safeCast(spell) {
     // need to keep something from being cast during a Dragonflight if it's a click frenzy in disguise (or anything similar)
     M.computeMagicM()
@@ -2537,11 +2541,12 @@ function safeBuy(bldg, count) {
 }
 
 function autoGodzamokAction() {
-    if (!T) {
-        return;     //Just leave if Pantheon isn't here yet
+    if (!T || !FrozenCookies.autoGodzamok || !Game.hasGod("ruin")) {
+        //return;     
+        console.log("Just leave if Pantheon isn't here yet, or autoGodzamok isn't turned on, or you don't worship Godzamok.");
     }
 
-    if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
+    if ((!Game.hasBuff("Devastation")) && hasClickBuff()) {
         autoCombo();
 
         if (FrozenCookies.autoGodzamok === 1 || FrozenCookies.autoGodzamok === 2) {
