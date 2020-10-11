@@ -2288,14 +2288,10 @@ function autoGodzamokAction() {
     }
 
     if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
-        if (Game.Upgrades["Golden switch [on]"].unlocked && Game.Upgrades["Golden switch [on]"].bought) {
-            autoGSBuy();
-        }
-        if (!Game.Objects.Farm.minigame.freeze) {
-            gardenToggle();
-        }
-        
+        autoCombo();
+
         // will need some calculation to see how long the buff will last
+    
         if (FrozenCookies.autoGodzamok === 1 || FrozenCookies.autoGodzamok === 2) {
             Game.CalculateGains();
             Game.Objects.Farm.minigame.computeEffs()
@@ -2664,7 +2660,7 @@ function FCStart() {
     }
 
     if (FrozenCookies.autoCombo) {
-        FrozenCookies.autoComboBot = setInterval(autoCombo, FrozenCookies.frequency * 10)
+        FrozenCookies.autoComboBot = setInterval(autoCombo, FrozenCookies.frequency * 50)
     }
 
     if (FrozenCookies.autoGodzamok) {
