@@ -28,10 +28,25 @@ function setOverrides() {
     FrozenCookies.frenzyClickSpeed = preferenceParse('frenzyClickSpeed', 0);
     FrozenCookies.HCAscendAmount = preferenceParse('HCAscendAmount', 0);
     FrozenCookies.minCpSMult = preferenceParse('minCpSMult', 1);
-    FrozenCookies.cursorMax = preferenceParse('cursorMax', 500);
-    FrozenCookies.farmMax = preferenceParse('farmMax', 500);
-    FrozenCookies.manaMax = preferenceParse('manaMax', 100);
     FrozenCookies.maxSpecials = preferenceParse('maxSpecials', 1);
+    // building max values
+    FrozenCookies.cursorMax = preferenceParse('cursorMax', 500);
+    FrozenCookies.grandmaMax = preferenceParse('grandmaMax', 500);
+    FrozenCookies.farmMax = preferenceParse('farmMax', 500);
+    FrozenCookies.mineMax = preferenceParse('mineMax', 500);
+    FrozenCookies.factoryMax = preferenceParse('factoryMax', 500);
+    FrozenCookies.bankMax = preferenceParse('bankMax', 500);
+    FrozenCookies.templeMax = preferenceParse('templeMax', 500);
+    FrozenCookies.manaMax = preferenceParse('manaMax', 100);
+    FrozenCookies.shipmentMax = preferenceParse('shipmentMax', 500);
+    FrozenCookies.labMax = preferenceParse('labMax', 500);
+    FrozenCookies.portalMax = preferenceParse('portalMax', 500);
+    FrozenCookies.timeMachineMax = preferenceParse('timeMachineMax', 500);
+    FrozenCookies.condensorMax = preferenceParse('condensorMax', 500);
+    FrozenCookies.prismMax = preferenceParse('prismMax', 500);
+    FrozenCookies.chancemakerMax = preferenceParse('chancemakerMax', 500);
+    FrozenCookies.fractalEngineMax = preferenceParse('fractalEngineMax', 500);
+    FrozenCookies.consoleMax = preferenceParse('consoleMax', 500);
 
     // Becomes 0 almost immediately after user input, so default to 0
     FrozenCookies.timeTravelAmount = 0;
@@ -514,7 +529,7 @@ function updateMaxSpecials(base) {
 }
 
 function getCursorMax(current) {
-    var newMax = prompt('How many Cursors should Autobuy stop at?', current);
+    var newMax = prompt('How many Cursors should AutoBuy stop at?', current);
     if (typeof (newMax) == 'undefined' || newMax == null || isNaN(Number(newMax)) || Number(newMax < 0)) {
         newMax = current;
     }
@@ -530,8 +545,25 @@ function updateCursorMax(base) {
     }
 }
 
+function getGrandmaMax(current) {
+    var newMax2 = prompt('How many Grandmas should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateGrandmaMax(base) {
+    var newMax2 = getGrandmaMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
 function getFarmMax(current) {
-    var newMax2 = prompt('How many Farms should Autobuy stop at?', current);
+    var newMax2 = prompt('How many Farms should AutoBuy stop at?', current);
     if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
         newMax2 = current;
     }
@@ -540,6 +572,227 @@ function getFarmMax(current) {
 
 function updateFarmMax(base) {
     var newMax2 = getFarmMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getMineMax(current) {
+    var newMax2 = prompt('How many Mines should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateMineMax(base) {
+    var newMax2 = getMineMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getFactoryMax(current) {
+    var newMax2 = prompt('How many Factories should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateFactoryMax(base) {
+    var newMax2 = getFactoryMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getBankMax(current) {
+    var newMax2 = prompt('How many Banks should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateBankMax(base) {
+    var newMax2 = getBankMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getTempleMax(current) {
+    var newMax2 = prompt('How many Temples should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateTempleMax(base) {
+    var newMax2 = getTempleMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getShipmentMax(current) {
+    var newMax2 = prompt('How many Shipments should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateShipmentMax(base) {
+    var newMax2 = getShipmentMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getLabMax(current) {
+    var newMax2 = prompt('How many Alchemy Labs should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateLabMax(base) {
+    var newMax2 = getLabMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getPortalMax(current) {
+    var newMax2 = prompt('How many Portals should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updatePortalMax(base) {
+    var newMax2 = getPortalMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getTimeMachineMax(current) {
+    var newMax2 = prompt('How many Time Machines should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateTimeMachineMax(base) {
+    var newMax2 = getTimeMachineMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getCondensorMax(current) {
+    var newMax2 = prompt('How many Antimatter Condensors should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateCondensorMax(base) {
+    var newMax2 = getCondensorMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getPrismMax(current) {
+    var newMax2 = prompt('How many Prisms should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updatePrismMax(base) {
+    var newMax2 = getPrismMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getChancemakerMax(current) {
+    var newMax2 = prompt('How many Chancemakers should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateChancemakerMax(base) {
+    var newMax2 = getChancemakerMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getFractalEngineMax(current) {
+    var newMax2 = prompt('How many Fractal Engines should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateFractalEngineMax(base) {
+    var newMax2 = getFractalEngineMax(FrozenCookies[base]);
+    if (newMax2 != FrozenCookies[base]) {
+        FrozenCookies[base] = newMax2;
+        updateLocalStorage();
+        FCStart();
+    }
+}
+
+function getConsoleMax(current) {
+    var newMax2 = prompt('How many Javascript Consoles should AutoBuy stop at?', current);
+    if (typeof (newMax2) == 'undefined' || newMax2 == null || isNaN(Number(newMax2)) || Number(newMax2 < 0)) {
+        newMax2 = current;
+    }
+    return Number(newMax2);
+}
+
+function updateConsoleMax(base) {
+    var newMax2 = getConsoleMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
         updateLocalStorage();
