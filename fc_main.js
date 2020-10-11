@@ -2331,10 +2331,13 @@ function autoGodzamokAction() {
 
             logEvent("AutoGodzamok", "clickCps is: " + Beautify(clickCps));
             for (var i in Game.Objects) {
-                if (cumulativeBuildingCost(Game.Objects[i].basePrice, 0, Game.Objects[i].amount) < ((clickCps * (Game.Objects[i].amount / 100) - clickCps) * clickBuffTime)) {
-                    logEvent("AutoGodzamok", "Selling " + Game.Objects[i].amount + Game.Objects[i].name + " will get "
-                        + Beautify(((clickCps * (Game.Objects[i].amount / 100) - clickCps) * clickBuffTime)) + " more cookies and cost "
-                        + Beautify(cumulativeBuildingCost(Game.Objects[i].basePrice, 0, Game.Objects[i].amount)) + " to rebuild.");
+                var cost = cumulativeBuildingCost(Game.Objects[i].basePrice, 0, Game.Objects[i].amount);
+                var cpsModifier = Game.Objects[i].amount / 100;
+                var deltaCps = clickCps * cpsModifier - clickCps;
+                if (cost < (deltaCps * clickBuffTime)) {
+                    logEvent("AutoGodzamok", "Selling " + Game.Objects[i].amount + " " + Game.Objects[i].name + " will get "
+                        + Beautify((deltaCps * clickBuffTime)) + " more cookies and cost "
+                        + Beautify(cost) + " to rebuild.");
                 }
             }
 
