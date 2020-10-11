@@ -2291,11 +2291,10 @@ function autoGodzamokAction() {
     if (Game.hasGod("ruin") && (!Game.hasBuff("Devastation")) && hasClickBuff()) {
         autoCombo();
 
-        // will need some calculation to see how long the buff will last
-    
         if (FrozenCookies.autoGodzamok === 1 || FrozenCookies.autoGodzamok === 2) {
             Game.CalculateGains();
             Game.Objects.Farm.minigame.computeEffs()
+            // will need some calculation to see how long the buff will last
             var clickBuffTime = 10;
             logEvent("AutoGodzamok", "Active buffs:");
             for (var i in Game.buffs) {
@@ -2324,13 +2323,22 @@ function autoGodzamokAction() {
                 + cumulativeBuildingCost(Game.Objects['Factory'].basePrice, 0, factoryCount)
                 + cumulativeBuildingCost(Game.Objects['Bank'].basePrice, 0, bankCount)
                 ;
-            var actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
+            var clickCps = Game.mouseCps() * FrozenCookies.cookieClickSpeed;
+            var actualCps = Game.cookiesPs + clickCps;
             var expectedProd = actualCps * clickBuffTime;
-            var godzamokProd = (Game.cookiesPs + (Game.mouseCps() * FrozenCookies.cookieClickSpeed * ((cursorCount + farmCount) / 100))) * clickBuffTime;
-            var bigGodzamokProd = (Game.cookiesPs + (Game.mouseCps() * FrozenCookies.cookieClickSpeed * ((cursorCount + farmCount + shipmentCount + factoryCount /*+ bankCount*/) / 100))) * clickBuffTime
+            var godzamokProd = (Game.cookiesPs + (clickCps * ((cursorCount + farmCount) / 100))) * clickBuffTime;
+            var bigGodzamokProd = (Game.cookiesPs + (clickCps * ((cursorCount + farmCount + shipmentCount + factoryCount /*+ bankCount*/) / 100))) * clickBuffTime
 
+            logEvent("AutoGodzamok", "clickCps is: " + Beautify(clickCps));
+            for (var i in Game.Objects) {
+                if (cumulativeBuildingCost(Game.Objects[i].basePrice, 0, Game.Objects[i].amount) < ((clickCps * (Game.Objects[i].amount / 100) - clickCps) * clickBuffTime)) {
+                    logEvent("AutoGodzamok", "Selling " + Game.Objects[i].amount + Game.Objects[i].name + " will get "
+                        + Beautify(((clickCps * (Game.Objects[i].amount / 100) - clickCps) * clickBuffTime)) + " more cookies and cost "
+                        + Beautify(cumulativeBuildingCost(Game.Objects[i].basePrice, 0, Game.Objects[i].amount)) + " to rebuild.");
+                }
+            }
 
-            logEvent("AutoGodzamok","Actual CPS is Game.cookiesPs: " + Beautify(Game.cookiesPs)  + ", plus Game.mouseCps(): " + Beautify(Game.mouseCps()) + " times cookieClickSpeed: " + Beautify(FrozenCookies.cookieClickSpeed));
+            logEvent("AutoGodzamok", "Actual CPS is Game.cookiesPs: " + Beautify(Game.cookiesPs)  + ", plus Game.mouseCps(): " + Beautify(Game.mouseCps()) + " times cookieClickSpeed: " + Beautify(FrozenCookies.cookieClickSpeed));
             logEvent("AutoGodzamok", "Before selling, this combo should produce " + Beautify(expectedProd) + " cookies in " + clickBuffTime + " seconds");
             logEvent("AutoGodzamok", "After selling, this combo would produce " + Beautify(godzamokProd) + " cookies in " + clickBuffTime + " seconds");
             logEvent("AutoGodzamok", "You would earn " + Beautify((godzamokProd - expectedProd)) + " more cookies, but it would cost " + Beautify(buildingCost) + " cookies to rebuild");
