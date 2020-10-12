@@ -2573,19 +2573,22 @@ function autoGodzamokAction() {
         var shipmentCount = Game.Objects.Shipment.amount;
         var factoryCount = Game.Objects.Factory.amount;
         var bankCount = Game.Objects.Bank.amount;
+        var labCount = Game.Objects["Alchemy lab"].amount;
         var buildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount)
             + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount);
         var bigBuildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount)
             + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount)
-            + cumulativeBuildingCost(Game.Objects['Shipment'].basePrice, 0, shipmentCount)
             + cumulativeBuildingCost(Game.Objects['Factory'].basePrice, 0, factoryCount)
             + cumulativeBuildingCost(Game.Objects['Bank'].basePrice, 0, bankCount)
+            + cumulativeBuildingCost(Game.Objects['Shipment'].basePrice, 0, shipmentCount)
+            + cumulativeBuildingCost(Game.Objects['Alchemy lab'].basePrice, 0, labCount)
             ;
         var clickCps = Game.mouseCps() * FrozenCookies.cookieClickSpeed;
         var actualCps = Game.cookiesPs + clickCps;
         var expectedProd = actualCps * clickBuffTime;
         var godzamokProd = (Game.cookiesPs + (clickCps * ((cursorCount + farmCount) / 100))) * clickBuffTime;
-        var bigGodzamokProd = (Game.cookiesPs + (clickCps * ((cursorCount + farmCount + shipmentCount + factoryCount /*+ bankCount*/) / 100))) * clickBuffTime
+        var bigGodzamokProd = (Game.cookiesPs + (clickCps * ((cursorCount + farmCount + factoryCount + bankCount + shipmentCount + labCount) / 100))) * clickBuffTime;
+        
 
         logEvent("AutoGodzamok", "clickCps is: " + Beautify(clickCps));
         for (var i in Game.Objects) {
@@ -2638,11 +2641,12 @@ function autoGodzamokAction() {
             logEvent("AutoGodzamok", "Sold " + factoryCount + " factories");
         }
 
-        // if (Game.Objects.Bank.amount >= 10 && ((bigGodzamokProd - expectedProd - bigBuildingCost) > (godzamokProd - expectedProd - buildingCost))) {
-        //     Game.Objects.Bank.sell(bankCount);
-        //     logEvent("AutoGodzamok", "Sold " + bankCount + " banks");
-        // }
+        if (Game.Objects["Alchemy lab"].amount >= 10 && ((bigGodzamokProd - expectedProd - bigBuildingCost) > (godzamokProd - expectedProd - buildingCost))) {
+            Game.Objects["Alchemy lab"].sell(labCount);
+            logEvent("AutoGodzamok", "Sold " + labCount + " labs");
+        }
 
+        // buy everything back
         if (Game.Objects.Cursor.amount < 10) {
             if ((FrozenCookies.cursorLimit) && cursorCount > FrozenCookies.cursorMax) {
                 safeBuy(Game.Objects['Cursor'], FrozenCookies.cursorMax);
@@ -2673,10 +2677,10 @@ function autoGodzamokAction() {
             logEvent("AutoGodzamok", "Bought " + Game.Objects.Factory.amount + " factories");
         }
 
-        // if (Game.Objects.Bank.amount < 10) {
-        //     safeBuy(Game.Objects['Bank'], bankCount);
-        //     logEvent("AutoGodzamok", "Bought " + Game.Objects.Bank.amount + " banks");
-        // }
+        if (Game.Objects["Alchemy lab"].amount < 10) {
+            safeBuy(Game.Objects["Alchemy lab"], labCount);
+            logEvent("AutoGodzamok", "Bought " + Game.Objects["Alchemy lab"].amount + " labs");
+        }
 
     }
 }
