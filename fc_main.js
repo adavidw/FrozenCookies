@@ -2542,24 +2542,23 @@ function safeBuy(bldg, count) {
 
 function autoGodzamokAction() {
     if (!T || !FrozenCookies.autoGodzamok || !Game.hasGod("ruin")) {
-        //return;     
-        console.log("Just leave if Pantheon isn't here yet, or autoGodzamok isn't turned on, or you don't worship Godzamok.");
+        return; // Just leave if Pantheon isn't here yet, or autoGodzamok isn't turned on, or you don't worship Godzamok
     }
 
-    if ((!Game.hasBuff("Devastation")) && hasClickBuff()) {
+    if ((!Game.hasBuff("Devastation"))) { // && hasClickBuff()) {
         //  take this out or refactor before any PR
         autoCombo();
         Game.CalculateGains();
         Game.Objects.Farm.minigame.computeEffs()
         var clickBuffTime = 10;
         var clickCps = Game.mouseCps() * FrozenCookies.cookieClickSpeed;
-        var actualCps = Game.cookiesPs + clickCps;
+        var godzamokMultiplier = .01;
         var toSell = {};
 
         // will need some calculation to see how long the buff will last
-        logEvent("AutoGodzamok", "Active buffs:");  // take out
+        // logEvent("AutoGodzamok", "Active buffs:");  // take out
         for (var i in Game.buffs) {
-            logEvent("AutoGodzamok", Game.buffs[i].name + ": " + timeDisplay(Game.buffs[i].time / Game.fps));   // take out
+            // logEvent("AutoGodzamok", Game.buffs[i].name + ": " + timeDisplay(Game.buffs[i].time / Game.fps));   // take out
             if ((Game.buffs[i].time / Game.fps) < clickBuffTime) {
                 clickBuffTime = (Game.buffs[i].time / Game.fps)
             }
@@ -2567,24 +2566,29 @@ function autoGodzamokAction() {
 
 
         // calculate which buildings provide a big enough payback to be sold
-        logEvent("AutoGodzamok", "Current clickCps is: " + Beautify(clickCps));
+        // logEvent("AutoGodzamok", "Current clickCps is: " + Beautify(clickCps));
         for (var i in Game.Objects) {
-            if (i != "Wizard tower") {
-                var sellCount = Game.Objects[i].amount - 1
-                // what about calculating netCost with the amount received for selling back figured in?
-                var cost = cumulativeBuildingCost(Game.Objects[i].basePrice, 1, Game.Objects[i].amount);
-                var cpsModifier = sellCount / 100;
+            if (i != "Wizard tower" || (!FrozenCookies.towerLimit && !FrozenCookies.autoSpell)) {  // leave Wizard tower out if you've set the mana-related limit or autoCast, since selling messes with mana
+                var sellCount = Game.Objects[i].amount - 1  // leave one of each building to avoid messing with minigames
+                var cpsModifier = sellCount * godzamokMultiplier;
                 var deltaCps = clickCps * cpsModifier - clickCps;
-                if (cost < (deltaCps * clickBuffTime)) {
-                    toSell[i] = Game.Objects[i];
-                    toSell[i].sellCount = sellCount;
+                var cost = cumulativeBuildingCost(Game.Objects[i].basePrice, 1, Game.Objects[i].amount);
+                cost -= (cost * Game.Objects[i].getSellMultiplier()); // calculate a net cost by subtracting sales gains
+                if ((cost < (deltaCps * clickBuffTime)) && (sellCount >= 10)) {
+                    // sell the buildings
                     logEvent("AutoGodzamok", "Selling " + sellCount + " " + Game.Objects[i].plural + " will get "
-                        + Beautify((deltaCps * clickBuffTime)) + " more cookies and cost "
+                        + Beautify((deltaCps * clickBuffTime)) + " more cookies and cost a net "
                         + Beautify(cost) + " to rebuild.");
+                    Game.Objects[i].sell(sellCount);
+                    logEvent("AutoGodzamok", "Sold " + sellCount + " " + Game.Objects[i].plural);
+                    // buy everything back
+                    if (Game.Objects[i].amount < 10) {
+                        safeBuy(Game.Objects[i], sellCount);
+                        logEvent("AutoGodzamok", "Bought " + (Game.Objects[i].amount - 1) + " " + Game.Objects[i].plural);
+                    }
                 }
             }
         }
-
 
         // // these all go out
         // var cursorCount = Game.Objects.Cursor.amount;
@@ -2606,10 +2610,6 @@ function autoGodzamokAction() {
         // var godzamokProd = (Game.cookiesPs + (clickCps * ((cursorCount + farmCount) / 100))) * clickBuffTime;
         // var bigGodzamokProd = (Game.cookiesPs + (clickCps * ((cursorCount + farmCount + factoryCount + bankCount + shipmentCount + labCount) / 100))) * clickBuffTime;
 
-
-
-
-
         // // what logging is REALLY necessary?
         // logEvent("AutoGodzamok", "Actual CPS is Game.cookiesPs: " + Beautify(Game.cookiesPs) + ", plus Game.mouseCps(): " + Beautify(Game.mouseCps()) + " times cookieClickSpeed: " + Beautify(FrozenCookies.cookieClickSpeed));
         // logEvent("AutoGodzamok", "Before selling, this combo should produce " + Beautify(expectedProd) + " cookies in " + clickBuffTime + " seconds");
@@ -2620,29 +2620,6 @@ function autoGodzamokAction() {
         // logEvent("AutoGodzamok", "* BIG: You would earn " + Beautify((bigGodzamokProd - expectedProd - bigBuildingCost)) + " more cookies with big, and " +
         //     Beautify((godzamokProd - expectedProd - buildingCost)) + " more cookies with regular.");
 
-
-
-        // if toSell is empty then return
-        if ($.isEmptyObject(toSell)) {
-            logEvent("AutoGodzamok", "Not enough gains to be had. Won't sell anything.");
-            return;
-        }
-
-        // sell the buildings
-        for (var i in toSell) {
-            if (toSell[i].sellCount >= 10) {
-                Game.Objects[i].sell(toSell[i].sellCount);
-                logEvent("AutoGodzamok", "Sold " + toSell[i].sellCount + " " + toSell[i].plural);
-            }
-        }
-
-        // buy everything back
-        for (var i in toSell) {
-            if (Game.Objects[i].amount < 10) {
-                safeBuy(Game.Objects[i], toSell[i].sellCount);
-                logEvent("AutoGodzamok", "Bought " + (Game.Objects[i].amount - 1) + " " + toSell[i].plural);
-            }
-        }
     }
 }
 
