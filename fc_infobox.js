@@ -333,7 +333,7 @@ function updateTimers() {   // update calculations and assemble output -- called
             t_draw.push({
                 f_percent: devastationTime / devastationMaxTime,
                 c1: "rgba(183, 206, 49, 1)",
-                name: "Devastation (x" + Game.buffs['Devastation'].multClick + ") Time",
+                name: "Devastation (x" + (Math.round(Game.buffs['Devastation'].multClick * 100) / 100) + ") Time",
                 display: timeDisplay(devastationTime / Game.fps)
             });
         }
