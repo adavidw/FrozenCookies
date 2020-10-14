@@ -2563,14 +2563,13 @@ function autoGodzamokAction() {
     if ((!Game.hasBuff("Devastation"))) { // && hasClickBuff()) {
         //  take this out or refactor before any PR
         autoCombo();
-        Game.CalculateGains();
-        Game.Objects.Farm.minigame.computeEffs()
-        var clickBuffTime = 10;
+        Game.CalculateGains();                      // make sure we have the most up to date
+        Game.Objects.Farm.minigame.computeEffs()    // numbers to do the calculations
+        var clickBuffTime = 10;     // default length of Devastation buff
         var clickCps = Game.mouseCps() * FrozenCookies.cookieClickSpeed;
-        var godzamokMultiplier = .01;
-        var toSell = {};
+        var godzamokMultiplier = 2 / Math.pow(2, Game.hasGod("ruin")) / 100;
 
-        // will need some calculation to see how long the buff will last
+        // see how long the shortest buff will last
         // logEvent("AutoGodzamok", "Active buffs:");  // take out
         for (var i in Game.buffs) {
             // logEvent("AutoGodzamok", Game.buffs[i].name + ": " + timeDisplay(Game.buffs[i].time / Game.fps));   // take out
@@ -2579,17 +2578,17 @@ function autoGodzamokAction() {
             }
         }
 
-
+        // check each one against remaining bank to ensure you don't get stuck with fewer buildings
         // calculate which buildings provide a big enough payback to be sold
         // logEvent("AutoGodzamok", "Current clickCps is: " + Beautify(clickCps));
         for (var i in Game.Objects) {
             if (i != "Wizard tower" || (!FrozenCookies.towerLimit && !FrozenCookies.autoSpell)) {  // leave Wizard tower out if you've set the mana-related limit or autoCast, since selling messes with mana
                 var sellCount = Game.Objects[i].amount - 1  // leave one of each building to avoid messing with minigames
-                var cpsModifier = sellCount * godzamokMultiplier;
+                var cpsModifier = 1 + (sellCount * godzamokMultiplier);
                 var deltaCps = clickCps * cpsModifier - clickCps;
-                var cost = cumulativeBuildingCost(Game.Objects[i].basePrice, 1, Game.Objects[i].amount);
+                var cost = newCumulativeBuildingCost(Game.Objects[i], 1, Game.Objects[i].amount);
                 cost -= (cost * Game.Objects[i].getSellMultiplier()); // calculate a net cost by subtracting sales gains
-                if ((cost < (deltaCps * clickBuffTime)) && (sellCount >= 10)) {
+                if ((cost < (deltaCps * clickBuffTime)) && (sellCount >= 10) && cost < Game.cookies) {
                     // sell the buildings
                     logEvent("AutoGodzamok", "Selling " + sellCount + " " + Game.Objects[i].plural + " will get "
                         + Beautify((deltaCps * clickBuffTime)) + " more cookies and cost a net "

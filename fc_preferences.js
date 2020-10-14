@@ -201,7 +201,7 @@ FrozenCookies.preferenceValues = {
         'default': 0
     },
     'autoGodzamok': {
-        'hint': 'Automatically sell buildings to get the Devastation bonus during Dragonflight, Click Frenzy, and other click buffs if you worship Godzamok',
+        'hint': 'During click buffs and other bonuses, automatically sell buildings to get the Devastation bonus if you worship Godzamok',
         'display': ['Auto-Godzamok OFF', 'Auto-Godzamok ON'],
         'default': 0
     },
