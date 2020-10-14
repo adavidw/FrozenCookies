@@ -1872,6 +1872,7 @@ function defaultPurchase() {
     }
 }
 
+// doesn't match what the game uses. Probably should get rid of it and use the game's building-specific function since that's the only way to take into account building fortunes.
 function totalDiscount(building) {
     var price = 1;
     if (building) {
@@ -1879,8 +1880,12 @@ function totalDiscount(building) {
         if (Game.Has('Santa\'s dominion')) price *= 0.99;
         if (Game.Has('Faberge egg')) price *= 0.99;
         if (Game.Has('Divine discount')) price *= 0.99;
-        if (Game.hasAura('Fierce Hoarder')) price *= 0.98;
+        if (Game.Has('Fortune #100')) price*=0.99;
+        // if (Game.hasAura('Fierce Hoarder')) price *= 0.98;
+        price*=1-Game.auraMult('Fierce Hoarder')*0.02;
         if (Game.hasBuff('Everything must go')) price *= 0.95;
+        if (Game.hasBuff('Crafty pixies')) price*=0.98;
+		if (Game.hasBuff('Nasty goblins')) price*=1.02;
     } else {
         if (Game.Has('Toy workshop')) price *= 0.95;
         if (Game.Has('Five-finger discount')) price *= Math.pow(0.99, Game.Objects['Cursor'].amount / 100);
@@ -1892,8 +1897,18 @@ function totalDiscount(building) {
     return price;
 }
 
+// this function is inaccurate and can only be assumed to be an approximation. Probably should get rid of it and use the game's building-specific function since that's the only way to take into account building fortunes and free buildings.
 function cumulativeBuildingCost(basePrice, startingNumber, endingNumber) {
     return basePrice * totalDiscount(true) * (Math.pow(Game.priceIncrease, endingNumber) - Math.pow(Game.priceIncrease, startingNumber)) / (Game.priceIncrease - 1);
+}
+
+function newCumulativeBuildingCost(building, startingNumber, endingNumber) {    // return how much it would cost to buy some/more of this building
+    var price = 0;
+    for (var i = Math.max(0, startingNumber - building.free); i < Math.max(0, endingNumber - building.free); i++) {
+        price += building.basePrice * Math.pow(Game.priceIncrease, Math.max(0, i));
+    }
+    price = Game.modifyBuildingPrice(building, price);
+    return Math.ceil(price);
 }
 
 function cumulativeSantaCost(amount) {
