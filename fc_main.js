@@ -2557,7 +2557,7 @@ function safeBuy(bldg, count) {
 
 var previousClickCount = Game.cookieClicks;
 var previousClickTime = Date.now();
-var measuredClicksPS = FrozenCookies.cookieClickSpeed;
+var measuredClicksPS = measureClicks();
 var lastCookies = Game.cookies;
 
 function measureClicks() {
