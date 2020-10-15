@@ -2557,16 +2557,18 @@ function safeBuy(bldg, count) {
 
 var previousClickCount = Game.cookieClicks;
 var previousClickTime = Date.now();
-var measuredClicksPS = measureClicks();
+var measuredClicksPS = 0
 var lastCookies = Game.cookies;
 
 function measureClicks() {
     measuredClicksPS = (Game.cookieClicks - previousClickCount) / (Date.now() - previousClickTime) * 1000;
     previousClickCount = Game.cookieClicks;
     previousClickTime = Date.now();
+    console.log(measuredClicksPS);
     return measuredClicksPS;
 }
 
+measureClicks();
 
 
 //does having godz running so much prevent clickbuffs?
@@ -2641,7 +2643,7 @@ function autoGodzamokAction() {
             // console.log("Clicks: " + (Game.cookieClicks - previousClickCount));
             // previousClickCount = Game.cookieClicks;
             // previousClickTime = Date.now();
-            console.log("Measured clicks per second: " + measureClicks());
+            console.log("Measured clicks per second: " + measuredClicksPS);
         }
 
     }
