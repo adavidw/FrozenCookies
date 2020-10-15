@@ -2561,14 +2561,15 @@ var measuredClicksPS = 0
 var lastCookies = Game.cookies;
 
 function measureClicks() {
-    measuredClicksPS = (Game.cookieClicks - previousClickCount) / (Date.now() - previousClickTime) * 1000;
-    previousClickCount = Game.cookieClicks;
-    previousClickTime = Date.now();
-    console.log(measuredClicksPS);
-    return measuredClicksPS;
+    if (previousClickCount > Game.cookieClicks) {
+        measuredClicksPS = (Game.cookieClicks - previousClickCount) / (Date.now() - previousClickTime) * 1000;
+        previousClickCount = Game.cookieClicks;
+        previousClickTime = Date.now();
+        return measuredClicksPS;
+    } else return 0;
 }
 
-measureClicks();
+setTimeout(measureClicks,10000);
 
 
 //does having godz running so much prevent clickbuffs?
