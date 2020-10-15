@@ -2555,84 +2555,94 @@ function safeBuy(bldg, count) {
     }
 }
 
+var previousClickCount = Game.cookieClicks;
+var previousClickTime = Date.now();
+var measuredClicksPS = FrozenCookies.cookieClickSpeed;
+var lastCookies = Game.cookies;
+
+function measureClicks() {
+    measuredClicksPS = (Game.cookieClicks - previousClickCount) / (Date.now() - previousClickTime) * 1000;
+    previousClickCount = Game.cookieClicks;
+    previousClickTime = Date.now();
+    return measuredClicksPS;
+}
+
+
+
+//does having godz running so much prevent clickbuffs?
+// to pr, remove autoCombo, fix cumulativeBuildingCost, change preferences, and fix preferences around building limits
+
+
 function autoGodzamokAction() {
     if (!T || !FrozenCookies.autoGodzamok || !Game.hasGod("ruin")) {
         return; // Just leave if Pantheon isn't here yet, or autoGodzamok isn't turned on, or you don't worship Godzamok
     }
 
     if ((!Game.hasBuff("Devastation"))) { // && hasClickBuff()) {
-        //  take this out or refactor before any PR
+        //  take autoCombo() out or refactor before any PR
         autoCombo();
         Game.CalculateGains();                      // make sure we have the most up to date
         Game.Objects.Farm.minigame.computeEffs()    // numbers to do the calculations
         var clickBuffTime = 10;     // default length of Devastation buff
-        var clickCps = Game.mouseCps() * FrozenCookies.cookieClickSpeed;
+        var clickCps = Game.computedMouseCps * Math.min(measuredClicksPS, FrozenCookies.cookieClickSpeed);
+        var actualCps = Game.cookiesPs + clickCps;
         var godzamokMultiplier = 2 / Math.pow(2, Game.hasGod("ruin")) / 100;
+        var startCookies = Game.cookies;
+        // var startClicks = Game.cookieClicks;
+        // console.log("Start cookies: " +startCookies+ " / "+ Game.cookies);
 
         // see how long the shortest buff will last
-        // logEvent("AutoGodzamok", "Active buffs:");  // take out
         for (var i in Game.buffs) {
-            // logEvent("AutoGodzamok", Game.buffs[i].name + ": " + timeDisplay(Game.buffs[i].time / Game.fps));   // take out
             if ((Game.buffs[i].time / Game.fps) < clickBuffTime) {
                 clickBuffTime = (Game.buffs[i].time / Game.fps)
             }
         }
 
-        // check each one against remaining bank to ensure you don't get stuck with fewer buildings
         // calculate which buildings provide a big enough payback to be sold
-        // logEvent("AutoGodzamok", "Current clickCps is: " + Beautify(clickCps));
         for (var i in Game.Objects) {
             if (i != "Wizard tower" || (!FrozenCookies.towerLimit && !FrozenCookies.autoSpell)) {  // leave Wizard tower out if you've set the mana-related limit or autoCast, since selling messes with mana
-                var sellCount = Game.Objects[i].amount - 1  // leave one of each building to avoid messing with minigames
+                var toRemain = Game.Objects[i].minigameLoaded   // leave one of each building to avoid messing with minigames
+                var sellCount = Game.Objects[i].amount - toRemain;
                 var cpsModifier = 1 + (sellCount * godzamokMultiplier);
                 var deltaCps = clickCps * cpsModifier - clickCps;
-                var cost = newCumulativeBuildingCost(Game.Objects[i], 1, Game.Objects[i].amount);
-                cost -= (cost * Game.Objects[i].getSellMultiplier()); // calculate a net cost by subtracting sales gains
-                if ((cost < (deltaCps * clickBuffTime)) && (sellCount >= 10) && cost < Game.cookies) {
-                    // sell the buildings
-                    logEvent("AutoGodzamok", "Selling " + sellCount + " " + Game.Objects[i].plural + " will get "
-                        + Beautify((deltaCps * clickBuffTime)) + " more cookies and cost a net "
-                        + Beautify(cost) + " to rebuild.");
-                    Game.Objects[i].sell(sellCount);
-                    logEvent("AutoGodzamok", "Sold " + sellCount + " " + Game.Objects[i].plural);
-                    // buy everything back
-                    if (Game.Objects[i].amount < 10) {
-                        safeBuy(Game.Objects[i], sellCount);
-                        logEvent("AutoGodzamok", "Bought " + (Game.Objects[i].amount - 1) + " " + Game.Objects[i].plural);
-                    }
+                var cost = newCumulativeBuildingCost(Game.Objects[i], toRemain, Game.Objects[i].amount);
+                // cost -= (cost * Game.Objects[i].getSellMultiplier()); // calculate a net cost by subtracting sales gains
+                cost -= (Game.Objects[i].getReverseSumPrice(sellCount)); // calculate a net cost by subtracting sales gains
+
+                // put a margin in here
+                if ((cost < (deltaCps * clickBuffTime) * .75) && (sellCount >= 10)) {
+                    if (cost < Game.cookies) {  // check against remaining bank to ensure you don't get stuck with fewer buildings
+                        // sell the buildings
+                        logEvent("AutoGodzamok", "deltaCps: " + deltaCps + ", clickBuffTime: " + clickBuffTime + ", clickCps: " + clickCps + ", measuredClicksPS: " + measuredClicksPS);
+                        logEvent("AutoGodzamok", "Selling " + sellCount + " " + Game.Objects[i].plural + " will get "
+                            + Beautify((deltaCps * clickBuffTime)) + " more cookies and cost "
+                            + Beautify(cost) + " cookies (net) to rebuild.");
+                        var cookiesBefore = Game.cookies;
+                        Game.Objects[i].sell(sellCount);
+                        logEvent("AutoGodzamok", "Sold " + sellCount + " " + Game.Objects[i].plural);
+                        // buy everything back
+                        if (Game.Objects[i].amount < 10) {
+                            safeBuy(Game.Objects[i], sellCount);
+                            logEvent("AutoGodzamok", "Bought " + ((Game.Objects[i].amount) - toRemain) + " " + Game.Objects[i].plural);
+                        }
+                        logEvent("AutoGodzamok", "Cookies used: " + Beautify(cookiesBefore - Game.cookies) + ". New cookie amount: " + Beautify(Game.cookies));
+                    } else logEvent("AutoGodzamok", Game.Objects[i].plural + " would qualify, but there's not enough cookies in bank to rebuy them.");
                 }
             }
         }
 
-        // // these all go out
-        // var cursorCount = Game.Objects.Cursor.amount;
-        // var farmCount = Game.Objects.Farm.amount - 1;     // 1 farm always left to prevent garden from disappearing
-        // var shipmentCount = Game.Objects.Shipment.amount;
-        // var factoryCount = Game.Objects.Factory.amount;
-        // var bankCount = Game.Objects.Bank.amount;
-        // var labCount = Game.Objects["Alchemy lab"].amount;
-        // var buildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount)
-        //     + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount);
-        // var bigBuildingCost = cumulativeBuildingCost(Game.Objects['Cursor'].basePrice, 0, cursorCount)
-        //     + cumulativeBuildingCost(Game.Objects['Farm'].basePrice, 0, farmCount)
-        //     + cumulativeBuildingCost(Game.Objects['Factory'].basePrice, 0, factoryCount)
-        //     + cumulativeBuildingCost(Game.Objects['Bank'].basePrice, 0, bankCount)
-        //     + cumulativeBuildingCost(Game.Objects['Shipment'].basePrice, 0, shipmentCount)
-        //     + cumulativeBuildingCost(Game.Objects['Alchemy lab'].basePrice, 0, labCount)
-        //     ;
-        // var expectedProd = actualCps * clickBuffTime;
-        // var godzamokProd = (Game.cookiesPs + (clickCps * ((cursorCount + farmCount) / 100))) * clickBuffTime;
-        // var bigGodzamokProd = (Game.cookiesPs + (clickCps * ((cursorCount + farmCount + factoryCount + bankCount + shipmentCount + labCount) / 100))) * clickBuffTime;
-
-        // // what logging is REALLY necessary?
-        // logEvent("AutoGodzamok", "Actual CPS is Game.cookiesPs: " + Beautify(Game.cookiesPs) + ", plus Game.mouseCps(): " + Beautify(Game.mouseCps()) + " times cookieClickSpeed: " + Beautify(FrozenCookies.cookieClickSpeed));
-        // logEvent("AutoGodzamok", "Before selling, this combo should produce " + Beautify(expectedProd) + " cookies in " + clickBuffTime + " seconds");
-        // logEvent("AutoGodzamok", "After selling, this combo would produce " + Beautify(godzamokProd) + " cookies in " + clickBuffTime + " seconds");
-        // logEvent("AutoGodzamok", "You would earn " + Beautify((godzamokProd - expectedProd)) + " more cookies, but it would cost " + Beautify(buildingCost) + " cookies to rebuild");
-        // logEvent("AutoGodzamok", "* BIG: After selling big, this combo would produce " + Beautify(bigGodzamokProd) + " cookies in " + clickBuffTime + " seconds");
-        // logEvent("AutoGodzamok", "* BIG: You would earn " + Beautify((bigGodzamokProd - expectedProd)) + " more cookies, but it would cost " + Beautify(bigBuildingCost) + " cookies to rebuild");
-        // logEvent("AutoGodzamok", "* BIG: You would earn " + Beautify((bigGodzamokProd - expectedProd - bigBuildingCost)) + " more cookies with big, and " +
-        //     Beautify((godzamokProd - expectedProd - buildingCost)) + " more cookies with regular.");
+        // console.log("Current cookies: " + Game.cookies);
+        if (startCookies != Game.cookies) {
+            // console.log("not equal");
+            // console.log("Current cookies: " + Game.cookies);
+            console.log("Expected production without Devastation: " + Beautify(actualCps * clickBuffTime));
+            console.log("Made: " + Beautify(Game.cookies - lastCookies) + " cookies");
+            lastCookies = Game.cookies;
+            // console.log("Clicks: " + (Game.cookieClicks - previousClickCount));
+            // previousClickCount = Game.cookieClicks;
+            // previousClickTime = Date.now();
+            console.log("Measured clicks per second: " + measureClicks());
+        }
 
     }
 }
