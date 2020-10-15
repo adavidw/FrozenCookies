@@ -73,102 +73,102 @@ FrozenCookies.preferenceValues = {
         'default': 0,
         'extras': '<a class="option" id="cursorMax" onclick="updateCursorMax(\'cursorMax\');">${cursorMax} Cursors</a>'
     },
-    'grandmaLimit': {
-        'hint': 'Limit max number of Grandmas that AutoBuy will purchase',
-        'display': ['Grandma Limit OFF', 'Grandma Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="grandmaMax" onclick="updateGrandmaMax(\'grandmaMax\');">${grandmaMax} Grandmas</a>'
-    },
+    // 'grandmaLimit': {
+    //     'hint': 'Limit max number of Grandmas that AutoBuy will purchase',
+    //     'display': ['Grandma Limit OFF', 'Grandma Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="grandmaMax" onclick="updateGrandmaMax(\'grandmaMax\');">${grandmaMax} Grandmas</a>'
+    // },
     'farmLimit': {
         'hint': 'Limit max number of Farms that AutoBuy will purchase',
         'display': ['Farm Limit OFF', 'Farm Limit ON'],
         'default': 0,
         'extras': '<a class="option" id="farmMax" onclick="updateFarmMax(\'farmMax\');">${farmMax} Farms</a>'
     },
-    'mineLimit': {
-        'hint': 'Limit max number of Mines that AutoBuy will purchase',
-        'display': ['Mine Limit OFF', 'Mine Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="mineMax" onclick="updateMineMax(\'mineMax\');">${mineMax} Mines</a>'
-    },
-    'factoryLimit': {
-        'hint': 'Limit max number of Factories that AutoBuy will purchase',
-        'display': ['Factory Limit OFF', 'Factory Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="factoryMax" onclick="updateFactoryMax(\'factoryMax\');">${factoryMax} Factories</a>'
-    },
-    'bankLimit': {
-        'hint': 'Limit max number of Banks that AutoBuy will purchase',
-        'display': ['Bank Limit OFF', 'Bank Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="bankMax" onclick="updateBankMax(\'bankMax\');">${bankMax} Banks</a>'
-    },
-    'templeLimit': {
-        'hint': 'Limit max number of Temples that AutoBuy will purchase',
-        'display': ['Temple Limit OFF', 'Temple Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="templeMax" onclick="updateTempleMax(\'templeMax\');">${templeMax} Temples</a>'
-    },
+    // 'mineLimit': {
+    //     'hint': 'Limit max number of Mines that AutoBuy will purchase',
+    //     'display': ['Mine Limit OFF', 'Mine Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="mineMax" onclick="updateMineMax(\'mineMax\');">${mineMax} Mines</a>'
+    // },
+    // 'factoryLimit': {
+    //     'hint': 'Limit max number of Factories that AutoBuy will purchase',
+    //     'display': ['Factory Limit OFF', 'Factory Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="factoryMax" onclick="updateFactoryMax(\'factoryMax\');">${factoryMax} Factories</a>'
+    // },
+    // 'bankLimit': {
+    //     'hint': 'Limit max number of Banks that AutoBuy will purchase',
+    //     'display': ['Bank Limit OFF', 'Bank Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="bankMax" onclick="updateBankMax(\'bankMax\');">${bankMax} Banks</a>'
+    // },
+    // 'templeLimit': {
+    //     'hint': 'Limit max number of Temples that AutoBuy will purchase',
+    //     'display': ['Temple Limit OFF', 'Temple Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="templeMax" onclick="updateTempleMax(\'templeMax\');">${templeMax} Temples</a>'
+    // },
     'towerLimit': {
         'hint': 'Stop autobuying Wizard Towers at selected Max Mana, for spellcasting efficiency',
         'display': ['Wizard Tower Cap OFF', 'Wizard Tower Cap ON'],
         'default': 0,
         'extras': '<a class="option" id="manaMax" onclick="updateManaMax(\'manaMax\');">${manaMax} max Mana</a>'
     },
-    'shipmentLimit': {
-        'hint': 'Limit max number of Shipments that AutoBuy will purchase',
-        'display': ['Shipment Limit OFF', 'Shipment Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="shipmentMax" onclick="updateShipmentMax(\'shipmentMax\');">${shipmentMax} Shipments</a>'
-    },
-    'labLimit': {
-        'hint': 'Limit max number of Alchemy Labs that AutoBuy will purchase',
-        'display': ['Alchemy Lab Limit OFF', 'Alchemy Lab Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="labMax" onclick="updateLabMax(\'labMax\');">${labMax} Alchemy Labs</a>'
-    },
-    'portalLimit': {
-        'hint': 'Limit max number of Portals that AutoBuy will purchase',
-        'display': ['Portal Limit OFF', 'Portal Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="portalMax" onclick="updatePortalMax(\'portalMax\');">${portalMax} Portals</a>'
-    },
-    'timeMachineLimit': {
-        'hint': 'Limit max number of Time Machines that AutoBuy will purchase',
-        'display': ['Time Machine Limit OFF', 'Time Machine Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="timeMachineMax" onclick="updateTimeMachineMax(\'timeMachineMax\');">${timeMachineMax} Time Machines</a>'
-    },
-    'condensorLimit': {
-        'hint': 'Limit max number of Antimatter Condensors that AutoBuy will purchase',
-        'display': ['Antimatter Condensor Limit OFF', 'Antimatter Condensor Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="condensorMax" onclick="updateCondensorMax(\'condensorMax\');">${condensorMax} Antimatter Condensors</a>'
-    },
-    'prismLimit': {
-        'hint': 'Limit max number of Prisms that AutoBuy will purchase',
-        'display': ['Prism Limit OFF', 'Prism Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="prismMax" onclick="updatePrismMax(\'prismMax\');">${prismMax} Prisms</a>'
-    },
-    'chancemakerLimit': {
-        'hint': 'Limit max number of Chancemakers that AutoBuy will purchase',
-        'display': ['Chancemaker Limit OFF', 'Chancemaker Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="chancemakerMax" onclick="updateChancemakerMax(\'chancemakerMax\');">${chancemakerMax} Chancemakers</a>'
-    },
-    'fractalEngineLimit': {
-        'hint': 'Limit max number of Fractal Engines that AutoBuy will purchase',
-        'display': ['Fractal Engine Limit OFF', 'Fractal Engine Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="fractalEngineMax" onclick="updateFractalEngineMax(\'fractalEngineMax\');">${fractalEngineMax} Fractal Engines</a>'
-    },
-    'consoleLimit': {
-        'hint': 'Limit max number of Javascript Consoles that AutoBuy will purchase',
-        'display': ['Javascript Console Limit OFF', 'Javascript Console Limit ON'],
-        'default': 0,
-        'extras': '<a class="option" id="consoleMax" onclick="updateConsoleMax(\'consoleMax\');">${consoleMax} Javascript Consoles</a>'
-    },
+    // 'shipmentLimit': {
+    //     'hint': 'Limit max number of Shipments that AutoBuy will purchase',
+    //     'display': ['Shipment Limit OFF', 'Shipment Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="shipmentMax" onclick="updateShipmentMax(\'shipmentMax\');">${shipmentMax} Shipments</a>'
+    // },
+    // 'labLimit': {
+    //     'hint': 'Limit max number of Alchemy Labs that AutoBuy will purchase',
+    //     'display': ['Alchemy Lab Limit OFF', 'Alchemy Lab Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="labMax" onclick="updateLabMax(\'labMax\');">${labMax} Alchemy Labs</a>'
+    // },
+    // 'portalLimit': {
+    //     'hint': 'Limit max number of Portals that AutoBuy will purchase',
+    //     'display': ['Portal Limit OFF', 'Portal Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="portalMax" onclick="updatePortalMax(\'portalMax\');">${portalMax} Portals</a>'
+    // },
+    // 'timeMachineLimit': {
+    //     'hint': 'Limit max number of Time Machines that AutoBuy will purchase',
+    //     'display': ['Time Machine Limit OFF', 'Time Machine Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="timeMachineMax" onclick="updateTimeMachineMax(\'timeMachineMax\');">${timeMachineMax} Time Machines</a>'
+    // },
+    // 'condensorLimit': {
+    //     'hint': 'Limit max number of Antimatter Condensors that AutoBuy will purchase',
+    //     'display': ['Antimatter Condensor Limit OFF', 'Antimatter Condensor Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="condensorMax" onclick="updateCondensorMax(\'condensorMax\');">${condensorMax} Antimatter Condensors</a>'
+    // },
+    // 'prismLimit': {
+    //     'hint': 'Limit max number of Prisms that AutoBuy will purchase',
+    //     'display': ['Prism Limit OFF', 'Prism Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="prismMax" onclick="updatePrismMax(\'prismMax\');">${prismMax} Prisms</a>'
+    // },
+    // 'chancemakerLimit': {
+    //     'hint': 'Limit max number of Chancemakers that AutoBuy will purchase',
+    //     'display': ['Chancemaker Limit OFF', 'Chancemaker Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="chancemakerMax" onclick="updateChancemakerMax(\'chancemakerMax\');">${chancemakerMax} Chancemakers</a>'
+    // },
+    // 'fractalEngineLimit': {
+    //     'hint': 'Limit max number of Fractal Engines that AutoBuy will purchase',
+    //     'display': ['Fractal Engine Limit OFF', 'Fractal Engine Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="fractalEngineMax" onclick="updateFractalEngineMax(\'fractalEngineMax\');">${fractalEngineMax} Fractal Engines</a>'
+    // },
+    // 'consoleLimit': {
+    //     'hint': 'Limit max number of Javascript Consoles that AutoBuy will purchase',
+    //     'display': ['Javascript Console Limit OFF', 'Javascript Console Limit ON'],
+    //     'default': 0,
+    //     'extras': '<a class="option" id="consoleMax" onclick="updateConsoleMax(\'consoleMax\');">${consoleMax} Javascript Consoles</a>'
+    // },
 
     // other auto options
     'autoOtherOptions': {
