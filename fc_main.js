@@ -985,7 +985,7 @@ function safeCast(spell) {
         if (cpsBonus() <= 1 && Game.shimmers.length === 0) { // should we also check to see if the next GC is at least some minimum amount of time away?
             suppressNextGC = true;
             if (M.castSpell(spell)) {
-                logEvent('SafeCast', "Cast Force the Hand of Fate -- Don't click on THIS cookie");
+                logEvent('SafeCast', "Force the Hand of Fate -- Don't click on this next cookie");
                 return true;
             }
             // if casting failed and these next two lines get executed, rewind
