@@ -1,15 +1,30 @@
 // functionality for the infobox
 
-var previous = {
+var previousBoxSize = {
     maxRadius: 0,
     maxWidth: 0,
     maxHeight: 0,
 };
 
-function drawInfobox(t_d, x, y) {   // draw the wheel and text box
+// measure the left pane, and size the elements relative to that
+
+
+function drawInfobox(t_d) {   // draw the wheel and text box
+
+    // figure out positioning
+    var len = Game.specialTabs.length;  // if length > 0, that means Santa or Krumblor icons are present
+    var x = 24;
+    if (len > 0) {
+        x += 48;
+    }
+    var y = Game.LeftBackground.canvas.height - 96;
+    if (Game.specialTab != 0) {
+        y -= 130
+    }
+
     var maxRadius, heightOffset, i_c, i_tc, t_b, maxWidth, maxHeight, s_t,
         c = $('#backgroundLeftCanvas'),
-        boxFont = "Arial",
+        boxFont = "Helvetica,Arial",
         boxFontSize = "14px";
     if (typeof (c.measureText) != "function") {
         return;
@@ -24,6 +39,19 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
     }), function (str) {
         return str.length;
     });
+    // console.log(t_d);
+    // console.log(t_d.map(function (o) {
+    //     return o.name + ((o.name && o.display) ? ": " : "") + o.display;
+    //     }));
+
+    // var maxText = _.max(
+    //     t_d.map(function (o) {
+    //         return o.name + ((o.name && o.display) ? ": " : "") + o.display;
+    //     }),
+    //     function (str) {
+    //         return str.length;
+    //     });
+    //     // console.log(maxText);
     var maxMeasure = c.measureText({
         fontSize: boxFontSize,
         fontFamily: boxFont,
@@ -32,12 +60,12 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
     });
     maxWidth = maxMeasure.width;
     maxHeight = maxMeasure.height * t_d.length;
-    if (maxRadius > previous.maxRadius) {previous.maxRadius = maxRadius};
-    if (maxRadius < previous.maxRadius) {previous.maxRadius --};
-    if (maxWidth > previous.maxWidth)   {previous.maxWidth = maxWidth};
-    if (maxWidth < previous.maxWidth)   {previous.maxWidth --;   maxWidth = previous.maxWidth};
-    if (maxHeight > previous.maxHeight) {previous.maxHeight = maxHeight};
-    if (maxHeight < previous.maxHeight) {previous.maxHeight --;  maxHeight = previous.maxHeight};
+    if (maxRadius > previousBoxSize.maxRadius) { previousBoxSize.maxRadius = maxRadius };
+    if (maxRadius < previousBoxSize.maxRadius) { previousBoxSize.maxRadius-- };
+    if (maxWidth > previousBoxSize.maxWidth) { previousBoxSize.maxWidth = maxWidth };
+    if (maxWidth < previousBoxSize.maxWidth) { previousBoxSize.maxWidth--; maxWidth = previousBoxSize.maxWidth };
+    if (maxHeight > previousBoxSize.maxHeight) { previousBoxSize.maxHeight = maxHeight };
+    if (maxHeight < previousBoxSize.maxHeight) { previousBoxSize.maxHeight--; maxHeight = previousBoxSize.maxHeight };
 
     //draw the box
     if (FrozenCookies.fancyui % 2 == 1) {
@@ -103,11 +131,11 @@ function drawInfobox(t_d, x, y) {   // draw the wheel and text box
             });
             c.drawArc({ // colored arc
                 strokeStyle: o_draw.c1,
-                x: x + (maxRadius + 0), y: y-1,
+                x: x + (maxRadius + 0), y: y - 1,
                 radius: maxRadius - i_c * 12,
                 strokeWidth: 9,
                 start: 0,
-                end: (360 * o_draw.f_percent) 
+                end: (360 * o_draw.f_percent)
             });
         }
         i_c++;
@@ -187,12 +215,12 @@ function updateTimers() {   // update calculations and assemble output -- called
             chainTotal = 0,
             chainFinished,
             chainCompletion = 0;
-        
+
         // calculate min, max, and median expected times for golden cookie
         if (!Game.Has('Golden switch [off]')) { // when golden switch is on, golden cookies don't spawn, so only calculate time for them if they can actually appear
             gcDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.5) - Game.shimmerTypes.golden.time),
-            gcMaxDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99) - Game.shimmerTypes.golden.time),
-            gcMinDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.01) - Game.shimmerTypes.golden.time);
+                gcMaxDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99) - Game.shimmerTypes.golden.time),
+                gcMinDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.01) - Game.shimmerTypes.golden.time);
         }
         if (nextChainedPurchase().cost > nextPurchase().cost) {
             chainPurchase = nextChainedPurchase().purchase;
@@ -216,12 +244,30 @@ function updateTimers() {   // update calculations and assemble output -- called
                 display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps))
             });
         }
+        // if (purchaseTotal > 0) {
+        //     t_draw.push({
+        //         f_percent: purchaseCompletion,
+        //         c1: 'rgba(44, 44, 44, 1)',
+        //         name: "Purchase Time (" + nextPurchase().purchase.name + ")",
+        //         display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps))
+        //     });
+        // }
+
+        // if text is wider than some percentage, split it
+
         if (purchaseTotal > 0) {
+            t_draw.push({
+                // f_percent: 0,
+                c1: 'rgba(44, 44, 44, 1)',
+                name: "Purchase Completion Time"
+                , display: ""
+            })
             t_draw.push({
                 f_percent: purchaseCompletion,
                 c1: 'rgba(44, 44, 44, 1)',
-                name: "Purchase Time (" + nextPurchase().purchase.name + ")",
-                display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps))
+                name: "(" + nextPurchase().purchase.name + ")",
+                display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps)),
+                overlay: true
             });
         }
         if (bankMax > 0) {
@@ -345,17 +391,6 @@ function updateTimers() {   // update calculations and assemble output -- called
                 display: timeDisplay(buildingSpecialTime / Game.fps)
             });
         }
-
-        // figure out positioning
-        var len = Game.specialTabs.length;  // if length > 0, that means Santa or Krumblor icons are present
-        var x = 24;
-        if (len > 0) {
-            x += 48;
-        }
-        var y = Game.LeftBackground.canvas.height - 96;
-        if (Game.specialTab != 0) {
-            y -= 130
-        }
-        drawInfobox(t_draw, x, y);
+        drawInfobox(t_draw);
     }
 }
