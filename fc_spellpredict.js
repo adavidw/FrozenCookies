@@ -5,21 +5,21 @@
 // @source       https://www.reddit.com/r/CookieClicker/comments/6v2lz3/predict_next_hands_of_faith/
 
 var suppressNextGC = false;
-const predictedCookie = {
-    "Frenzy": {color: '<b style="color:#FFDE5F">', minimum: ["Frenzy"], comboWith: ["Frenzy", "Building Special"], next: ""},
-    "Lucky": {color: '<b style="color:#FFDE5F">', comboWith: ["Frenzy"], next: ""},
-    "Click Frenzy": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
-    "Cookie Chain": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
-    "Cookie Storm": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
-    "Building Special": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
-    "Cookie Storm (Drop)": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
-    "Sugar Lump": {color: '<b style="color:#FFDE5F">', comboWith: "anytime", next: ""},
-    "Clot": {color: '<b style="color:#FFDE5F">', comboWith: "none", next: ""},
-    "Ruin Cookies": {color: '<b style="color:#FFDE5F">', comboWith: "none", next: ""},
-    "Cursed Finger": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
-    "Elder Frenzy": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
-    "Blab": {color: '<b style="color:#FFDE5F">', comboWith: "none", next: ""}
-};
+// const predictedCookie = {
+//     "Frenzy": {color: '<b style="color:#FFDE5F">', minimum: ["Frenzy"], comboWith: ["Frenzy", "Building Special"], next: ""},
+//     "Lucky": {color: '<b style="color:#FFDE5F">', comboWith: ["Frenzy"], next: ""},
+//     "Click Frenzy": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
+//     "Cookie Chain": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
+//     "Cookie Storm": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
+//     "Building Special": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
+//     "Cookie Storm (Drop)": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
+//     "Sugar Lump": {color: '<b style="color:#FFDE5F">', comboWith: "anytime", next: ""},
+//     "Clot": {color: '<b style="color:#FFDE5F">', comboWith: "none", next: ""},
+//     "Ruin Cookies": {color: '<b style="color:#FFDE5F">', comboWith: "none", next: ""},
+//     "Cursed Finger": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
+//     "Elder Frenzy": {color: '<b style="color:#FFDE5F">', comboWith: "mult", next: ""},
+//     "Blab": {color: '<b style="color:#FFDE5F">', comboWith: "none", next: ""}
+// };
 
 (function () {   // tooltip display
     if (Game.ObjectsById[7].minigameLoaded) {

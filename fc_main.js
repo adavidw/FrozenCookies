@@ -2561,7 +2561,7 @@ var measuredClicksPS = 0
 var lastCookies = Game.cookies;
 
 function measureClicks() {
-    if (previousClickCount > Game.cookieClicks) {
+    if (previousClickCount < Game.cookieClicks) {
         measuredClicksPS = (Game.cookieClicks - previousClickCount) / (Date.now() - previousClickTime) * 1000;
         previousClickCount = Game.cookieClicks;
         previousClickTime = Date.now();
@@ -2569,7 +2569,8 @@ function measureClicks() {
     } else return 0;
 }
 
-setTimeout(measureClicks,10000);
+//put the var in front of this?
+var poop = setTimeout(measureClicks,20000);
 
 
 //does having godz running so much prevent clickbuffs?
