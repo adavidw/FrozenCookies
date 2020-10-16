@@ -80,7 +80,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     if (FrozenCookies.fancyui % 2 == 1) {
         // draw the box background
         c.drawRect({
-            fillStyle: 'rgba(200, 200, 255, 0.6)',
+            fillStyle: 'rgba(220, 220, 220, 0.6)',
             x: xMargin + (maxRadius * 2) + (maxBoxWidth / 2) + alley, y: y,
             width: maxBoxWidth + 20, height: maxBoxHeight
         });
