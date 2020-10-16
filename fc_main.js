@@ -1112,8 +1112,7 @@ function probabilitySpan(listType, start, endProbability) {
 function clickBuffBonus() {
     var ret = 1
     for (var i in Game.buffs) {
-        // Devastation, Godzamok's buff, is too variable
-        if (typeof Game.buffs[i].multClick != 'undefined' && Game.buffs[i].name != 'Devastation') {
+        if (typeof Game.buffs[i].multClick != 'undefined') {
             ret *= Game.buffs[i].multClick;
         }
     }
