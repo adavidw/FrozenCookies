@@ -2,8 +2,8 @@
 
 var previousBoxSize = {
     maxRadius: 0,
-    maxWidth: 0,
-    maxHeight: 0,
+    maxBoxWidth: 0,
+    maxBoxHeight: 0,
 };
 
 // measure the left pane, and size the elements relative to that
@@ -12,17 +12,24 @@ var previousBoxSize = {
 function drawInfobox(t_d) {   // draw the wheel and text box
 
     // figure out positioning
+    var xMargin = 24;
+    var maxWidth = Game.LeftBackground.canvas.width - xMargin * 2;
+
+    var yMargin = 48;
+    var maxHeight = Game.LeftBackground.canvas.height;
+
+    var x = xMargin;
     var len = Game.specialTabs.length;  // if length > 0, that means Santa or Krumblor icons are present
-    var x = 24;
     if (len > 0) {
-        x += 48;
+        x += 24;
     }
-    var y = Game.LeftBackground.canvas.height - 96;
+
+    var y = Game.LeftBackground.canvas.height - 48 - yMargin;
     if (Game.specialTab != 0) {
         y -= 130
     }
 
-    var maxRadius, heightOffset, i_c, i_tc, t_b, maxWidth, maxHeight, s_t,
+    var maxRadius, heightOffset, i_c, i_tc, t_b, maxBoxWidth, maxBoxHeight, s_t,
         c = $('#backgroundLeftCanvas'),
         boxFont = "Helvetica,Arial",
         boxFontSize = "14px";
@@ -58,22 +65,24 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         maxWidth: c.width,
         text: maxText
     });
-    maxWidth = maxMeasure.width;
-    maxHeight = maxMeasure.height * t_d.length;
+    maxBoxWidth = maxMeasure.width;
+    maxBoxHeight = maxMeasure.height * t_d.length;
+    
+    // dynamically resize the box in a less jerky fashion
     if (maxRadius > previousBoxSize.maxRadius) { previousBoxSize.maxRadius = maxRadius };
     if (maxRadius < previousBoxSize.maxRadius) { previousBoxSize.maxRadius-- };
-    if (maxWidth > previousBoxSize.maxWidth) { previousBoxSize.maxWidth = maxWidth };
-    if (maxWidth < previousBoxSize.maxWidth) { previousBoxSize.maxWidth--; maxWidth = previousBoxSize.maxWidth };
-    if (maxHeight > previousBoxSize.maxHeight) { previousBoxSize.maxHeight = maxHeight };
-    if (maxHeight < previousBoxSize.maxHeight) { previousBoxSize.maxHeight--; maxHeight = previousBoxSize.maxHeight };
+    if (maxBoxWidth > previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth = maxBoxWidth };
+    if (maxBoxWidth < previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth--; maxBoxWidth = previousBoxSize.maxBoxWidth };
+    if (maxBoxHeight > previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight = maxBoxHeight };
+    if (maxBoxHeight < previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight--; maxBoxHeight = previousBoxSize.maxBoxHeight };
 
     //draw the box
     if (FrozenCookies.fancyui % 2 == 1) {
         // draw the box background
         c.drawRect({
             fillStyle: 'rgba(180, 180, 180, 0.6)',
-            x: x + (maxRadius * 2) + (maxWidth / 2) + 35, y: y,
-            width: maxWidth + 20, height: maxHeight + 20
+            x: x + (maxRadius * 2) + (maxBoxWidth / 2) + 35, y: y,
+            width: maxBoxWidth + 20, height: maxBoxHeight + 20
         });
         // iterate through the text items
         t_d.forEach(function (o_draw) {
@@ -83,7 +92,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
                     fontSize: boxFontSize,
                     fontFamily: boxFont,
                     fillStyle: o_draw.c1,
-                    x: x + maxRadius * 2 + maxWidth / 2 + 35, y: y - maxRadius - 5 + heightOffset + 16 * i_tc,
+                    x: x + maxRadius * 2 + maxBoxWidth / 2 + 35, y: y - maxRadius - 5 + heightOffset + 16 * i_tc,
                     text: s_t
                 });
                 i_tc++;
