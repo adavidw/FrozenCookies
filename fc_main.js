@@ -2667,7 +2667,7 @@ function autoGodzamokAction() {
                             safeBuy(Game.Objects[i], sellCount);
                             logEvent("AutoGodzamok", "Bought " + ((Game.Objects[i].amount) - toRemain) + " " + Game.Objects[i].plural);
                         }
-                        logEvent("AutoGodzamok", "Cookies used on " + Game.Objects[i].plural + ": " + Beautify(cookiesBefore - Game.cookies) + ". New cookie amount: " + (Game.cookies));
+                        logEvent("AutoGodzamok", "Cookies spent on " + Game.Objects[i].plural + ": " + Beautify(cookiesBefore - Game.cookies) + ". New cookie amount: " + (Game.cookies));
                     } else logEvent("AutoGodzamok", Game.Objects[i].plural + " would qualify, but there's not enough cookies in bank to rebuy them.");
                 }
             }
@@ -2679,7 +2679,7 @@ function autoGodzamokAction() {
             // console.log("Current cookies: " + Game.cookies);
             logEvent("AutoGodzamok", "Total spent on this ridiculousness: " + Beautify(startCookies - Game.cookies));
             logEvent("AutoGodzamok", "Expected production without Devastation: " + Beautify(actualCps * clickBuffTime));
-            logEvent("AutoGodzamok", "Devastation buff total of +" + (totalSold * 100) + " percent");
+            logEvent("AutoGodzamok", "Devastation buff total of +" + (totalSold) + " percent");
             // lastCookies = Game.cookies;
             // console.log("Clicks: " + (Game.cookieClicks - previousClickCount));
             // previousClickCount = Game.cookieClicks;
