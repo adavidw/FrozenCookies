@@ -2611,52 +2611,54 @@ function autoGodzamokAction() {
 
         // calculate which buildings provide a big enough payback to be sold
         for (var i in Game.Objects) {
-            if (i != "Wizard tower" || (!FrozenCookies.towerLimit && !FrozenCookies.autoSpell)) {  // leave Wizard tower out if you've set the mana-related limit or autoCast, since selling messes with mana
-                var toRemain = Game.Objects[i].minigameLoaded   // leave one of each building to avoid messing with minigames
-                var sellCount = Game.Objects[i].amount - toRemain;
-                var cpsModifier = 1 + (sellCount * godzamokMultiplier);
-                var deltaCps = clickCps * cpsModifier - clickCps;
-                var cost = newCumulativeBuildingCost(Game.Objects[i], toRemain, Game.Objects[i].amount);
-                                    // cost -= (cost * Game.Objects[i].getSellMultiplier()); // calculate a net cost by subtracting sales gains
-                cost -= (Game.Objects[i].getReverseSumPrice(sellCount)); // calculate a net cost by subtracting sales gains
+            if (i === "Cursor") {
+                if (i != "Wizard tower" || (!FrozenCookies.towerLimit && !FrozenCookies.autoSpell)) {  // leave Wizard tower out if you've set the mana-related limit or autoCast, since selling messes with mana
+                    var toRemain = Game.Objects[i].minigameLoaded   // leave one of each building to avoid messing with minigames
+                    var sellCount = Game.Objects[i].amount - toRemain;
+                    var cpsModifier = 1 + (sellCount * godzamokMultiplier);
+                    var deltaCps = clickCps * cpsModifier - clickCps;
+                    var cost = newCumulativeBuildingCost(Game.Objects[i], toRemain, Game.Objects[i].amount);
+                    // cost -= (cost * Game.Objects[i].getSellMultiplier()); // calculate a net cost by subtracting sales gains
+                    cost -= (Game.Objects[i].getReverseSumPrice(sellCount)); // calculate a net cost by subtracting sales gains
 
-                if ((cost < (deltaCps * clickBuffTime) * .75) && (sellCount >= 10)) {   // cost/cookies comparison includes a buffer to make sure that it's really obviously better
-                    if (cost < Game.cookies) {  // check against remaining bank to ensure you don't get stuck buying fewer buildings than expected
-                        // sell the buildings
-                        logEvent("AutoGodzamok", "deltaCps: " + deltaCps + ", clickBuffTime: " + clickBuffTime + ", clickCps: " + clickCps + ", measuredClicksPS: " + measuredClicksPS);
-                        logEvent("AutoGodzamok", "Selling " + sellCount + " " + Game.Objects[i].plural + " will get "
-                            + Beautify((deltaCps * clickBuffTime)) + " more cookies and cost "
-                            + Beautify(cost) + " cookies (net) to rebuild.");
-                        var cookiesBefore = Game.cookies;
-                        Game.Objects[i].sell(sellCount);
-                        totalSold += sellCount;
-                        logEvent("AutoGodzamok", "Sold " + sellCount + " " + Game.Objects[i].plural);
+                    if ((cost < (deltaCps * clickBuffTime) * .5) && (sellCount >= 10)) {   // cost/cookies comparison includes a buffer to make sure that it's really obviously better
+                        if (cost < Game.cookies) {  // check against remaining bank to ensure you don't get stuck buying fewer buildings than expected
+                            // sell the buildings
+                            logEvent("AutoGodzamok", "deltaCps: " + deltaCps + ", clickBuffTime: " + clickBuffTime + ", clickCps: " + clickCps + ", measuredClicksPS: " + measuredClicksPS);
+                            logEvent("AutoGodzamok", "Selling " + sellCount + " " + Game.Objects[i].plural + " will get "
+                                + Beautify((deltaCps * clickBuffTime)) + " more cookies and cost "
+                                + Beautify(cost) + " cookies (net) to rebuild.");
+                            var cookiesBefore = Game.cookies;
+                            Game.Objects[i].sell(sellCount);
+                            totalSold += sellCount;
+                            logEvent("AutoGodzamok", "Sold " + sellCount + " " + Game.Objects[i].plural);
 
-                        // do some goofy looping
-                        var mult = Math.min(Math.ceil((deltaCps * clickBuffTime) / cost), 100);
-                        multSellCount = Math.ceil(sellCount / 10);
-                        if (cost * mult < Game.cookies) {
-                            for (ii = 0; ii < mult; ii++) {
-                                if (Game.Objects[i].amount < 10) {
-                                    safeBuy(Game.Objects[i], multSellCount);
-                                    // logEvent("AutoGodzamok", ii + " of " + mult + " - Went crazy with garbage. Bought " + ((Game.Objects[i].amount) - toRemain) + " " + Game.Objects[i].plural);
+                            // do some goofy looping
+                            var mult = Math.min(Math.ceil((deltaCps * clickBuffTime) / cost), 500);
+                            multSellCount = Math.ceil(sellCount / 10);
+                            if (cost * mult < Game.cookies) {
+                                for (ii = 0; ii < mult; ii++) {
+                                    if (Game.Objects[i].amount < 10) {
+                                        safeBuy(Game.Objects[i], multSellCount);
+                                        // logEvent("AutoGodzamok", ii + " of " + mult + " - Went crazy with garbage. Bought " + ((Game.Objects[i].amount) - toRemain) + " " + Game.Objects[i].plural);
+                                    }
+                                    if (Game.Objects[i].amount >= 10) {
+                                        Game.Objects[i].sell(multSellCount);
+                                        totalSold += multSellCount;
+                                        // logEvent("AutoGodzamok", ii + " of " + mult + " - Went nuts. Sold " + multSellCount + " " + Game.Objects[i].plural);
+                                    }
                                 }
-                                if (Game.Objects[i].amount >= 10) {
-                                    Game.Objects[i].sell(multSellCount);
-                                    totalSold += multSellCount;
-                                    // logEvent("AutoGodzamok", ii + " of " + mult + " - Went nuts. Sold " + multSellCount + " " + Game.Objects[i].plural);
-                                }
+                                logEvent("AutoGodzamok", "Oscillated buying and selling " + multSellCount + " " + Game.Objects[i].plural + " " + mult + " times.");
                             }
-                            logEvent("AutoGodzamok","Oscillated buying and selling " + multSellCount + " " + Game.Objects[i].plural + " " + mult + " times.");
-                        }
 
-                        // buy everything back
-                        if (Game.Objects[i].amount < 10) {
-                            safeBuy(Game.Objects[i], sellCount);
-                            logEvent("AutoGodzamok", "Bought " + ((Game.Objects[i].amount) - toRemain) + " " + Game.Objects[i].plural);
-                        }
-                        logEvent("AutoGodzamok", "Cookies spent on " + Game.Objects[i].plural + ": " + Beautify(cookiesBefore - Game.cookies) + ". New cookie amount: " + (Game.cookies));
-                    } else logEvent("AutoGodzamok", Game.Objects[i].plural + " would qualify, but there's not enough cookies in bank to rebuy them.");
+                            // buy everything back
+                            if (Game.Objects[i].amount < 10) {
+                                safeBuy(Game.Objects[i], sellCount);
+                                logEvent("AutoGodzamok", "Bought " + ((Game.Objects[i].amount) - toRemain) + " " + Game.Objects[i].plural);
+                            }
+                            logEvent("AutoGodzamok", "Cookies spent on " + Game.Objects[i].plural + ": " + Beautify(cookiesBefore - Game.cookies) + ". New cookie amount: " + (Game.cookies));
+                        } else logEvent("AutoGodzamok", Game.Objects[i].plural + " would qualify, but there's not enough cookies in bank to rebuy them.");
+                    }
                 }
             }
         }
