@@ -2531,14 +2531,16 @@ function autoFrenzyClick() {
 function autoGSBuy() {
     if (hasClickBuff()) {
         if (Game.Upgrades["Golden switch [off]"].unlocked && !Game.Upgrades["Golden switch [off]"].bought) {
-            Game.Upgrades["Golden switch [off]"].buy();
-            logEvent("AutoGS", "Turning Golden Switch on");
+            if (Game.Upgrades["Golden switch [off]"].buy()) {
+                logEvent("AutoGS", "Turning Golden Switch on");
+            }
         }
     } else if (cpsBonus() <= 1) {
         if (Game.Upgrades["Golden switch [on]"].unlocked && !Game.Upgrades["Golden switch [on]"].bought) {
             Game.CalculateGains();  // Ensure price is updated since Frenzy ended
-            Game.Upgrades["Golden switch [on]"].buy();
-            logEvent("AutoGS", "Turning Golden Switch back off");
+            if (Game.Upgrades["Golden switch [on]"].buy()) {
+                logEvent("AutoGS", "Turning Golden Switch back off");
+            }
         }
     }
 }
