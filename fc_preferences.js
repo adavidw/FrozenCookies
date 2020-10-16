@@ -195,11 +195,6 @@ FrozenCookies.preferenceValues = {
         'display': ['Auto-GS-Switch OFF', 'Auto-GS-Switch ON'],
         'default': 0
     },
-    'autoCombo': {
-        'hint': 'Special for Aaron',
-        'display': ['Auto-Combo OFF', 'Auto-Combo ON'],
-        'default': 0
-    },
     'autoGodzamok': {
         'hint': 'During click buffs and other bonuses, automatically sell buildings to get the Devastation bonus if you worship Godzamok',
         'display': ['Auto-Godzamok OFF', 'Auto-Godzamok ON'],

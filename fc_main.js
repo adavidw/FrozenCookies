@@ -933,17 +933,6 @@ function gardenToggle() {
     }
 }
 
-function autoCombo() {
-    if (hasClickBuff()) {
-        var FTHOF = M.spellsById[1];
-        autoGSBuy();
-        gardenToggle();
-        if (predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Cursed Finger" || predictNextSpell(0) === "Elder Frenzy") {    // if the next one is good enough to cast early or reduce the towers for
-            if (safeCast(FTHOF)) {logEvent("AutoCombo", "Cast Force the Hand of Fate");}
-        }
-    } else gardenToggle();
-}
-
 function doubleCast(spell) {
     if (suppressNextGC) return;
     var towerCount = Game.Objects["Wizard tower"].amount;
@@ -953,7 +942,7 @@ function doubleCast(spell) {
         if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate"); } else return false;
         Game.Objects["Wizard tower"].sell(towerCount - 21);
         M.computeMagicM()
-        logEvent('AutoCombo', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount + '. Mana at ' + M.magic);
+        logEvent('AutoSpell', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount + '. Mana at ' + M.magic);
         if (predictNextSpell(0) === secondSpell) {
             if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return false;
         } else {
@@ -965,7 +954,7 @@ function doubleCast(spell) {
         } else {
             safeBuy(Game.Objects["Wizard tower"], 307 - 21);
         }
-        logEvent('AutoCombo', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
+        logEvent('AutoSpell', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
         return true;
     } else return false;
 }
@@ -2577,7 +2566,7 @@ function measureClicks() {
 
 
 //does having godz running so much prevent clickbuffs?
-// to pr, remove autoCombo, fix cumulativeBuildingCost, change preferences, and fix preferences around building limits
+// to pr, fix cumulativeBuildingCost, change preferences, and fix preferences around building limits
 
 
 // work on iteration to make it a normal thing
@@ -2597,10 +2586,6 @@ function autoGodzamokAction() {
     }
 
     if ((!Game.hasBuff("Devastation"))) { // && hasClickBuff()) {
-        //  take autoCombo() out or refactor before any PR
-        autoCombo();
-
-
         if (Date.now() - previousClickTime > 30000) {
             measureClicks();
         }
@@ -2916,11 +2901,6 @@ function FCStart() {
         FrozenCookies.autoGSBot = 0;
     }
 
-    if (FrozenCookies.autoComboBot) {
-        clearInterval(FrozenCookies.autoComboBot);
-        FrozenCookies.autoComboBot = 0;
-    }
-
     if (FrozenCookies.autoGodzamokBot) {
         clearInterval(FrozenCookies.autoGodzamokBot);
         FrozenCookies.autoGodzamokBot = 0;
@@ -2964,10 +2944,6 @@ function FCStart() {
 
     if (FrozenCookies.autoGS) {
         FrozenCookies.autoGSBot = setInterval(autoGSBuy, FrozenCookies.frequency)
-    }
-
-    if (FrozenCookies.autoCombo) {
-        FrozenCookies.autoComboBot = setInterval(autoCombo, FrozenCookies.frequency * 50)
     }
 
     if (FrozenCookies.autoGodzamok) {
