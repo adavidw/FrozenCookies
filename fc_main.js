@@ -1101,7 +1101,8 @@ function probabilitySpan(listType, start, endProbability) {
 function clickBuffBonus() {
     var ret = 1
     for (var i in Game.buffs) {
-        if (typeof Game.buffs[i].multClick != 'undefined') {
+        // Devastation, Godzamok's buff, is too variable and messes up the frenzy time tracking
+        if (typeof Game.buffs[i].multClick != 'undefined' && Game.buffs[i].name != 'Devastation') {
             ret *= Game.buffs[i].multClick;
         }
     }
@@ -1119,7 +1120,7 @@ function cpsBonus() {
 }
 
 function hasClickBuff() {
-    return Game.hasBuff('Cursed finger') || clickBuffBonus() > 1;
+    return Game.hasBuff('Cursed finger') || Game.hasBuff('Devastation') || clickBuffBonus() > 1;
 }
 
 function baseCps() {
@@ -2518,7 +2519,7 @@ function autoFrenzyClick() {
 }
 
 function autoGSBuy() {
-    if (hasClickBuff()) {
+    if (hasClickBuff() && cpsBonus() > 7) {
         if (Game.Upgrades["Golden switch [off]"].unlocked && !Game.Upgrades["Golden switch [off]"].bought) {
             if (Game.Upgrades["Golden switch [off]"].buy()) {
                 logEvent("AutoGS", "Turning Golden Switch on");
