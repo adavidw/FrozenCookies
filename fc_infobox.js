@@ -12,16 +12,16 @@ var previousBoxSize = {
 function drawInfobox(t_d) {   // draw the wheel and text box
 
     // figure out positioning
-    var xMargin = 24;
+    var xMargin = 12;
     var maxWidth = Game.LeftBackground.canvas.width - xMargin * 2;
 
     var yMargin = 48;
     var maxHeight = Game.LeftBackground.canvas.height;
 
-    var x = xMargin;
-    var len = Game.specialTabs.length;  // if length > 0, that means Santa or Krumblor icons are present
-    if (len > 0) {
-        x += 24;
+    var alley = 24;
+
+    if (Game.specialTabs.length > 0) {  // if length > 0, that means Santa or Krumblor icons are present
+        xMargin += 48;
     }
 
     var y = Game.LeftBackground.canvas.height - 48 - yMargin;
@@ -36,8 +36,8 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     if (typeof (c.measureText) != "function") {
         return;
     }
-    maxRadius = 10 + 12 * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
-    heightOffset = maxRadius + 5 - (15 * (t_d.length - 1) / 2);
+    maxRadius = 16 + 12 * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
+    heightOffset = (16 * (t_d.length - 1) / 2);
     i_c = 0;
     i_tc = 0;
     t_b = ['rgba(170, 170, 170, 1)', 'rgba(187, 187, 187, 1)', 'rgba(204, 204, 204, 1)', 'rgba(221, 221, 221, 1)', 'rgba(238, 238, 238, 1)', 'rgba(255, 255, 255, 1)'];
@@ -66,8 +66,8 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         text: maxText
     });
     maxBoxWidth = maxMeasure.width;
-    maxBoxHeight = maxMeasure.height * t_d.length;
-    
+    maxBoxHeight = maxMeasure.height * t_d.length + 20;
+
     // dynamically resize the box in a less jerky fashion
     if (maxRadius > previousBoxSize.maxRadius) { previousBoxSize.maxRadius = maxRadius };
     if (maxRadius < previousBoxSize.maxRadius) { previousBoxSize.maxRadius-- };
@@ -76,13 +76,13 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     if (maxBoxHeight > previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight = maxBoxHeight };
     if (maxBoxHeight < previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight--; maxBoxHeight = previousBoxSize.maxBoxHeight };
 
-    //draw the box
+    // draw the box
     if (FrozenCookies.fancyui % 2 == 1) {
         // draw the box background
         c.drawRect({
-            fillStyle: 'rgba(180, 180, 180, 0.6)',
-            x: x + (maxRadius * 2) + (maxBoxWidth / 2) + 35, y: y,
-            width: maxBoxWidth + 20, height: maxBoxHeight + 20
+            fillStyle: 'rgba(200, 200, 255, 0.6)',
+            x: xMargin + (maxRadius * 2) + (maxBoxWidth / 2) + alley, y: y,
+            width: maxBoxWidth + 20, height: maxBoxHeight
         });
         // iterate through the text items
         t_d.forEach(function (o_draw) {
@@ -92,7 +92,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
                     fontSize: boxFontSize,
                     fontFamily: boxFont,
                     fillStyle: o_draw.c1,
-                    x: x + maxRadius * 2 + maxBoxWidth / 2 + 35, y: y - maxRadius - 5 + heightOffset + 16 * i_tc,
+                    x: xMargin + maxRadius * 2 + maxBoxWidth / 2 + alley, y: y - heightOffset + 16 * i_tc,
                     text: s_t
                 });
                 i_tc++;
@@ -102,53 +102,52 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     //draw the wheel
     if (FrozenCookies.fancyui > 1) {    // draw the wheel outer ring
+        // if (maxRadius < maxBoxHeight) {maxRadius = maxBoxHeight / 2;}
+        x = xMargin + maxRadius
         c.drawArc({
             strokeStyle: t_b[(i_c + 2) % t_b.length],
             strokeWidth: 3,
-            x: x + (maxRadius + 0), y: y,
-            radius: maxRadius + 6
+            x: x, y: y,
+            radius: maxRadius - 2
         });
-    }
-    t_d.forEach(function (o_draw) {
-        if (o_draw.overlay) {
-            i_c--;
-        }
-        else {
-            if (FrozenCookies.fancyui > 1) {    // draw the wheel background
-                c.drawArc({
+        t_d.forEach(function (o_draw) {
+            if (o_draw.overlay) {
+                i_c--;
+            }
+            else {
+                c.drawArc({     // draw the wheel background
                     strokeStyle: t_b[i_c % t_b.length],
                     strokeWidth: 10,
-                    x: x + (maxRadius + 0), y: y,
-                    radius: maxRadius - i_c * 12
+                    x: x, y: y,
+                    radius: maxRadius - 8 - i_c * 12
                 });
                 c.drawArc({
                     strokeStyle: t_b[(i_c + 2) % t_b.length],
                     strokeWidth: 3,
-                    x: x + (maxRadius + 0), y: y,
-                    radius: maxRadius - 6 - (i_c) * 12
+                    x: x, y: y,
+                    radius: maxRadius - 14 - (i_c) * 12
                 });
             }
-        }
-        if (FrozenCookies.fancyui > 1) {    // draw the time arcs on the wheel
+            // draw the time arcs on the wheel
             c.drawArc({ // shadow arc
                 strokeStyle: "#222",
-                x: x + (maxRadius - 1), y: y,
-                radius: maxRadius - i_c * 12,
+                x: x - 1, y: y,
+                radius: maxRadius - 8 - i_c * 12,
                 strokeWidth: 9,
                 start: 0,
                 end: (360 * o_draw.f_percent)
             });
             c.drawArc({ // colored arc
                 strokeStyle: o_draw.c1,
-                x: x + (maxRadius + 0), y: y - 1,
-                radius: maxRadius - i_c * 12,
+                x: x, y: y - 1,
+                radius: maxRadius - 8 - i_c * 12,
                 strokeWidth: 9,
                 start: 0,
                 end: (360 * o_draw.f_percent)
             });
-        }
-        i_c++;
-    });
+            i_c++;
+        });
+    }
 }
 
 function buildingSpecialBuffTime() {    // calculate building special remaining time
