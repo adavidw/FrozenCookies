@@ -64,9 +64,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
 
-
-
-    if (FrozenCookies.fancyui > 1) {
+    if (FrozenCookies.fancyUI > 1) {
         wheel.maxRadius = wheel.hub + wheel.interval * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
     }
 
@@ -130,7 +128,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     c.drawRect({    // testing old text box placement
         fillStyle: 'rgba(30, 30, 30, 0.7)',
-        x: xPadding + wheel.maxRadius * 2 + (maxBoxWidth/2) + alley, y: startingY,
+        x: xPadding + wheel.maxRadius * 2 + (maxBoxWidth / 2) + alley, y: startingY,
         width: maxBoxWidth + 20, height: maxBoxHeight
     });
 
@@ -146,6 +144,14 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     if (maxBoxHeight > previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight = maxBoxHeight };
     if (maxBoxHeight < previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight--; maxBoxHeight = previousBoxSize.maxBoxHeight };
 
+
+
+
+
+
+
+
+
     // draw the box
     if (FrozenCookies.fancyui % 2 == 1) {
         if (FrozenCookies.fancyui == 1) {
@@ -153,85 +159,126 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         } else {
             // x = ((canvas.width - xMargin) - (xPadding + (wheel.maxRadius * 2)))/2 + (xPadding + (wheel.maxRadius * 2))
             x = ((canvas.width - xMargin) + (xPadding + (wheel.maxRadius * 2))) / 2
+
+
+
+    switch (FrozenCookies.fancyUI) {
+        case 1: {
+            drawBox();
         }
-        // draw the box background
-        c.drawRect({
-            fillStyle: 'rgba(220, 220, 220, 0.6)',
-            x: x, y: startingY,
-            width: maxBoxWidth + 20, height: maxBoxHeight
-        });
-        // iterate through the text items
-        t_d.forEach(function (o_draw) {
-            if (o_draw.name || o.draw.display) {
-                s_t = o_draw.name + ((o_draw.name && o_draw.display) ? ": " : "") + o_draw.display;
-                c.drawText({
-                    fontSize: boxFontSize,
-                    fontFamily: boxFont,
-                    fillStyle: o_draw.c1,
-                    x: x, y: startingY - heightOffset + 16 * i_tc,
-                    text: s_t
-                });
-                i_tc++;
-            }
-        });
+        case 2: {
+            drawWheel();
+        }
+        case 3: {
+            drawWheel();
+            drawBox();
+        }
     }
 
-    //draw the wheel
-    if (FrozenCookies.fancyui > 1) {
-        if (wheel.maxRadius < maxBoxHeight) {
-            scaler(maxBoxHeight / (wheel.maxRadius * 2));
-        }
-        x = xPadding + wheel.maxRadius;
-        y = startingY;
-        if (startingY + wheel.maxRadius > allTheTopStuff + maxDraw.height) {
-            y = allTheTopStuff + maxDraw.height - wheel.maxRadius;
-        }
-        // console.log("startingY: "+startingY + ", wheel.maxRadius: "+ Math.ceil(wheel.maxRadius) + ", allTheTopStuff:" + allTheTopStuff + ", maxDraw.height: " + maxDraw.height + ", y:" + y);
-        c.drawArc({     // draw the wheel outer ring
-            strokeStyle: t_b[(i_c + 2) % t_b.length],
-            strokeWidth: wheel.lineWidth,
-            x: x, y: y,
-            radius: wheel.maxRadius - wheel.interval / 6
-        });
-        t_d.forEach(function (o_draw) {
-            if (o_draw.overlay) {
-                i_c--;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function drawWheel() {  //draw the wheel
+        if (FrozenCookies.fancyUI > 1) {
+            if (wheel.maxRadius < maxBoxHeight) {
+                scaler(maxBoxHeight / (wheel.maxRadius * 2));
             }
-            else {
-                c.drawArc({     // draw the wheel background
-                    strokeStyle: t_b[i_c % t_b.length],
-                    strokeWidth: wheel.arcWidth + 1,
-                    x: x, y: y,
-                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval
-                });
-                c.drawArc({
-                    strokeStyle: t_b[(i_c + 2) % t_b.length],
-                    strokeWidth: wheel.lineWidth,
-                    x: x, y: y,
-                    radius: wheel.maxRadius - wheel.interval * 7 / 6 - (i_c) * wheel.interval
-                });
+            x = xPadding + wheel.maxRadius;
+            y = startingY;
+            if (startingY + wheel.maxRadius > allTheTopStuff + maxDraw.height) {
+                y = allTheTopStuff + maxDraw.height - wheel.maxRadius;
             }
-            // draw the time arcs on the wheel
-            if (!o_draw.overlay) {
-                c.drawArc({ // shadow arc
-                    strokeStyle: "#222",
-                    x: x - wheel.depthFactor, y: y + wheel.depthFactor * 2,
-                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval,
+            // console.log("startingY: "+startingY + ", wheel.maxRadius: "+ Math.ceil(wheel.maxRadius) + ", allTheTopStuff:" + allTheTopStuff + ", maxDraw.height: " + maxDraw.height + ", y:" + y);
+            c.drawArc({     // draw the wheel outer ring
+                strokeStyle: t_b[(i_c + 2) % t_b.length],
+                strokeWidth: wheel.lineWidth,
+                x: x, y: y,
+                radius: wheel.maxRadius - wheel.interval / 6
+            });
+            t_d.forEach(function (o_draw) {
+                if (o_draw.overlay) {
+                    i_c--;
+                }
+                else {
+                    c.drawArc({     // draw the wheel background
+                        strokeStyle: t_b[i_c % t_b.length],
+                        strokeWidth: wheel.arcWidth + 1,
+                        x: x, y: y,
+                        radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval
+                    });
+                    c.drawArc({
+                        strokeStyle: t_b[(i_c + 2) % t_b.length],
+                        strokeWidth: wheel.lineWidth,
+                        x: x, y: y,
+                        radius: wheel.maxRadius - wheel.interval * 7 / 6 - (i_c) * wheel.interval
+                    });
+                }
+                // draw the time arcs on the wheel
+                if (!o_draw.overlay) {
+                    c.drawArc({ // shadow arc
+                        strokeStyle: "#222",
+                        x: x - wheel.depthFactor, y: y + wheel.depthFactor * 2,
+                        radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval,
+                        strokeWidth: wheel.arcWidth,
+                        start: 0,
+                        end: (360 * o_draw.f_percent)
+                    });
+                }
+                c.drawArc({ // colored arc
+                    strokeStyle: o_draw.c1,
+                    x: x + wheel.depthFactor, y: y - wheel.depthFactor * 2,
+                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval - wheel.depthFactor,
                     strokeWidth: wheel.arcWidth,
                     start: 0,
                     end: (360 * o_draw.f_percent)
                 });
-            }
-            c.drawArc({ // colored arc
-                strokeStyle: o_draw.c1,
-                x: x + wheel.depthFactor, y: y - wheel.depthFactor * 2,
-                radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval - wheel.depthFactor,
-                strokeWidth: wheel.arcWidth,
-                start: 0,
-                end: (360 * o_draw.f_percent)
+                i_c++;
             });
-            i_c++;
-        });
+        }
+    }
+
+    function drawBox() {    // draw the box
+        if (FrozenCookies.fancyUI % 2 == 1) {
+            if (FrozenCookies.fancyUI == 1) {
+                x = canvas.center.x
+            } else {
+                // x = ((canvas.width - xMargin) - (xPadding + (wheel.maxRadius * 2)))/2 + (xPadding + (wheel.maxRadius * 2))
+                x = ((canvas.width - xMargin) + (xPadding + (wheel.maxRadius * 2))) / 2
+            }
+            // draw the box background
+            c.drawRect({
+                fillStyle: 'rgba(220, 220, 220, 0.6)',
+                x: x, y: startingY,
+                width: maxBoxWidth + 20, height: maxBoxHeight
+            });
+            // iterate through the text items
+            t_d.forEach(function (o_draw) {
+                if (o_draw.name || o.draw.display) {
+                    s_t = o_draw.name + ((o_draw.name && o_draw.display) ? ": " : "") + o_draw.display;
+                    c.drawText({
+                        fontSize: boxFontSize,
+                        fontFamily: boxFont,
+                        fillStyle: o_draw.c1,
+                        x: x, y: startingY - heightOffset + 16 * i_tc,
+                        text: s_t
+                    });
+                    i_tc++;
+                }
+            });
+        }
     }
 }
 
@@ -277,7 +324,7 @@ function maxCookieDelay() { // calculate the max amount of time reasonably expec
 }
 
 function updateTimers() {   // update calculations and assemble output -- called every time Game.DrawBackground() is called
-    if (FrozenCookies.fancyui === 0) {
+    if (FrozenCookies.fancyUI === 0) {
         return  // skip doing any calculations if the infobox isn't turned on
     } else {
         var chainPurchase, bankPercent, purchasePercent, bankMax, actualCps, t_draw,

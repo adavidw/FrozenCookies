@@ -216,7 +216,7 @@ FrozenCookies.preferenceValues = {
         'display': ["Number Display RAW", "Number Display FULL (million, billion)", "Number Display INITIALS (M, B)", "Number Display SI UNITS (M, G, T)", "Number Display SCIENTIFIC (6.3e12)"],
         'default': 1
     },
-    'fancyui': {
+    'fancyUI': {
         'hint': 'Infobox type (can be slow)',
         'display': ['Infobox OFF', 'Infobox TEXT ONLY', 'Infobox WHEEL ONLY', 'Infobox WHEEL & TEXT'],
         'default': 0
