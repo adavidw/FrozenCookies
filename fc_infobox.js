@@ -8,7 +8,6 @@ var previousBoxSize = {
 
 // measure the left pane, and size the elements relative to that
 
-
 function drawInfobox(t_d) {   // draw the wheel and text box
     var heightOffset, i_c, i_tc, t_b, maxBoxWidth, maxBoxHeight, s_t,
         xMargin = 12,   // stay at least this far away from left edge
@@ -114,6 +113,31 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     maxBoxWidth = maxMeasure.width;
     maxBoxHeight = maxMeasure.height * t_d.length + 20;
 
+
+
+
+    c.drawRect({    // testing maxDraw
+        fillStyle: 'rgba(200, 200, 255, 0.4)',
+        x: maxDraw.center.x, y: maxDraw.center.y,
+        width: maxDraw.width, height: maxDraw.height
+    });
+
+    c.drawRect({    // testing normal wheel placement
+        fillStyle: 'rgba(30, 30, 30, 0.7)',
+        x: xPadding + wheel.maxRadius, y: startingY,
+        width: wheel.maxRadius * 2, height: wheel.maxRadius * 2
+    });
+
+    c.drawRect({    // testing old text box placement
+        fillStyle: 'rgba(30, 30, 30, 0.7)',
+        x: xPadding + wheel.maxRadius * 2 + (maxBoxWidth/2) + alley, y: startingY,
+        width: maxBoxWidth + 20, height: maxBoxHeight
+    });
+
+
+
+
+
     // dynamically resize the box in a less jerky fashion
     if (wheel.maxRadius > previousBoxSize.maxRadius) { previousBoxSize.maxRadius = wheel.maxRadius };
     if (wheel.maxRadius < previousBoxSize.maxRadius) { previousBoxSize.maxRadius-- };
@@ -127,6 +151,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         if (FrozenCookies.fancyui == 1) {
             x = canvas.center.x
         } else {
+            // x = ((canvas.width - xMargin) - (xPadding + (wheel.maxRadius * 2)))/2 + (xPadding + (wheel.maxRadius * 2))
             x = ((canvas.width - xMargin) + (xPadding + (wheel.maxRadius * 2))) / 2
         }
         // draw the box background
@@ -161,10 +186,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         if (startingY + wheel.maxRadius > allTheTopStuff + maxDraw.height) {
             y = allTheTopStuff + maxDraw.height - wheel.maxRadius;
         }
-    if (FrozenCookies.fancyui > 1) {    // draw the wheel outer ring
-        // if (maxRadius < maxBoxHeight) {maxRadius = maxBoxHeight / 2;}
-        x = xMargin + maxRadius
-        c.drawArc({
+        // console.log("startingY: "+startingY + ", wheel.maxRadius: "+ Math.ceil(wheel.maxRadius) + ", allTheTopStuff:" + allTheTopStuff + ", maxDraw.height: " + maxDraw.height + ", y:" + y);
         c.drawArc({     // draw the wheel outer ring
             strokeStyle: t_b[(i_c + 2) % t_b.length],
             strokeWidth: wheel.lineWidth,
