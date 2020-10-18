@@ -6,7 +6,6 @@ var previousBoxSize = {
     maxBoxHeight: 0,
 };
 
-// measure the left pane, and size the elements relative to that
 
 function drawInfobox(t_d) {   // draw the wheel and text box
     var heightOffset, i_c, i_tc, t_b, maxBoxWidth, maxBoxHeight, s_t,
@@ -152,13 +151,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
 
-    // draw the box
-    if (FrozenCookies.fancyui % 2 == 1) {
-        if (FrozenCookies.fancyui == 1) {
-            x = canvas.center.x
-        } else {
-            // x = ((canvas.width - xMargin) - (xPadding + (wheel.maxRadius * 2)))/2 + (xPadding + (wheel.maxRadius * 2))
-            x = ((canvas.width - xMargin) + (xPadding + (wheel.maxRadius * 2))) / 2
+    console.log(FrozenCookies.fancyUI);
 
 
 
