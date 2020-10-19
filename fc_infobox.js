@@ -8,11 +8,14 @@ var previousBoxSize = {
 
 
 function drawInfobox(t_d) {   // draw the wheel and text box
-    var heightOffset, i_c, i_tc, t_b, maxBoxWidth, maxBoxHeight, s_t,
-        xMargin = 12,   // stay at least this far away from left edge
-        yMargin = 36,   // stay at least this far away from bottom edge
-        allTheTopStuff = Game.cookieOriginY + 256, // shine.png behind the cookie is 512x512, so this keeps the box off that graphic
-        alley = 24;     // the space between the wheel and the text box
+    var t_b, s_t;
+    var textBox = {};
+    var margin = {
+        x: 12,  // stay at least this far away from left edge
+        y: 36   // stay at least this far away from bottom edge
+    };
+    var allTheTopStuff = Game.cookieOriginY + 256; // shine.png behind the cookie is 512x512, so this keeps the box off that graphic
+    var alley = 24;     // the space between the wheel and the text box
 
     //spacing and positioning attributes
     var canvas = {
@@ -24,49 +27,68 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         }
     };
 
-    var xPadding = xMargin;
-    var yPadding = yMargin;
- 
+    var padding = {
+        x: margin.x,
+        y: margin.y
+    };
+
     // look to see if any special tabs make us need padding on left or bottom
     if (Game.specialTabs.length > 0) {  // if length > 0, that means Santa or Krumblor icons are present
-        xPadding += 48;
+        padding.x += 48;
     }
     if (Game.specialTab != 0) {     // test to see if Krumblor or Santa has been selected and has their window up
-        yPadding += 130
+        padding.y += 130
     }
     var maxDraw = {
-        width: canvas.width - xMargin - xPadding,
-        height: canvas.height - allTheTopStuff - yPadding
+        width: canvas.width - margin.x - padding.x,
+        height: canvas.height - allTheTopStuff - padding.y
     };
     maxDraw.center = {
-        x: xPadding + (maxDraw.width / 2),
-        y: canvas.height - yPadding - (maxDraw.height / 2)
+        x: padding.x + (maxDraw.width / 2),
+        y: canvas.height - padding.y - (maxDraw.height / 2)
     };
 
-    // startingY aims to have the wheel center point vertically centered between Krumblor and Santa, which is 96 pixels above the bottom
-    var startingY = Game.LeftBackground.canvas.height - 60 - yPadding;
+    // startingY aims to have the wheel center point vertically centered between Krumblor and Santa, which is 96 pixels above the bottom of the canvas
+    var startingY = Game.LeftBackground.canvas.height - 60 - padding.y;
 
     // style and formatting attributes
-    var c = $('#backgroundLeftCanvas'),
-        boxFont = "Helvetica,Arial",
-        boxFontSize = "14px",
-        wheel = {
-            hub: 15,
-            arcWidth: 9,
-            lineWidth: 3,
-            interval: 12,
-            depthFactor: .3,
-        };
+    var c = $("#backgroundLeftCanvas");
+    var boxFont = "Helvetica,Arial";
+    var boxFontSize = "14px";
+    var wheel = {
+        hub: 15,
+        arcWidth: 9,
+        lineWidth: 3,
+        interval: 12,
+        depthFactor: 0.3
+    };
 
 
 
 
 
 
-        
 
-    if (FrozenCookies.fancyUI > 1) {
+
+
+
+
+
+
+
+
+
+
+    // getRadius();
+    function getRadius() {
         wheel.maxRadius = wheel.hub + wheel.interval * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
+        if (wheel.maxRadius < 48) {
+            scaler(48 / wheel.maxRadius);
+        }
+        if (wheel.maxRadius + 1 <= previousBoxSize.maxRadius) {
+            wheel.maxRadius = previousBoxSize.maxRadius - 1;
+        };
+        previousBoxSize.maxRadius = wheel.maxRadius;
     }
 
     function scaler(scaleFactor) {
@@ -76,41 +98,56 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     }
 
 
+    function getBoxSize() {
+        if (typeof (c.measureText) != "function") {
+            return;
+        }
+        var heightOffset = (16 * (t_d.length - 1) / 2);     // what is this for?
+        t_b = ['rgba(170, 170, 170, 1)', 'rgba(187, 187, 187, 1)', 'rgba(204, 204, 204, 1)', 'rgba(221, 221, 221, 1)', 'rgba(238, 238, 238, 1)', 'rgba(255, 255, 255, 1)'];
+        var maxText = _.max(t_d.map(function (o) {
+            return o.name ? o.name + (o.display ? ': ' + o.display : '') : '';
+        }), function (str) {
+            return str.length;
+        });
+        // console.log(t_d);
+        // console.log(t_d.map(function (o) {
+        //     return o.name + ((o.name && o.display) ? ": " : "") + o.display;
+        //     }));
 
-    if (typeof (c.measureText) != "function") {
-        return;
+        // var maxText = _.max(
+        //     t_d.map(function (o) {
+        //         return o.name + ((o.name && o.display) ? ": " : "") + o.display;
+        //     }),
+        //     function (str) {
+        //         return str.length;
+        //     });
+        //     // console.log(maxText);
+        var maxMeasure = c.measureText({
+            fontSize: boxFontSize,
+            fontFamily: boxFont,
+            maxWidth: c.width,
+            text: maxText
+        });
+        textBox.maxWidth = maxMeasure.width;
+        textBox.maxHeight = maxMeasure.height * t_d.length + 20;
+        // dynamically resize the box in a less jerky fashion
+        if (textBox.maxWidth > previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth = textBox.maxWidth };
+        if (textBox.maxWidth < previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth--; textBox.maxWidth = previousBoxSize.maxBoxWidth };
+        if (textBox.maxHeight > previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight = textBox.maxHeight };
+        if (textBox.maxHeight < previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight--; textBox.maxHeight = previousBoxSize.maxBoxHeight };
     }
 
-    heightOffset = (16 * (t_d.length - 1) / 2);     // what is this for?
-    i_c = 0;
-    i_tc = 0;
-    t_b = ['rgba(170, 170, 170, 1)', 'rgba(187, 187, 187, 1)', 'rgba(204, 204, 204, 1)', 'rgba(221, 221, 221, 1)', 'rgba(238, 238, 238, 1)', 'rgba(255, 255, 255, 1)'];
-    var maxText = _.max(t_d.map(function (o) {
-        return o.name ? o.name + (o.display ? ': ' + o.display : '') : '';
-    }), function (str) {
-        return str.length;
-    });
-    // console.log(t_d);
-    // console.log(t_d.map(function (o) {
-    //     return o.name + ((o.name && o.display) ? ": " : "") + o.display;
-    //     }));
 
-    // var maxText = _.max(
-    //     t_d.map(function (o) {
-    //         return o.name + ((o.name && o.display) ? ": " : "") + o.display;
-    //     }),
-    //     function (str) {
-    //         return str.length;
-    //     });
-    //     // console.log(maxText);
-    var maxMeasure = c.measureText({
-        fontSize: boxFontSize,
-        fontFamily: boxFont,
-        maxWidth: c.width,
-        text: maxText
-    });
-    maxBoxWidth = maxMeasure.width;
-    maxBoxHeight = maxMeasure.height * t_d.length + 20;
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -123,30 +160,15 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     c.drawRect({    // testing normal wheel placement
         fillStyle: 'rgba(30, 30, 30, 0.7)',
-        x: xPadding + wheel.maxRadius, y: startingY,
+        x: padding.x + wheel.maxRadius, y: startingY,
         width: wheel.maxRadius * 2, height: wheel.maxRadius * 2
     });
 
     c.drawRect({    // testing old text box placement
         fillStyle: 'rgba(30, 30, 30, 0.7)',
-        x: xPadding + wheel.maxRadius * 2 + (maxBoxWidth / 2) + alley, y: startingY,
-        width: maxBoxWidth + 20, height: maxBoxHeight
+        x: padding.x + wheel.maxRadius * 2 + (textBox.maxWidth / 2) + alley, y: startingY,
+        width: textBox.maxWidth + 20, height: textBox.maxHeight
     });
-
-
-
-
-
-    // dynamically resize the box in a less jerky fashion
-    if (wheel.maxRadius > previousBoxSize.maxRadius) { previousBoxSize.maxRadius = wheel.maxRadius };
-    if (wheel.maxRadius < previousBoxSize.maxRadius) { previousBoxSize.maxRadius--; wheel.maxRadius = previousBoxSize.maxRadius };
-    if (maxBoxWidth > previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth = maxBoxWidth };
-    if (maxBoxWidth < previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth--; maxBoxWidth = previousBoxSize.maxBoxWidth };
-    if (maxBoxHeight > previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight = maxBoxHeight };
-    if (maxBoxHeight < previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight--; maxBoxHeight = previousBoxSize.maxBoxHeight };
-
-
-
 
 
 
@@ -158,17 +180,23 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     switch (FrozenCookies.fancyUI) {
         case 1: {
+            getBoxSize();
             drawBox();
+            break;
         }
         case 2: {
+            getRadius();
             drawWheel();
+            break;
         }
         case 3: {
+            getRadius();
+            getBoxSize();
             drawWheel();
             drawBox();
+            break;
         }
     }
-
 
 
 
@@ -186,80 +214,77 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
     function drawWheel() {  //draw the wheel
-        if (FrozenCookies.fancyUI > 1) {
-            if (wheel.maxRadius < 48) {
-                scaler(48 / wheel.maxRadius);
+        var i_c = 0;
+        if (wheel.maxRadius < textBox.maxHeight) {
+            scaler((textBox.maxHeight / 2) / wheel.maxRadius);
+        }
+        x = padding.x + wheel.maxRadius;
+        y = startingY;
+        if (startingY + wheel.maxRadius > allTheTopStuff + maxDraw.height) {
+            y = allTheTopStuff + maxDraw.height - wheel.maxRadius;
+        }
+        // console.log("startingY: "+startingY + ", wheel.maxRadius: "+ Math.ceil(wheel.maxRadius) + ", allTheTopStuff:" + allTheTopStuff + ", maxDraw.height: " + maxDraw.height + ", y:" + y);
+        c.drawArc({     // draw the wheel outer ring
+            strokeStyle: t_b[(i_c + 2) % t_b.length],
+            strokeWidth: wheel.lineWidth,
+            x: x, y: y,
+            radius: wheel.maxRadius - wheel.interval / 6
+        });
+        t_d.forEach(function (o_draw) {
+            if (o_draw.overlay) {
+                i_c--;
             }
-            if (wheel.maxRadius < maxBoxHeight) {
-                scaler((maxBoxHeight / 2) / wheel.maxRadius);
+            else {
+                c.drawArc({     // draw the wheel background
+                    strokeStyle: t_b[i_c % t_b.length],
+                    strokeWidth: wheel.arcWidth + 1,
+                    x: x, y: y,
+                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval
+                });
+                c.drawArc({
+                    strokeStyle: t_b[(i_c + 2) % t_b.length],
+                    strokeWidth: wheel.lineWidth,
+                    x: x, y: y,
+                    radius: wheel.maxRadius - wheel.interval * 7 / 6 - (i_c) * wheel.interval
+                });
             }
-            x = xPadding + wheel.maxRadius;
-            y = startingY;
-            if (startingY + wheel.maxRadius > allTheTopStuff + maxDraw.height) {
-                y = allTheTopStuff + maxDraw.height - wheel.maxRadius;
-            }
-            // console.log("startingY: "+startingY + ", wheel.maxRadius: "+ Math.ceil(wheel.maxRadius) + ", allTheTopStuff:" + allTheTopStuff + ", maxDraw.height: " + maxDraw.height + ", y:" + y);
-            c.drawArc({     // draw the wheel outer ring
-                strokeStyle: t_b[(i_c + 2) % t_b.length],
-                strokeWidth: wheel.lineWidth,
-                x: x, y: y,
-                radius: wheel.maxRadius - wheel.interval / 6
-            });
-            t_d.forEach(function (o_draw) {
-                if (o_draw.overlay) {
-                    i_c--;
-                }
-                else {
-                    c.drawArc({     // draw the wheel background
-                        strokeStyle: t_b[i_c % t_b.length],
-                        strokeWidth: wheel.arcWidth + 1,
-                        x: x, y: y,
-                        radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval
-                    });
-                    c.drawArc({
-                        strokeStyle: t_b[(i_c + 2) % t_b.length],
-                        strokeWidth: wheel.lineWidth,
-                        x: x, y: y,
-                        radius: wheel.maxRadius - wheel.interval * 7 / 6 - (i_c) * wheel.interval
-                    });
-                }
-                // draw the time arcs on the wheel
-                if (!o_draw.overlay) {
-                    c.drawArc({ // shadow arc
-                        strokeStyle: "#222",
-                        x: x - wheel.depthFactor, y: y + wheel.depthFactor * 2,
-                        radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval,
-                        strokeWidth: wheel.arcWidth,
-                        start: 0,
-                        end: (360 * o_draw.f_percent)
-                    });
-                }
-                c.drawArc({ // colored arc
-                    strokeStyle: o_draw.c1,
-                    x: x + wheel.depthFactor, y: y - wheel.depthFactor * 2,
-                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval - wheel.depthFactor,
+            // draw the time arcs on the wheel
+            if (!o_draw.overlay) {
+                c.drawArc({ // shadow arc
+                    strokeStyle: "#222",
+                    x: x - wheel.depthFactor, y: y + wheel.depthFactor * 2,
+                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval,
                     strokeWidth: wheel.arcWidth,
                     start: 0,
                     end: (360 * o_draw.f_percent)
                 });
-                i_c++;
+            }
+            c.drawArc({ // colored arc
+                strokeStyle: o_draw.c1,
+                x: x + wheel.depthFactor, y: y - wheel.depthFactor * 2,
+                radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval - wheel.depthFactor,
+                strokeWidth: wheel.arcWidth,
+                start: 0,
+                end: (360 * o_draw.f_percent)
             });
-        }
+            i_c++;
+        });
     }
 
     function drawBox() {    // draw the box
+        var i_tc = 0;
         if (FrozenCookies.fancyUI % 2 == 1) {
             if (FrozenCookies.fancyUI == 1) {
                 x = canvas.center.x
             } else {
-                // x = ((canvas.width - xMargin) - (xPadding + (wheel.maxRadius * 2)))/2 + (xPadding + (wheel.maxRadius * 2))
-                x = ((canvas.width - xMargin) + (xPadding + (wheel.maxRadius * 2))) / 2
+                // x = ((canvas.width - margin.x) - (padding.x + (wheel.maxRadius * 2)))/2 + (padding.x + (wheel.maxRadius * 2))
+                x = ((canvas.width - margin.x) + (padding.x + (wheel.maxRadius * 2))) / 2
             }
             // draw the box background
             c.drawRect({
                 fillStyle: 'rgba(220, 220, 220, 0.6)',
                 x: x, y: startingY,
-                width: maxBoxWidth + 20, height: maxBoxHeight
+                width: textBox.maxWidth + 20, height: textBox.maxHeight
             });
             // iterate through the text items
             t_d.forEach(function (o_draw) {
