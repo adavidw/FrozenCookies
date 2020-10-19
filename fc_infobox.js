@@ -181,7 +181,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     switch (FrozenCookies.fancyUI) {
         case 1: {
             getBoxSize();
-            drawBox();
+            drawTextBox();
             break;
         }
         case 2: {
@@ -193,7 +193,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             getRadius();
             getBoxSize();
             drawWheel();
-            drawBox();
+            drawTextBox();
             break;
         }
     }
@@ -271,36 +271,34 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         });
     }
 
-    function drawBox() {    // draw the box
+    function drawTextBox() {    // draw the box
         var i_tc = 0;
-        if (FrozenCookies.fancyUI % 2 == 1) {
-            if (FrozenCookies.fancyUI == 1) {
-                x = canvas.center.x
-            } else {
-                // x = ((canvas.width - margin.x) - (padding.x + (wheel.maxRadius * 2)))/2 + (padding.x + (wheel.maxRadius * 2))
-                x = ((canvas.width - margin.x) + (padding.x + (wheel.maxRadius * 2))) / 2
-            }
-            // draw the box background
-            c.drawRect({
-                fillStyle: 'rgba(220, 220, 220, 0.6)',
-                x: x, y: startingY,
-                width: textBox.maxWidth + 20, height: textBox.maxHeight
-            });
-            // iterate through the text items
-            t_d.forEach(function (o_draw) {
-                if (o_draw.name || o.draw.display) {
-                    s_t = o_draw.name + ((o_draw.name && o_draw.display) ? ": " : "") + o_draw.display;
-                    c.drawText({
-                        fontSize: boxFontSize,
-                        fontFamily: boxFont,
-                        fillStyle: o_draw.c1,
-                        x: x, y: startingY - heightOffset + 16 * i_tc,
-                        text: s_t
-                    });
-                    i_tc++;
-                }
-            });
+        if (FrozenCookies.fancyUI == 1) {
+            x = canvas.center.x
+        } else {
+            // x = ((canvas.width - margin.x) - (padding.x + (wheel.maxRadius * 2)))/2 + (padding.x + (wheel.maxRadius * 2))
+            x = ((canvas.width - margin.x) + (padding.x + (wheel.maxRadius * 2))) / 2
         }
+        // draw the box background
+        c.drawRect({
+            fillStyle: 'rgba(220, 220, 220, 0.6)',
+            x: x, y: startingY,
+            width: textBox.maxWidth + 20, height: textBox.maxHeight
+        });
+        // iterate through the text items
+        t_d.forEach(function (o_draw) {
+            if (o_draw.name || o.draw.display) {
+                s_t = o_draw.name + ((o_draw.name && o_draw.display) ? ": " : "") + o_draw.display;
+                c.drawText({
+                    fontSize: boxFontSize,
+                    fontFamily: boxFont,
+                    fillStyle: o_draw.c1,
+                    x: x, y: startingY - heightOffset + 16 * i_tc,
+                    text: s_t
+                });
+                i_tc++;
+            }
+        });
     }
 }
 
