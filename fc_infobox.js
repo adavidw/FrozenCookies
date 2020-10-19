@@ -273,7 +273,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     function drawTextBox() {    // draw the box
         var i_tc = 0;
-        if (FrozenCookies.fancyUI == 1) {
+        if (!wheel.maxRadius) {
             x = canvas.center.x
         } else {
             // x = ((canvas.width - margin.x) - (padding.x + (wheel.maxRadius * 2)))/2 + (padding.x + (wheel.maxRadius * 2))
