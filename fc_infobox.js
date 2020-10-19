@@ -8,7 +8,7 @@ var previousBoxSize = {
 
 
 function drawInfobox(t_d) {   // draw the wheel and text box
-    var t_b, s_t;
+    var s_t;
     var textBox = {};
     var margin = {
         x: 12,  // stay at least this far away from left edge
@@ -60,7 +60,8 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         arcWidth: 9,
         lineWidth: 3,
         interval: 12,
-        depthFactor: 0.3
+        depthFactor: 0.3,
+        BGColors: ['rgba(170, 170, 170, 1)', 'rgba(187, 187, 187, 1)', 'rgba(204, 204, 204, 1)', 'rgba(221, 221, 221, 1)', 'rgba(238, 238, 238, 1)', 'rgba(255, 255, 255, 1)']
     };
 
 
@@ -103,7 +104,6 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             return;
         }
         var heightOffset = (16 * (t_d.length - 1) / 2);     // what is this for?
-        t_b = ['rgba(170, 170, 170, 1)', 'rgba(187, 187, 187, 1)', 'rgba(204, 204, 204, 1)', 'rgba(221, 221, 221, 1)', 'rgba(238, 238, 238, 1)', 'rgba(255, 255, 255, 1)'];
         var maxText = _.max(t_d.map(function (o) {
             return o.name ? o.name + (o.display ? ': ' + o.display : '') : '';
         }), function (str) {
@@ -215,9 +215,9 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     function drawWheel() {  //draw the wheel
         var i_c = 0;
-        if (wheel.maxRadius < textBox.maxHeight) {
-            scaler((textBox.maxHeight / 2) / wheel.maxRadius);
-        }
+        // if (wheel.maxRadius < textBox.maxHeight) {
+        //     scaler((textBox.maxHeight / 2) / wheel.maxRadius);
+        // }
         x = padding.x + wheel.maxRadius;
         y = startingY;
         if (startingY + wheel.maxRadius > allTheTopStuff + maxDraw.height) {
@@ -225,7 +225,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         }
         // console.log("startingY: "+startingY + ", wheel.maxRadius: "+ Math.ceil(wheel.maxRadius) + ", allTheTopStuff:" + allTheTopStuff + ", maxDraw.height: " + maxDraw.height + ", y:" + y);
         c.drawArc({     // draw the wheel outer ring
-            strokeStyle: t_b[(i_c + 2) % t_b.length],
+            strokeStyle: wheel.BGColors[(i_c + 2) % wheel.BGColors.length],
             strokeWidth: wheel.lineWidth,
             x: x, y: y,
             radius: wheel.maxRadius - wheel.interval / 6
@@ -236,13 +236,13 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             }
             else {
                 c.drawArc({     // draw the wheel background
-                    strokeStyle: t_b[i_c % t_b.length],
+                    strokeStyle: wheel.BGColors[i_c % wheel.BGColors.length],
                     strokeWidth: wheel.arcWidth + 1,
                     x: x, y: y,
                     radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval
                 });
                 c.drawArc({
-                    strokeStyle: t_b[(i_c + 2) % t_b.length],
+                    strokeStyle: wheel.BGColors[(i_c + 2) % wheel.BGColors.length],
                     strokeWidth: wheel.lineWidth,
                     x: x, y: y,
                     radius: wheel.maxRadius - wheel.interval * 7 / 6 - (i_c) * wheel.interval
@@ -272,17 +272,19 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     }
 
     function drawTextBox() {    // draw the box
+        var heightOffset = (16 * (t_d.length - 1) / 2);     // what is this for?
         var i_tc = 0;
+        var x = 0;
+        var y = startingY;
         if (!wheel.maxRadius) {
             x = canvas.center.x
         } else {
-            // x = ((canvas.width - margin.x) - (padding.x + (wheel.maxRadius * 2)))/2 + (padding.x + (wheel.maxRadius * 2))
             x = ((canvas.width - margin.x) + (padding.x + (wheel.maxRadius * 2))) / 2
         }
         // draw the box background
         c.drawRect({
             fillStyle: 'rgba(220, 220, 220, 0.6)',
-            x: x, y: startingY,
+            x: x, y: y,
             width: textBox.maxWidth + 20, height: textBox.maxHeight
         });
         // iterate through the text items
@@ -293,7 +295,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
                     fontSize: boxFontSize,
                     fontFamily: boxFont,
                     fillStyle: o_draw.c1,
-                    x: x, y: startingY - heightOffset + 16 * i_tc,
+                    x: x, y: y - heightOffset + 16 * i_tc,
                     text: s_t
                 });
                 i_tc++;
