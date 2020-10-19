@@ -1120,7 +1120,7 @@ function cpsBonus() {
 }
 
 function hasClickBuff() {
-    return Game.hasBuff('Cursed finger') || Game.hasBuff('Devastation') || clickBuffBonus() > 1;
+    return Game.hasBuff('Cursed finger') || clickBuffBonus() > 1;
 }
 
 function baseCps() {
@@ -2519,7 +2519,7 @@ function autoFrenzyClick() {
 }
 
 function autoGSBuy() {
-    if (hasClickBuff() && cpsBonus() > 7) {
+    if (hasClickBuff()) {
         if (Game.Upgrades["Golden switch [off]"].unlocked && !Game.Upgrades["Golden switch [off]"].bought) {
             if (Game.Upgrades["Golden switch [off]"].buy()) {
                 logEvent("AutoGS", "Turning Golden Switch on");
