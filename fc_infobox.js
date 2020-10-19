@@ -14,17 +14,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         allTheTopStuff = Game.cookieOriginY + 256, // shine.png behind the cookie is 512x512, so this keeps the box off that graphic
         alley = 24;     // the space between the wheel and the text box
 
-
-    // look to see if any special tabs make us need padding on left or bottom
-    var xPadding = xMargin;
-    if (Game.specialTabs.length > 0) {  // if length > 0, that means Santa or Krumblor icons are present
-        xPadding += 48;
-    }
-    var yPadding = yMargin;
-    if (Game.specialTab != 0) {     // test to see if Krumblor or Santa has been selected and has their window up
-        yPadding += 130
-    }
-
+    //spacing and positioning attributes
     var canvas = {
         width: Game.LeftBackground.canvas.width,
         height: Game.LeftBackground.canvas.height,
@@ -34,6 +24,16 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         }
     };
 
+    var xPadding = xMargin;
+    var yPadding = yMargin;
+ 
+    // look to see if any special tabs make us need padding on left or bottom
+    if (Game.specialTabs.length > 0) {  // if length > 0, that means Santa or Krumblor icons are present
+        xPadding += 48;
+    }
+    if (Game.specialTab != 0) {     // test to see if Krumblor or Santa has been selected and has their window up
+        yPadding += 130
+    }
     var maxDraw = {
         width: canvas.width - xMargin - xPadding,
         height: canvas.height - allTheTopStuff - yPadding
@@ -45,9 +45,6 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     // startingY aims to have the wheel center point vertically centered between Krumblor and Santa, which is 96 pixels above the bottom
     var startingY = Game.LeftBackground.canvas.height - 60 - yPadding;
-
-
-
 
     // style and formatting attributes
     var c = $('#backgroundLeftCanvas'),
@@ -62,6 +59,11 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         };
 
 
+
+
+
+
+        
 
     if (FrozenCookies.fancyUI > 1) {
         wheel.maxRadius = wheel.hub + wheel.interval * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
@@ -137,7 +139,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     // dynamically resize the box in a less jerky fashion
     if (wheel.maxRadius > previousBoxSize.maxRadius) { previousBoxSize.maxRadius = wheel.maxRadius };
-    if (wheel.maxRadius < previousBoxSize.maxRadius) { previousBoxSize.maxRadius-- };
+    if (wheel.maxRadius < previousBoxSize.maxRadius) { previousBoxSize.maxRadius--; wheel.maxRadius = previousBoxSize.maxRadius };
     if (maxBoxWidth > previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth = maxBoxWidth };
     if (maxBoxWidth < previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth--; maxBoxWidth = previousBoxSize.maxBoxWidth };
     if (maxBoxHeight > previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight = maxBoxHeight };
@@ -151,7 +153,6 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
 
-    console.log(FrozenCookies.fancyUI);
 
 
 
@@ -186,8 +187,11 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     function drawWheel() {  //draw the wheel
         if (FrozenCookies.fancyUI > 1) {
+            if (wheel.maxRadius < 48) {
+                scaler(48 / wheel.maxRadius);
+            }
             if (wheel.maxRadius < maxBoxHeight) {
-                scaler(maxBoxHeight / (wheel.maxRadius * 2));
+                scaler((maxBoxHeight / 2) / wheel.maxRadius);
             }
             x = xPadding + wheel.maxRadius;
             y = startingY;
