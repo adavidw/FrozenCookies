@@ -61,7 +61,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         lineWidth: 3,
         interval: 12,
         depthFactor: 0.3,
-        shadowColor: "#222",
+        shadowColor: "rgba(0, 0, 0, .5)",
         BGColors: ['rgba(170, 170, 170, 1)', 'rgba(187, 187, 187, 1)', 'rgba(204, 204, 204, 1)', 'rgba(221, 221, 221, 1)', 'rgba(238, 238, 238, 1)', 'rgba(255, 255, 255, 1)']
     };
 
@@ -420,7 +420,7 @@ function updateTimers() {   // update calculations and assemble output -- called
 
         if (purchaseTotal > 0) {
             t_draw.push({
-                // f_percent: 0,
+                f_percent: purchaseCompletion,
                 c1: 'rgba(44, 44, 44, 1)',
                 name: "Purchase Completion Time"
                 , display: ""
