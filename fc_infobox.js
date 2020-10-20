@@ -216,9 +216,9 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     function drawWheel() {  //draw the wheel
         var itemCount = 0;
-        // if (wheel.maxRadius < textBox.maxHeight) {
-        //     scaler((textBox.maxHeight / 2) / wheel.maxRadius);
-        // }
+        if (wheel.maxRadius * 2 < textBox.maxHeight) {
+            scaler((textBox.maxHeight / 2) / wheel.maxRadius);
+        }
         x = padding.x + wheel.maxRadius;
         y = startingY;
         if (startingY + wheel.maxRadius > allTheTopStuff + maxDraw.height) {
