@@ -39,13 +39,13 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     if (Game.specialTab != 0) {     // test to see if Krumblor or Santa has been selected and has their window up
         padding.y += 130
     }
-    var maxDraw = {
+    var maxDrawArea = {
         width: canvas.width - margin.x - padding.x,
         height: canvas.height - allTheTopStuff - padding.y
     };
-    maxDraw.center = {
-        x: padding.x + (maxDraw.width / 2),
-        y: canvas.height - padding.y - (maxDraw.height / 2)
+    maxDrawArea.center = {
+        x: padding.x + (maxDrawArea.width / 2),
+        y: canvas.height - padding.y - (maxDrawArea.height / 2)
     };
 
     // startingY aims to have the wheel center point vertically centered between Krumblor and Santa, which is 96 pixels above the bottom of the canvas
@@ -155,8 +155,8 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     c.drawRect({    // testing maxDraw
         fillStyle: 'rgba(200, 200, 255, 0.4)',
-        x: maxDraw.center.x, y: maxDraw.center.y,
-        width: maxDraw.width, height: maxDraw.height
+        x: maxDrawArea.center.x, y: maxDrawArea.center.y,
+        width: maxDrawArea.width, height: maxDrawArea.height
     });
 
     c.drawRect({    // testing normal wheel placement
@@ -193,7 +193,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         case 3: {
             getRadius();
             getBoxSize();
-            drawWheel();
+            drawWheel(wheel.maxRadius);
             drawTextBox();
             break;
         }
@@ -221,8 +221,8 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         }
         x = padding.x + wheel.maxRadius;
         y = startingY;
-        if (startingY + wheel.maxRadius > allTheTopStuff + maxDraw.height) {
-            y = allTheTopStuff + maxDraw.height - wheel.maxRadius;
+        if (startingY + wheel.maxRadius > allTheTopStuff + maxDrawArea.height) {
+            y = allTheTopStuff + maxDrawArea.height - wheel.maxRadius;
         }
         // console.log("startingY: "+startingY + ", wheel.maxRadius: "+ Math.ceil(wheel.maxRadius) + ", allTheTopStuff:" + allTheTopStuff + ", maxDraw.height: " + maxDraw.height + ", y:" + y);
         c.drawArc({     // draw the wheel outer ring
