@@ -81,78 +81,6 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
 
-    function getRadius() {
-        wheel.maxRadius = wheel.hub + wheel.interval * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
-        if (wheel.maxRadius < 48) {     // make it at least as big as the height of the two special tabs
-            scaler(48 / wheel.maxRadius);
-        }
-        // dynamically resize the wheel in a less jerky fashion
-        if (wheel.maxRadius + 1 <= previousBoxSize.maxRadius) {
-            wheel.maxRadius = previousBoxSize.maxRadius - 1;
-        };
-        previousBoxSize.maxRadius = wheel.maxRadius;
-    }
-
-    function getBoxSize() {
-        if (typeof (c.measureText) != "function") {
-            return;
-        }
-        var heightOffset = (16 * (t_d.length - 1) / 2);     // what is this for?
-        var maxText = _.max(t_d.map(function (o) {
-            return o.name ? o.name + (o.display ? ': ' + o.display : '') : '';
-        }), function (str) {
-            return str.length;
-        });
-        // console.log(t_d);
-        // console.log(t_d.map(function (o) {
-        //     return o.name + ((o.name && o.display) ? ": " : "") + o.display;
-        //     }));
-
-        // var maxText = _.max(
-        //     t_d.map(function (o) {
-        //         return o.name + ((o.name && o.display) ? ": " : "") + o.display;
-        //     }),
-        //     function (str) {
-        //         return str.length;
-        //     });
-        //     // console.log(maxText);
-        var maxMeasure = c.measureText({
-            fontSize: boxFontSize,
-            fontFamily: boxFont,
-            maxWidth: c.width,
-            text: maxText
-        });
-        textBox.maxWidth = maxMeasure.width;
-        textBox.maxHeight = maxMeasure.height * t_d.length + 20;
-        // dynamically resize the box in a less jerky fashion
-        if (textBox.maxWidth > previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth = textBox.maxWidth };
-        if (textBox.maxWidth < previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth--; textBox.maxWidth = previousBoxSize.maxBoxWidth };
-        if (textBox.maxHeight > previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight = textBox.maxHeight };
-        if (textBox.maxHeight < previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight--; textBox.maxHeight = previousBoxSize.maxBoxHeight };
-    }
-
-    function scaler(scaleFactor) {
-        for (i in wheel) {
-            if (!isNaN(wheel[i])) {
-                wheel[i] *= scaleFactor;
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     c.drawRect({    // testing maxDraw
         fillStyle: 'rgba(200, 200, 255, 0.4)',
         x: maxDrawArea.center.x, y: maxDrawArea.center.y,
@@ -212,7 +140,67 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
 
+    function getRadius() {
+        wheel.maxRadius = wheel.hub + wheel.interval * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
+        if (wheel.maxRadius < 48) {     // make it at least as big as the height of the two special tabs
+            scaler(48 / wheel.maxRadius);
+        }
+        if (wheel.maxRadius * 2 > maxDrawArea.height) {
+            scaler(maxDrawArea.height / (wheel.maxRadius * 2));
+        }
 
+        // dynamically resize the wheel in a less jerky fashion
+        if (wheel.maxRadius + 1 <= previousBoxSize.maxRadius) {
+            wheel.maxRadius = previousBoxSize.maxRadius - 1;
+        };
+        previousBoxSize.maxRadius = wheel.maxRadius;
+    }
+
+    function getBoxSize() {
+        if (typeof (c.measureText) != "function") {
+            return;
+        }
+        var heightOffset = (16 * (t_d.length - 1) / 2);     // what is this for?
+        var maxText = _.max(t_d.map(function (o) {
+            return o.name ? o.name + (o.display ? ': ' + o.display : '') : '';
+        }), function (str) {
+            return str.length;
+        });
+        // console.log(t_d);
+        // console.log(t_d.map(function (o) {
+        //     return o.name + ((o.name && o.display) ? ": " : "") + o.display;
+        //     }));
+
+        // var maxText = _.max(
+        //     t_d.map(function (o) {
+        //         return o.name + ((o.name && o.display) ? ": " : "") + o.display;
+        //     }),
+        //     function (str) {
+        //         return str.length;
+        //     });
+        //     // console.log(maxText);
+        var maxMeasure = c.measureText({
+            fontSize: boxFontSize,
+            fontFamily: boxFont,
+            maxWidth: c.width,
+            text: maxText
+        });
+        textBox.maxWidth = maxMeasure.width;
+        textBox.maxHeight = maxMeasure.height * t_d.length + 20;
+        // dynamically resize the box in a less jerky fashion
+        if (textBox.maxWidth > previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth = textBox.maxWidth };
+        if (textBox.maxWidth < previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth--; textBox.maxWidth = previousBoxSize.maxBoxWidth };
+        if (textBox.maxHeight > previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight = textBox.maxHeight };
+        if (textBox.maxHeight < previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight--; textBox.maxHeight = previousBoxSize.maxBoxHeight };
+    }
+
+    function scaler(scaleFactor) {
+        for (i in wheel) {
+            if (!isNaN(wheel[i])) {
+                wheel[i] *= scaleFactor;
+            }
+        }
+    }
 
     function drawWheel() {  //draw the wheel
         var itemCount = 0;
