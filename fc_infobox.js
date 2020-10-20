@@ -93,14 +93,6 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         previousBoxSize.maxRadius = wheel.maxRadius;
     }
 
-    function scaler(scaleFactor) {
-        for (i in wheel) {
-            if (!isNaN(wheel[i])) {
-                wheel[i] *= scaleFactor;
-            }
-        }
-    }
-
     function getBoxSize() {
         if (typeof (c.measureText) != "function") {
             return;
@@ -139,6 +131,13 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         if (textBox.maxHeight < previousBoxSize.maxBoxHeight) { previousBoxSize.maxBoxHeight--; textBox.maxHeight = previousBoxSize.maxBoxHeight };
     }
 
+    function scaler(scaleFactor) {
+        for (i in wheel) {
+            if (!isNaN(wheel[i])) {
+                wheel[i] *= scaleFactor;
+            }
+        }
+    }
 
 
 
