@@ -83,7 +83,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     function getRadius() {
         wheel.maxRadius = wheel.hub + wheel.interval * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
-        if (wheel.maxRadius < 48) {
+        if (wheel.maxRadius < 48) {     // make it at least as big as the height of the two special tabs
             scaler(48 / wheel.maxRadius);
         }
         // dynamically resize the wheel in a less jerky fashion
