@@ -80,12 +80,12 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
 
-    // getRadius();
     function getRadius() {
         wheel.maxRadius = wheel.hub + wheel.interval * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
         if (wheel.maxRadius < 48) {
             scaler(48 / wheel.maxRadius);
         }
+        // dynamically resize the wheel in a less jerky fashion
         if (wheel.maxRadius + 1 <= previousBoxSize.maxRadius) {
             wheel.maxRadius = previousBoxSize.maxRadius - 1;
         };
@@ -97,7 +97,6 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             wheel[i] *= scaleFactor;
         }
     }
-
 
     function getBoxSize() {
         if (typeof (c.measureText) != "function") {
@@ -214,7 +213,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
     function drawWheel() {  //draw the wheel
-        var i_c = 0;
+        var itemCount = 0;
         // if (wheel.maxRadius < textBox.maxHeight) {
         //     scaler((textBox.maxHeight / 2) / wheel.maxRadius);
         // }
@@ -225,27 +224,27 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         }
         // console.log("startingY: "+startingY + ", wheel.maxRadius: "+ Math.ceil(wheel.maxRadius) + ", allTheTopStuff:" + allTheTopStuff + ", maxDraw.height: " + maxDraw.height + ", y:" + y);
         c.drawArc({     // draw the wheel outer ring
-            strokeStyle: wheel.BGColors[(i_c + 2) % wheel.BGColors.length],
+            strokeStyle: wheel.BGColors[(itemCount + 2) % wheel.BGColors.length],
             strokeWidth: wheel.lineWidth,
             x: x, y: y,
             radius: wheel.maxRadius - wheel.interval / 6
         });
         t_d.forEach(function (o_draw) {
             if (o_draw.overlay) {
-                i_c--;
+                itemCount--;
             }
             else {
                 c.drawArc({     // draw the wheel background
-                    strokeStyle: wheel.BGColors[i_c % wheel.BGColors.length],
+                    strokeStyle: wheel.BGColors[itemCount % wheel.BGColors.length],
                     strokeWidth: wheel.arcWidth + 1,
                     x: x, y: y,
-                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval
+                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - itemCount * wheel.interval
                 });
                 c.drawArc({
-                    strokeStyle: wheel.BGColors[(i_c + 2) % wheel.BGColors.length],
+                    strokeStyle: wheel.BGColors[(itemCount + 2) % wheel.BGColors.length],
                     strokeWidth: wheel.lineWidth,
                     x: x, y: y,
-                    radius: wheel.maxRadius - wheel.interval * 7 / 6 - (i_c) * wheel.interval
+                    radius: wheel.maxRadius - wheel.interval * 7 / 6 - (itemCount) * wheel.interval
                 });
             }
             // draw the time arcs on the wheel
@@ -253,7 +252,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
                 c.drawArc({ // shadow arc
                     strokeStyle: "#222",
                     x: x - wheel.depthFactor, y: y + wheel.depthFactor * 2,
-                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval,
+                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - itemCount * wheel.interval,
                     strokeWidth: wheel.arcWidth,
                     start: 0,
                     end: (360 * o_draw.f_percent)
@@ -262,12 +261,12 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             c.drawArc({ // colored arc
                 strokeStyle: o_draw.c1,
                 x: x + wheel.depthFactor, y: y - wheel.depthFactor * 2,
-                radius: wheel.maxRadius - wheel.interval * 2 / 3 - i_c * wheel.interval - wheel.depthFactor,
+                radius: wheel.maxRadius - wheel.interval * 2 / 3 - itemCount * wheel.interval - wheel.depthFactor,
                 strokeWidth: wheel.arcWidth,
                 start: 0,
                 end: (360 * o_draw.f_percent)
             });
-            i_c++;
+            itemCount++;
         });
     }
 
