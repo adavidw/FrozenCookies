@@ -61,6 +61,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         lineWidth: 3,
         interval: 12,
         depthFactor: 0.3,
+        shadowColor: "#222",
         BGColors: ['rgba(170, 170, 170, 1)', 'rgba(187, 187, 187, 1)', 'rgba(204, 204, 204, 1)', 'rgba(221, 221, 221, 1)', 'rgba(238, 238, 238, 1)', 'rgba(255, 255, 255, 1)']
     };
 
@@ -252,7 +253,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             // draw the time arcs on the wheel
             if (!item.overlay) {
                 c.drawArc({ // shadow arc
-                    strokeStyle: "#222",
+                    strokeStyle: wheel.shadowColor,
                     x: x - wheel.depthFactor, y: y + wheel.depthFactor * 2,
                     radius: wheel.maxRadius - wheel.interval * 2 / 3 - itemCount * wheel.interval,
                     strokeWidth: wheel.arcWidth,
