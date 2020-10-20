@@ -94,7 +94,9 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     function scaler(scaleFactor) {
         for (i in wheel) {
-            wheel[i] *= scaleFactor;
+            if (!isNaN(i)) {
+                wheel[i] *= scaleFactor;
+            }
         }
     }
 
