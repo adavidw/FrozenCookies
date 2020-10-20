@@ -231,8 +231,8 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             x: x, y: y,
             radius: wheel.maxRadius - wheel.interval / 6
         });
-        t_d.forEach(function (o_draw) {
-            if (o_draw.overlay) {
+        t_d.forEach(function (item) {
+            if (item.overlay) {
                 itemCount--;
             }
             else {
@@ -250,23 +250,23 @@ function drawInfobox(t_d) {   // draw the wheel and text box
                 });
             }
             // draw the time arcs on the wheel
-            if (!o_draw.overlay) {
+            if (!item.overlay) {
                 c.drawArc({ // shadow arc
                     strokeStyle: "#222",
                     x: x - wheel.depthFactor, y: y + wheel.depthFactor * 2,
                     radius: wheel.maxRadius - wheel.interval * 2 / 3 - itemCount * wheel.interval,
                     strokeWidth: wheel.arcWidth,
                     start: 0,
-                    end: (360 * o_draw.f_percent)
+                    end: (360 * item.f_percent)
                 });
             }
             c.drawArc({ // colored arc
-                strokeStyle: o_draw.c1,
+                strokeStyle: item.c1,
                 x: x + wheel.depthFactor, y: y - wheel.depthFactor * 2,
                 radius: wheel.maxRadius - wheel.interval * 2 / 3 - itemCount * wheel.interval - wheel.depthFactor,
                 strokeWidth: wheel.arcWidth,
                 start: 0,
-                end: (360 * o_draw.f_percent)
+                end: (360 * item.f_percent)
             });
             itemCount++;
         });
@@ -289,13 +289,13 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             width: textBox.maxWidth + 20, height: textBox.maxHeight
         });
         // iterate through the text items
-        t_d.forEach(function (o_draw) {
-            if (o_draw.name || o.draw.display) {
-                s_t = o_draw.name + ((o_draw.name && o_draw.display) ? ": " : "") + o_draw.display;
+        t_d.forEach(function (item) {
+            if (item.name || o.draw.display) {
+                s_t = item.name + ((item.name && item.display) ? ": " : "") + item.display;
                 c.drawText({
                     fontSize: boxFontSize,
                     fontFamily: boxFont,
-                    fillStyle: o_draw.c1,
+                    fillStyle: item.c1,
                     x: x, y: y - heightOffset + 16 * i_tc,
                     text: s_t
                 });
