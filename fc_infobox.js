@@ -427,8 +427,8 @@ function updateTimers() {   // update calculations and assemble output -- called
             t_draw.push({
                 f_percent: purchaseCompletion,
                 c1: 'rgba(44, 44, 44, 1)',
-                name: "Purchase Completion Time"
-                , display: ""
+                name: "Purchase Completion Time",
+                display: ""
             })
             t_draw.push({
                 f_percent: purchaseCompletion,
