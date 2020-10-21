@@ -82,16 +82,17 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
     // testing maxDraw
     c.drawRect({
-        fillStyle: 'rgba(200, 200, 255, 0.4)',
+        fillStyle: 'rgba(200, 200, 255, 0.2)',
         x: maxDrawArea.center.x, y: maxDrawArea.center.y,
         width: maxDrawArea.width, height: maxDrawArea.height
     });
     c.drawText({
-        fontSize: "32px",
+        fontSize: "48px",
         fontFamily: boxFont,
-        fillStyle: 'rgba(200, 255, 200, 0.4)',
+        fillStyle: 'rgba(200, 200, 255, 0.1)',
         x: maxDrawArea.center.x, y: maxDrawArea.center.y,
-        text: "maxDrawArea"
+        text: "maxDrawArea",
+        rotate: -30
     });
 
 
