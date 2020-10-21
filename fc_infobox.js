@@ -80,24 +80,34 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
 
-
-    c.drawRect({    // testing maxDraw
+    // testing maxDraw
+    c.drawRect({
         fillStyle: 'rgba(200, 200, 255, 0.4)',
         x: maxDrawArea.center.x, y: maxDrawArea.center.y,
         width: maxDrawArea.width, height: maxDrawArea.height
     });
-
-    c.drawRect({    // testing normal wheel placement
-        fillStyle: 'rgba(30, 30, 30, 0.7)',
-        x: padding.x + wheel.maxRadius, y: startingY,
-        width: wheel.maxRadius * 2, height: wheel.maxRadius * 2
+    c.drawText({
+        fontSize: "32px",
+        fontFamily: boxFont,
+        fillStyle: 'rgba(200, 255, 200, 0.4)',
+        x: maxDrawArea.center.x, y: maxDrawArea.center.y,
+        text: "maxDrawArea"
     });
 
-    c.drawRect({    // testing old text box placement
-        fillStyle: 'rgba(30, 30, 30, 0.7)',
-        x: padding.x + wheel.maxRadius * 2 + (textBox.maxWidth / 2) + alley, y: startingY,
-        width: textBox.maxWidth + 20, height: textBox.maxHeight
-    });
+
+    // // testing old wheel placement
+    // c.drawRect({
+    //     fillStyle: 'rgba(30, 30, 30, 0.7)',
+    //     x: padding.x + wheel.maxRadius, y: startingY,
+    //     width: wheel.maxRadius * 2, height: wheel.maxRadius * 2
+    // });
+
+    // // testing old text box placement
+    // c.drawRect({
+    //     fillStyle: 'rgba(30, 30, 30, 0.7)',
+    //     x: padding.x + wheel.maxRadius * 2 + (textBox.maxWidth / 2) + alley, y: startingY,
+    //     width: textBox.maxWidth + 20, height: textBox.maxHeight
+    // });
 
 
 
