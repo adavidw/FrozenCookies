@@ -433,11 +433,8 @@ var blacklist = [
 
 var seasons = ['','fools','christmas','easter','halloween','valentines'];
 
-// only putting cookie multipliers in easterCookies for now. Will figure out a plan for 222-229 later
-var easterCookies = [210,211,212,213,214,215,216,217,218,219,220,221];
 var halloweenCookies = [134,135,136,137,138,139,140];
 var christmasCookies = [143,144,145,146,147,148,149];
-var valentinesCookies = [169,170,171,172,173,174,645];
 var holidayCookies = {
     halloween: [134,135,136,137,138,139,140],
     christmas: [143,144,145,146,147,148,149],
