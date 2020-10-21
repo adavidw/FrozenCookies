@@ -234,7 +234,7 @@ var upgradeJson = {
     531: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,350], 'upgrades': []},
     532: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,400], 'upgrades': []},
     676: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450], 'upgrades': []},
-
+    
     // Javascript Console tiered upgrades
     594: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 'upgrades': []},
     595: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5], 'upgrades': []},
@@ -265,6 +265,7 @@ var upgradeJson = {
     415: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
     521: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
     593: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
+
     
     // Synergies
     369: {'buildings': [0,0,15,0,0,0,0,0,0,0,0,15,0,0,0], 'upgrades': [393]},
@@ -350,14 +351,14 @@ var upgradeJson = {
     166: {'buildings': [], 'upgrades': [152], 'santa': 1},
     168: {'buildings': [], 'upgrades': [152], 'santa': 14},
 
-    // Season switching - requires Season Switcher (181)
+    // Season switching - requires Season Switcher heavenly upgrade (181)
     182: {'buildings': [], 'upgrades': [181]},      // Christmas
     183: {'buildings': [], 'upgrades': [181]},      // Halloween
     184: {'buildings': [], 'upgrades': [181]},      // Valentine's
     185: {'buildings': [], 'upgrades': [181]},      // Business Day
     209: {'buildings': [], 'upgrades': [181]},      // Easter
     
-    // Easter season
+    // Easter season - Requires Bunny biscuit (209)
     210: {'buildings': [], 'upgrades': [209]},
     211: {'buildings': [], 'upgrades': [209]},
     212: {'buildings': [], 'upgrades': [209]},
@@ -379,7 +380,7 @@ var upgradeJson = {
     228: {'buildings': [], 'upgrades': [209]},
     229: {'buildings': [], 'upgrades': [209]},
 
-    // Halloween season
+    // Halloween season - Requires Ghostly biscuit (183); actually getting rewards requires "One mind" and wrinklers
     134: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
     135: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
     136: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
@@ -388,7 +389,7 @@ var upgradeJson = {
     139: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
     140: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
 
-    // Christmas season
+    // Christmas season - Requires Festive biscuit (182)
     143: {'buildings': [], 'upgrades': [182]},
     144: {'buildings': [], 'upgrades': [182]},
     145: {'buildings': [], 'upgrades': [182]},
@@ -397,7 +398,7 @@ var upgradeJson = {
     148: {'buildings': [], 'upgrades': [182]},
     149: {'buildings': [], 'upgrades': [182]},
 
-    // Valentine's Day season
+    // Valentine's Day season - Requires Lovesick biscuit (184); each Valentine's biscuit requires the previous one
     169: {'buildings': [], 'upgrades': [184]},
     170: {'buildings': [], 'upgrades': [169,184]},
     171: {'buildings': [], 'upgrades': [170,184]},
