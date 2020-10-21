@@ -387,14 +387,31 @@ function updateTimers() {   // update calculations and assemble output -- called
         // create an array of all the elements to draw
         t_draw = [];
 
+        // if (chainTotal) {
+        //     t_draw.push({
+        //         f_percent: chainCompletion,
+        //         c1: 'rgba(77, 77, 77, 1)',
+        //         name: "Chain Completion Time (" + chainPurchase.name + ")",
+        //         display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps))
+        //     });
+        // }
+
         if (chainTotal) {
             t_draw.push({
                 f_percent: chainCompletion,
-                c1: 'rgba(77, 77, 77, 1)',
-                name: "Chain Completion Time (" + chainPurchase.name + "):",
-                display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps))
+                c1: 'rgba(77, 88, 77, 1)',
+                name: "Chain Completion Time",
+                display: ""
+            });
+            t_draw.push({
+                f_percent: chainCompletion,
+                c1: 'rgba(77, 88, 77, 1)',
+                name: "(" + chainPurchase.name + ")",
+                display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps)),
+                overlay: true
             });
         }
+
         // if (purchaseTotal > 0) {
         //     t_draw.push({
         //         f_percent: purchaseCompletion,
