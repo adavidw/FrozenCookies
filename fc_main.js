@@ -148,6 +148,16 @@ function setOverrides() {
     if (!Game.HasAchiev('Third-party')) {
         Game.Win('Third-party');
     }
+
+    //Automatically buy in bulk if setting turned on
+    if (FrozenCookies.autoBulk != 0) {
+        if (FrozenCookies.autoBulk == 1) { //Buy x10
+            document.getElementById('storeBulk10').click();
+        }
+        if (FrozenCookies.autoBulk == 2) { //Buy x100
+            document.getElementById('storeBulk100').click();
+        }
+    }
 }
 
 function preferenceParse(setting, defaultVal) {
@@ -2772,15 +2782,6 @@ function autoCookie() {
         }
 
         var itemBought = false;
-        //Automatically buy in bulk if setting turned on
-        if (FrozenCookies.autoBulk != 0) {
-            if (FrozenCookies.autoBulk == 1) { //Buy x10
-                document.getElementById('storeBulk10').click();
-            }
-            if (FrozenCookies.autoBulk == 2) { //Buy x100
-                document.getElementById('storeBulk100').click();
-            }
-        }
 
         //var seConditions = (Game.cookies >= delay + recommendation.cost) || (!(FrozenCookies.autoSpell == 3) && !(FrozenCookies.holdSEBank))); //true == good on SE bank or don't care about it
         if (FrozenCookies.autoBuy && ((Game.cookies >= delay + recommendation.cost) || recommendation.purchase.name == "Elder Pledge") && (FrozenCookies.pastemode || isFinite(nextChainedPurchase().efficiency))) {
