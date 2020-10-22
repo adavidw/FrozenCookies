@@ -31,22 +31,22 @@ function setOverrides() {
     FrozenCookies.maxSpecials = preferenceParse('maxSpecials', 1);
     // building max values
     FrozenCookies.cursorMax = preferenceParse('cursorMax', 500);
-    FrozenCookies.grandmaMax = preferenceParse('grandmaMax', 500);
+    // FrozenCookies.grandmaMax = preferenceParse('grandmaMax', 500);
     FrozenCookies.farmMax = preferenceParse('farmMax', 500);
-    FrozenCookies.mineMax = preferenceParse('mineMax', 500);
-    FrozenCookies.factoryMax = preferenceParse('factoryMax', 500);
-    FrozenCookies.bankMax = preferenceParse('bankMax', 500);
-    FrozenCookies.templeMax = preferenceParse('templeMax', 500);
-    FrozenCookies.manaMax = preferenceParse('manaMax', 100);
-    FrozenCookies.shipmentMax = preferenceParse('shipmentMax', 500);
-    FrozenCookies.labMax = preferenceParse('labMax', 500);
-    FrozenCookies.portalMax = preferenceParse('portalMax', 500);
-    FrozenCookies.timeMachineMax = preferenceParse('timeMachineMax', 500);
-    FrozenCookies.condensorMax = preferenceParse('condensorMax', 500);
-    FrozenCookies.prismMax = preferenceParse('prismMax', 500);
-    FrozenCookies.chancemakerMax = preferenceParse('chancemakerMax', 500);
-    FrozenCookies.fractalEngineMax = preferenceParse('fractalEngineMax', 500);
-    FrozenCookies.consoleMax = preferenceParse('consoleMax', 500);
+    // FrozenCookies.mineMax = preferenceParse('mineMax', 500);
+    // FrozenCookies.factoryMax = preferenceParse('factoryMax', 500);
+    // FrozenCookies.bankMax = preferenceParse('bankMax', 500);
+    // FrozenCookies.templeMax = preferenceParse('templeMax', 500);
+    // FrozenCookies.manaMax = preferenceParse('manaMax', 100);
+    // FrozenCookies.shipmentMax = preferenceParse('shipmentMax', 500);
+    // FrozenCookies.labMax = preferenceParse('labMax', 500);
+    // FrozenCookies.portalMax = preferenceParse('portalMax', 500);
+    // FrozenCookies.timeMachineMax = preferenceParse('timeMachineMax', 500);
+    // FrozenCookies.condensorMax = preferenceParse('condensorMax', 500);
+    // FrozenCookies.prismMax = preferenceParse('prismMax', 500);
+    // FrozenCookies.chancemakerMax = preferenceParse('chancemakerMax', 500);
+    // FrozenCookies.fractalEngineMax = preferenceParse('fractalEngineMax', 500);
+    // FrozenCookies.consoleMax = preferenceParse('consoleMax', 500);
 
     // Becomes 0 almost immediately after user input, so default to 0
     FrozenCookies.timeTravelAmount = 0;
@@ -106,9 +106,6 @@ function setOverrides() {
     FrozenCookies.caches.recommendationList = [];
     FrozenCookies.caches.buildings = [];
     FrozenCookies.caches.upgrades = [];
-
-    //Whether to currently display achievement popups
-    FrozenCookies.showAchievements = true;
 
     //Whether to currently display achievement popups
     FrozenCookies.showAchievements = true;

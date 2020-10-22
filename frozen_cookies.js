@@ -35,7 +35,7 @@ var script_list = [
     // `${FrozenCookies.baseUrl}/fc_cyclius.js`
 ]
 
-FrozenCookies.loadInterval = setInterval(function() {
+FrozenCookies.loadInterval = setInterval(function () {
     if (Game && Game.ready) {
         clearInterval(FrozenCookies.loadInterval);
         FrozenCookies.loadInterval = 0;
@@ -50,7 +50,7 @@ function loadScript(id) {
     } else {
         var url = script_list[id];
         if (/\.js$/.exec(url)) {
-            $.getScript(url, function() {
+            $.getScript(url, function () {
                 loadScript(id + 1);
             });
         } else if (/\.css$/.exec(url)) {
@@ -71,7 +71,7 @@ function fcInit() {
     var jquery = document.createElement('script');
     jquery.setAttribute('type', 'text/javascript');
     jquery.setAttribute('src', '//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js');
-    jquery.onload = function() {
+    jquery.onload = function () {
         loadScript(0);
     };
     document.head.appendChild(jquery);
