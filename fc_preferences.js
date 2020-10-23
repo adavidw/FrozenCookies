@@ -178,7 +178,7 @@ FrozenCookies.preferenceValues = {
         'hint': 'Automatically ascend when your heavenly chip count hits a certain number. (Note: this will skip the upgrade screen)',
         'display': ["Autoascend OFF", "Autoascend ON"],
         'default': 0,
-        'extras': '<a class="option" id="chipsToAscend" onclick="updateAscendAmount(\'HCAscendAmount\');">${fcBeautify(HCAscendAmount)} heavenly chips</a>'
+        'extras': '<a class="option" id="chipsToAscend" onclick="updateAscendAmount(\'HCAscendAmount\');">${HCAscendAmount} heavenly chips</a>'
     },
     'autoWrinkler': {
         'hint': 'Automatically pop wrinklers efficiently (calculated timing to balance cookies vs. upgrades) or instantly',
