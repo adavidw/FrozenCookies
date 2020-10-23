@@ -37,7 +37,7 @@ function setOverrides() {
     // FrozenCookies.factoryMax = preferenceParse('factoryMax', 500);
     // FrozenCookies.bankMax = preferenceParse('bankMax', 500);
     // FrozenCookies.templeMax = preferenceParse('templeMax', 500);
-    // FrozenCookies.manaMax = preferenceParse('manaMax', 100);
+    FrozenCookies.manaMax = preferenceParse('manaMax', 100);
     // FrozenCookies.shipmentMax = preferenceParse('shipmentMax', 500);
     // FrozenCookies.labMax = preferenceParse('labMax', 500);
     // FrozenCookies.portalMax = preferenceParse('portalMax', 500);
