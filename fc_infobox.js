@@ -276,6 +276,9 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         var i_tc = 0;
         var x = 0;
         var y = startingY;
+        if (startingY + (textBox.maxHeight / 2) > allTheTopStuff + maxDrawArea.height) {
+            y = allTheTopStuff + maxDrawArea.height - (textBox.maxHeight / 2);
+        }
         if (!wheel.maxRadius) {
             x = canvas.center.x
         } else {
