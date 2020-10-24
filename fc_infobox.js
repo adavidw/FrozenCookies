@@ -282,7 +282,9 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         if (!wheel.maxRadius) {
             x = canvas.center.x
         } else {
-            x = ((canvas.width - margin.x) + (padding.x + (wheel.maxRadius * 2))) / 2
+            var l = padding.x + (wheel.maxRadius * 2);
+            var r = canvas.width - ((margin.x + padding.x) / 2);
+            x = (l + r) / 2;
         }
         // draw the box background
         c.drawRect({
