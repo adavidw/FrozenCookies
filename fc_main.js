@@ -347,6 +347,9 @@ function fcReset() {
     FrozenCookies.lastBaseCps = 0;
     FrozenCookies.trackedStats = [];
     FrozenCookies.autoBulkReady = 1;
+    // really just for my own use. These next two don't make much sense for the general case
+    FrozenCookies.blacklist = 3;
+    FrozenCookies.autoBlacklistStop = 0;
     updateLocalStorage();
     recommendationList(true);
 }
@@ -1059,7 +1062,7 @@ function autoCast() {
     }
 }
 
-function autoBlacklistOff() {
+function checkBlacklistGoal() {   // Automatically turn off a blacklist once the goal for that blacklist is achieved
     switch (FrozenCookies.blacklist) {
         case 1:
             FrozenCookies.blacklist = (Game.cookiesEarned >= 1000000) ? 0 : 1;
@@ -1069,6 +1072,9 @@ function autoBlacklistOff() {
             break;
         case 3:
             FrozenCookies.blacklist = (haveAll('halloween') && haveAll('easter')) ? 0 : 3;
+            break;
+        case 4:
+            // This is the "No Buildings" blacklist, so no real goal to fulfill
             break;
     }
 }
@@ -2855,8 +2861,8 @@ function autoCookie() {
                 }
             }
         }
-        if (FrozenCookies.autoBlacklistOff) {
-            autoBlacklistOff();
+        if (FrozenCookies.autoBlacklistStop) {
+            checkBlacklistGoal();
         }
         var currentFrenzy = (Game.hasBuff('Frenzy') ? Game.buffs['Frenzy'].multCpS : 1) * clickBuffBonus();
         if (currentFrenzy != FrozenCookies.last_gc_state) {

@@ -46,7 +46,7 @@ FrozenCookies.preferenceValues = {
         'display': ['Auto Bulkbuy OFF', 'Auto Bulkbuy x10', 'Auto Bulkbuy x100'],
         'default': 0
     },
-    'autoBlacklistOff': {
+    'autoBlacklistStop': {
         'hint': 'Automatically turn off a blacklist once the goal for that blacklist is achieved',
         'display': ['Auto Blacklist OFF', 'Auto Blacklist ON'],
         'default': 0
