@@ -349,7 +349,7 @@ function fcReset() {
     FrozenCookies.autoBulkReady = 1;
     // really just for my own use. These next two don't make much sense for the general case
     FrozenCookies.blacklist = 3;
-    FrozenCookies.autoBlacklistStop = 0;
+    FrozenCookies.autoBlacklistStop = 1;
     updateLocalStorage();
     recommendationList(true);
 }
