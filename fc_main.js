@@ -1607,38 +1607,38 @@ function recommendationList(recalculate) {
                 .sort(function (a, b) {
                     return a.efficiency != b.efficiency ? a.efficiency - b.efficiency : (a.delta_cps != b.delta_cps ? b.delta_cps - a.delta_cps : a.cost - b.cost);
                 }));
-        //If autocasting Spontaneous Edifice, don't buy any Fractal engine after 399
-        if (M && FrozenCookies.autoSpell == 3 && Game.Objects['Fractal engine'].amount >= 399) {
-            for (var i = 0; i < FrozenCookies.caches.recommendationList.length; i++) {
-                if (FrozenCookies.caches.recommendationList[i].id == 15) {
-                    FrozenCookies.caches.recommendationList.splice(i, 1);
-                }
-            }
-        }
-        //Stop buying wizard towers at max Mana if enabled
-        if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax) {
-            for (var i = 0; i < FrozenCookies.caches.recommendationList.length; i++) {
-                if (FrozenCookies.caches.recommendationList[i].id == 7) {
-                    FrozenCookies.caches.recommendationList.splice(i, 1);
-                }
-            }
-        }
-        //Stop buying Cursors if at set limit
-        if (FrozenCookies.cursorLimit && Game.Objects['Cursor'].amount >= FrozenCookies.cursorMax) {
-            for (var i = 0; i < FrozenCookies.caches.recommendationList.length; i++) {
-                if (FrozenCookies.caches.recommendationList[i].id == 0) {
-                    FrozenCookies.caches.recommendationList.splice(i, 1);
-                }
-            }
-        }
-        //Stop buying Farms if at set limit
-        if (FrozenCookies.farmLimit && Game.Objects['Farm'].amount >= FrozenCookies.farmMax) {
-            for (var i = 0; i < FrozenCookies.caches.recommendationList.length; i++) {
-                if (FrozenCookies.caches.recommendationList[i].id == 2) {
-                    FrozenCookies.caches.recommendationList.splice(i, 1);
-                }
-            }
-        }
+        // //If autocasting Spontaneous Edifice, don't buy any Fractal engine after 399
+        // if (M && FrozenCookies.autoSpell == 3 && Game.Objects['Fractal engine'].amount >= 399) {
+        //     for (var i = 0; i < FrozenCookies.caches.recommendationList.length; i++) {
+        //         if (FrozenCookies.caches.recommendationList[i].id == 15) {
+        //             FrozenCookies.caches.recommendationList.splice(i, 1);
+        //         }
+        //     }
+        // }
+        // //Stop buying wizard towers at max Mana if enabled
+        // if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax) {
+        //     for (var i = 0; i < FrozenCookies.caches.recommendationList.length; i++) {
+        //         if (FrozenCookies.caches.recommendationList[i].id == 7) {
+        //             FrozenCookies.caches.recommendationList.splice(i, 1);
+        //         }
+        //     }
+        // }
+        // //Stop buying Cursors if at set limit
+        // if (FrozenCookies.cursorLimit && Game.Objects['Cursor'].amount >= FrozenCookies.cursorMax) {
+        //     for (var i = 0; i < FrozenCookies.caches.recommendationList.length; i++) {
+        //         if (FrozenCookies.caches.recommendationList[i].id == 0) {
+        //             FrozenCookies.caches.recommendationList.splice(i, 1);
+        //         }
+        //     }
+        // }
+        // //Stop buying Farms if at set limit
+        // if (FrozenCookies.farmLimit && Game.Objects['Farm'].amount >= FrozenCookies.farmMax) {
+        //     for (var i = 0; i < FrozenCookies.caches.recommendationList.length; i++) {
+        //         if (FrozenCookies.caches.recommendationList[i].id == 2) {
+        //             FrozenCookies.caches.recommendationList.splice(i, 1);
+        //         }
+        //     }
+        // }
         if (FrozenCookies.pastemode) {
             FrozenCookies.caches.recommendationList.reverse();
         }
