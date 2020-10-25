@@ -56,7 +56,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     var boxFont = "Helvetica,Arial";
     var boxFontSize = "14px";
     var wheel = {
-        hub: 15,
+        hub: 13,
         arcWidth: 9,
         lineWidth: 3,
         interval: 12,
