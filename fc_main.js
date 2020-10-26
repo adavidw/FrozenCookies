@@ -1598,6 +1598,7 @@ function purchaseEfficiency(price, deltaCps, baseDeltaCps, currentCps) {
 }
 
 function recommendationList(recalculate) {
+    var clock = performance.now();
     if (recalculate) {
         FrozenCookies.showAchievements = false;
         FrozenCookies.caches.recommendationList = addScores(
@@ -1612,6 +1613,7 @@ function recommendationList(recalculate) {
         }
         FrozenCookies.showAchievements = true;
     }
+    console.log("recommendationList: " + Math.round(performance.now() - clock));
     return FrozenCookies.caches.recommendationList;
 }
 
@@ -1680,6 +1682,7 @@ function nextChainedPurchase(recalculate) {
 }
 
 function buildingStats(recalculate) {
+    var clock = performance.now();
     if (recalculate) {
         if (blacklist[FrozenCookies.blacklist].buildings === true) {
             FrozenCookies.caches.buildings = [];
@@ -1732,10 +1735,12 @@ function buildingStats(recalculate) {
             });
         }
     }
+    console.log("buildingStats: " + Math.round((performance.now() - clock)));
     return FrozenCookies.caches.buildings;
 }
 
 function upgradeStats(recalculate) {
+    var clock = performance.now();
     if (recalculate) {
         if (blacklist[FrozenCookies.blacklist].upgrades === true) {
             FrozenCookies.caches.upgrades = [];
@@ -1779,6 +1784,7 @@ function upgradeStats(recalculate) {
             });
         }
     }
+    console.log("upgradeStats: " + Math.round((performance.now() - clock)));
     return FrozenCookies.caches.upgrades;
 }
 
@@ -1803,7 +1809,7 @@ function isUnavailable(upgrade, upgradeBlacklist) {
     }
 
     if (upgrade.id == 414) {
-        result = true; // blacklist background selector from being used
+        result = true; // blacklist backgMath.round selector from being used
     }
 
     if (upgrade.id == 361) {
@@ -1826,7 +1832,8 @@ function isUnavailable(upgrade, upgradeBlacklist) {
 }
 
 function santaStats() {
-    return Game.Has('A festive hat') && (Game.santaLevel + 1 < Game.santaLevels.length) ? {
+    var clock = performance.now();
+    var ret = Game.Has('A festive hat') && (Game.santaLevel + 1 < Game.santaLevels.length) ? {
         id: 0,
         efficiency: Infinity,
         base_delta_cps: 0,
@@ -1842,6 +1849,8 @@ function santaStats() {
             }
         }
     } : [];
+    console.log("santaStats: " + Math.round((performance.now() - clock)));
+    return ret;
 }
 
 function defaultPurchase() {
