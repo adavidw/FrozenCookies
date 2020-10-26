@@ -1598,7 +1598,7 @@ function purchaseEfficiency(price, deltaCps, baseDeltaCps, currentCps) {
 }
 
 function recommendationList(recalculate) {
-    var clock = performance.now();
+    // console.time("recommendationList");
     if (recalculate) {
         FrozenCookies.showAchievements = false;
         FrozenCookies.caches.recommendationList = addScores(
@@ -1613,7 +1613,7 @@ function recommendationList(recalculate) {
         }
         FrozenCookies.showAchievements = true;
     }
-    console.log("recommendationList: " + Math.round(performance.now() - clock));
+    // console.timeEnd("recommendationList");
     return FrozenCookies.caches.recommendationList;
 }
 
@@ -1682,7 +1682,7 @@ function nextChainedPurchase(recalculate) {
 }
 
 function buildingStats(recalculate) {
-    var clock = performance.now();
+    // console.time("buildingStats");
     if (recalculate) {
         if (blacklist[FrozenCookies.blacklist].buildings === true) {
             FrozenCookies.caches.buildings = [];
@@ -1735,12 +1735,12 @@ function buildingStats(recalculate) {
             });
         }
     }
-    console.log("buildingStats: " + Math.round((performance.now() - clock)));
+    // console.timeEnd("buildingStats");
     return FrozenCookies.caches.buildings;
 }
 
 function upgradeStats(recalculate) {
-    var clock = performance.now();
+    // console.time("upgradeStats");
     if (recalculate) {
         if (blacklist[FrozenCookies.blacklist].upgrades === true) {
             FrozenCookies.caches.upgrades = [];
@@ -1784,7 +1784,7 @@ function upgradeStats(recalculate) {
             });
         }
     }
-    console.log("upgradeStats: " + Math.round((performance.now() - clock)));
+    // console.timeEnd("upgradeStats");
     return FrozenCookies.caches.upgrades;
 }
 
@@ -1832,7 +1832,7 @@ function isUnavailable(upgrade, upgradeBlacklist) {
 }
 
 function santaStats() {
-    var clock = performance.now();
+    // console.time("santaStats");
     var ret = Game.Has('A festive hat') && (Game.santaLevel + 1 < Game.santaLevels.length) ? {
         id: 0,
         efficiency: Infinity,
@@ -1849,7 +1849,7 @@ function santaStats() {
             }
         }
     } : [];
-    console.log("santaStats: " + Math.round((performance.now() - clock)));
+    // console.timeEnd("santaStats");
     return ret;
 }
 
