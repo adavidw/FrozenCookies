@@ -1830,7 +1830,6 @@ function isUnavailable(upgrade, upgradeBlacklist) {
     if (upgrade.id == 563 || upgrade.id == 564) {
         result = true; // blacklist shimmering veil from being used
     }
-
     return result;
 }
 
