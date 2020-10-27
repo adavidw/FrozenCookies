@@ -1740,7 +1740,7 @@ function buildingStats(recalculate) {
 }
 
 function upgradeStats(recalculate) {
-    // console.time("upgradeStats");
+    console.time("upgradeStats");
     if (recalculate) {
         if (blacklist[FrozenCookies.blacklist].upgrades === true) {
             FrozenCookies.caches.upgrades = [];
@@ -1751,6 +1751,7 @@ function upgradeStats(recalculate) {
                     if (isUnavailable(current, upgradeBlacklist)) {
                         return null;
                     }
+                    // console.time("1"); console.log(current);
                     var currentBank = bestBank(0).cost;
                     var cost = upgradePrereqCost(current);
                     var baseCpsOrig = baseCps();
@@ -1764,11 +1765,13 @@ function upgradeStats(recalculate) {
                     var baseCpsNew = baseCps();
                     var cpsNew = effectiveCps(currentBank);
                     var priceReduction = discounts == (totalDiscount() + totalDiscount(true)) ? 0 : checkPrices(current);
+                    // console.timeEnd("1"); console.time("2");
                     upgradeToggle(current, existingAchievements, reverseFunctions);
                     Game.elderWrath = existingWrath;
                     var deltaCps = cpsNew - cpsOrig;
                     var baseDeltaCps = baseCpsNew - baseCpsOrig;
                     var efficiency = (current.season && current.season == seasons[FrozenCookies.defaultSeason]) ? cost / baseCpsOrig : (priceReduction > cost) ? 1 : purchaseEfficiency(cost, deltaCps, baseDeltaCps, cpsOrig);
+                    // console.timeEnd("2");
                     return {
                         'id': current.id,
                         'efficiency': efficiency,
@@ -1784,7 +1787,7 @@ function upgradeStats(recalculate) {
             });
         }
     }
-    // console.timeEnd("upgradeStats");
+    console.timeEnd("upgradeStats");
     return FrozenCookies.caches.upgrades;
 }
 
