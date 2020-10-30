@@ -76,12 +76,6 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
 
 
 
-
-
-
-
-
-
     // testing maxDraw
     c.drawRect({
         fillStyle: 'rgba(200, 200, 255, 0.2)',
@@ -111,10 +105,6 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
     //     x: padding.x + wheel.maxRadius * 2 + (textBox.maxWidth / 2) + alley, y: startingY,
     //     width: textBox.maxWidth + 20, height: textBox.maxHeight
     // });
-
-
-
-
 
 
 
