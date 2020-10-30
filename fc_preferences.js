@@ -264,7 +264,7 @@ FrozenCookies.preferenceValues = {
     },
     'fpsModifier': {
         'hint': 'Run the game at the selected frame rate (browser default is 30). 60 is twice as fast, 15 is half as fast, etc. If you\'re not sure, keep this at 30',
-        'display': ['Frame Rate 15 fps', 'Frame Rate 24 fps', 'Frame Rate 30 fps', 'Frame Rate 48 fps', 'Frame Rate 60 fps', 'Frame Rate 2 fps', 'Frame Rate 88 fps', 'Frame Rate 100 fps', 'Frame Rate 120 fps', 'Frame Rate 144 fps', 'Frame Rate 200 fps', 'Frame Rate 240 fps', 'Frame Rate 300 fps', 'Frame Rate 5 fps', 'Frame Rate 10 fps'],
+        'display': ['Frame Rate 15 fps', 'Frame Rate 24 fps', 'Frame Rate 30 fps', 'Frame Rate 48 fps', 'Frame Rate 60 fps', 'Frame Rate 72 fps', 'Frame Rate 88 fps', 'Frame Rate 100 fps', 'Frame Rate 120 fps', 'Frame Rate 144 fps', 'Frame Rate 200 fps', 'Frame Rate 240 fps', 'Frame Rate 300 fps', 'Frame Rate 5 fps', 'Frame Rate 10 fps'],
         'default': 2
     },
     'logging': {
