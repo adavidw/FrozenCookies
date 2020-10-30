@@ -7,8 +7,8 @@ var previousBoxSize = {
 };
 
 
-function drawInfobox(t_d) {   // draw the wheel and text box
-    var s_t;
+function drawInfobox(infoboxItems) {   // draw the wheel and text box
+    var itemText;
     var textBox = {};
     var margin = {
         x: 12,  // stay at least this far away from left edge
@@ -152,7 +152,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
 
 
     function getRadius() {
-        wheel.maxRadius = wheel.hub + wheel.interval * t_d.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
+        wheel.maxRadius = wheel.hub + wheel.interval * infoboxItems.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
         if (wheel.maxRadius < 48) {     // make it at least as big as the height of the two special tabs
             scaler(48 / wheel.maxRadius);
         }
@@ -171,8 +171,8 @@ function drawInfobox(t_d) {   // draw the wheel and text box
         if (typeof (c.measureText) != "function") {
             return;
         }
-        var heightOffset = (16 * (t_d.length - 1) / 2);     // what is this for?
-        var maxText = _.max(t_d.map(function (o) {
+        var heightOffset = (16 * (infoboxItems.length - 1) / 2);     // what is this for?
+        var maxText = _.max(infoboxItems.map(function (o) {
             return o.name ? o.name + (o.display ? ': ' + o.display : '') : '';
         }), function (str) {
             return str.length;
@@ -197,7 +197,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             text: maxText
         });
         textBox.maxWidth = maxMeasure.width;
-        textBox.maxHeight = maxMeasure.height * t_d.length + 20;
+        textBox.maxHeight = maxMeasure.height * infoboxItems.length + 20;
         // dynamically resize the box in a less jerky fashion
         if (textBox.maxWidth > previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth = textBox.maxWidth };
         if (textBox.maxWidth < previousBoxSize.maxBoxWidth) { previousBoxSize.maxBoxWidth--; textBox.maxWidth = previousBoxSize.maxBoxWidth };
@@ -230,7 +230,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             x: x, y: y,
             radius: wheel.maxRadius - wheel.interval / 6
         });
-        t_d.forEach(function (item) {
+        infoboxItems.forEach(function (item) {
             if (item.overlay) {
                 itemCount--;
             }
@@ -272,7 +272,7 @@ function drawInfobox(t_d) {   // draw the wheel and text box
     }
 
     function drawTextBox() {    // draw the box
-        var heightOffset = (16 * (t_d.length - 1) / 2);     // what is this for?
+        var heightOffset = (16 * (infoboxItems.length - 1) / 2);     // what is this for?
         var i_tc = 0;
         var x = 0;
         var y = startingY;
@@ -293,15 +293,15 @@ function drawInfobox(t_d) {   // draw the wheel and text box
             width: textBox.maxWidth + 20, height: textBox.maxHeight
         });
         // iterate through the text items
-        t_d.forEach(function (item) {
+        infoboxItems.forEach(function (item) {
             if (item.name || o.draw.display) {
-                s_t = item.name + ((item.name && item.display) ? ": " : "") + item.display;
+                itemText = item.name + ((item.name && item.display) ? ": " : "") + item.display;
                 c.drawText({
                     fontSize: boxFontSize,
                     fontFamily: boxFont,
                     fillStyle: item.c1,
                     x: x, y: y - heightOffset + 16 * i_tc,
-                    text: s_t
+                    text: itemText
                 });
                 i_tc++;
             }
