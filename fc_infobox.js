@@ -49,7 +49,7 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
     };
 
     // startingY aims to have the wheel center point vertically centered between Krumblor and Santa, which is 96 pixels above the bottom of the canvas
-    var startingY = Game.LeftBackground.canvas.height - 60 - padding.y;
+    var startingY = canvas.height - 60 - padding.y;
 
     // style and formatting attributes
     var c = $("#backgroundLeftCanvas");
