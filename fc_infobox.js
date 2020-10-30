@@ -6,16 +6,16 @@ var previousBoxSize = {
     maxBoxHeight: 0,
 };
 
-
 function drawInfobox(infoboxItems) {   // draw the wheel and text box
     var itemText;
-    var textBox = {};
+    var textBox = {
+        color: 'rgba(220, 220, 220, 0.6)',
+    };
     var margin = {
         x: 12,  // stay at least this far away from left edge
         y: 36   // stay at least this far away from bottom edge
     };
     var allTheTopStuff = Game.cookieOriginY + 256; // shine.png behind the cookie is 512x512, so this keeps the box off that graphic
-    var alley = 24;     // the space between the wheel and the text box
 
     //spacing and positioning attributes
     var canvas = {
@@ -48,8 +48,10 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
         y: canvas.height - padding.y - (maxDrawArea.height / 2)
     };
 
-    // startingY aims to have the wheel center point vertically centered between Krumblor and Santa, which is 96 pixels above the bottom of the canvas
-    var startingY = canvas.height - 60 - padding.y;
+    // The starting Y value aims to have the wheel center point vertically centered between Krumblor and Santa, which is 96 pixels above the bottom of the canvas.
+    // However, it also takes into account if the Krumblor or Santa windows are open.
+    var x = padding.x;
+    var y = canvas.height - 60 - padding.y;
 
     // style and formatting attributes
     var c = $("#backgroundLeftCanvas");
@@ -138,19 +140,6 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     function getRadius() {
         wheel.maxRadius = wheel.hub + wheel.interval * infoboxItems.reduce(function (sum, item) { return (item.overlay) ? sum : sum + 1; }, 0);
         if (wheel.maxRadius < 48) {     // make it at least as big as the height of the two special tabs
@@ -171,25 +160,11 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
         if (typeof (c.measureText) != "function") {
             return;
         }
-        var heightOffset = (16 * (infoboxItems.length - 1) / 2);     // what is this for?
         var maxText = _.max(infoboxItems.map(function (o) {
             return o.name ? o.name + (o.display ? ': ' + o.display : '') : '';
         }), function (str) {
             return str.length;
         });
-        // console.log(t_d);
-        // console.log(t_d.map(function (o) {
-        //     return o.name + ((o.name && o.display) ? ": " : "") + o.display;
-        //     }));
-
-        // var maxText = _.max(
-        //     t_d.map(function (o) {
-        //         return o.name + ((o.name && o.display) ? ": " : "") + o.display;
-        //     }),
-        //     function (str) {
-        //         return str.length;
-        //     });
-        //     // console.log(maxText);
         var maxMeasure = c.measureText({
             fontSize: boxFontSize,
             fontFamily: boxFont,
@@ -213,39 +188,38 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
         }
     }
 
-    function drawWheel() {  //draw the wheel
+    function drawWheel() {  // draw the wheel
         var itemCount = 0;
         if (wheel.maxRadius * 2 < textBox.maxHeight) {
             scaler((textBox.maxHeight / 2) / wheel.maxRadius);
         }
         x = padding.x + wheel.maxRadius;
-        y = startingY;
-        if (startingY + wheel.maxRadius > allTheTopStuff + maxDrawArea.height) {
+        if (y + wheel.maxRadius > allTheTopStuff + maxDrawArea.height) {
             y = allTheTopStuff + maxDrawArea.height - wheel.maxRadius;
         }
-        // console.log("startingY: "+startingY + ", wheel.maxRadius: "+ Math.ceil(wheel.maxRadius) + ", allTheTopStuff:" + allTheTopStuff + ", maxDraw.height: " + maxDraw.height + ", y:" + y);
         c.drawArc({     // draw the wheel outer ring
             strokeStyle: wheel.BGColors[(itemCount + 2) % wheel.BGColors.length],
             strokeWidth: wheel.lineWidth,
             x: x, y: y,
-            radius: wheel.maxRadius - wheel.interval / 6
+            radius: wheel.maxRadius
         });
         infoboxItems.forEach(function (item) {
             if (item.overlay) {
                 itemCount--;
             }
             else {
-                c.drawArc({     // draw the wheel background
+                // draw the wheel background
+                c.drawArc({
                     strokeStyle: wheel.BGColors[itemCount % wheel.BGColors.length],
-                    strokeWidth: wheel.arcWidth + 1,
+                    strokeWidth: wheel.interval - wheel.lineWidth / 2,
                     x: x, y: y,
-                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - itemCount * wheel.interval
+                    radius: wheel.maxRadius - wheel.interval / 2 - (itemCount * wheel.interval)
                 });
                 c.drawArc({
                     strokeStyle: wheel.BGColors[(itemCount + 2) % wheel.BGColors.length],
                     strokeWidth: wheel.lineWidth,
                     x: x, y: y,
-                    radius: wheel.maxRadius - wheel.interval * 7 / 6 - (itemCount) * wheel.interval
+                    radius: wheel.maxRadius - wheel.interval - (itemCount * wheel.interval)
                 });
             }
             // draw the time arcs on the wheel
@@ -253,7 +227,7 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
                 c.drawArc({ // shadow arc
                     strokeStyle: wheel.shadowColor,
                     x: x - wheel.depthFactor, y: y + wheel.depthFactor * 2,
-                    radius: wheel.maxRadius - wheel.interval * 2 / 3 - itemCount * wheel.interval,
+                    radius: wheel.maxRadius - wheel.interval / 2 - (itemCount * wheel.interval),
                     strokeWidth: wheel.arcWidth,
                     start: 0,
                     end: (360 * item.f_percent)
@@ -262,7 +236,7 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
             c.drawArc({ // colored arc
                 strokeStyle: item.c1,
                 x: x + wheel.depthFactor, y: y - wheel.depthFactor * 2,
-                radius: wheel.maxRadius - wheel.interval * 2 / 3 - itemCount * wheel.interval - wheel.depthFactor,
+                radius: wheel.maxRadius - wheel.interval / 2 - (itemCount * wheel.interval) - wheel.depthFactor,
                 strokeWidth: wheel.arcWidth,
                 start: 0,
                 end: (360 * item.f_percent)
@@ -272,11 +246,10 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
     }
 
     function drawTextBox() {    // draw the box
-        var heightOffset = (16 * (infoboxItems.length - 1) / 2);     // what is this for?
-        var i_tc = 0;
+        var heightOffset = (16 * (infoboxItems.length - 1) / 2);
+        var textItemCount = 0;
         var x = 0;
-        var y = startingY;
-        if (startingY + (textBox.maxHeight / 2) > allTheTopStuff + maxDrawArea.height) {
+        if (y + (textBox.maxHeight / 2) > allTheTopStuff + maxDrawArea.height) {
             y = allTheTopStuff + maxDrawArea.height - (textBox.maxHeight / 2);
         }
         if (!wheel.maxRadius) {
@@ -288,22 +261,22 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
         }
         // draw the box background
         c.drawRect({
-            fillStyle: 'rgba(220, 220, 220, 0.6)',
+            fillStyle: textBox.color,
             x: x, y: y,
             width: textBox.maxWidth + 20, height: textBox.maxHeight
         });
         // iterate through the text items
         infoboxItems.forEach(function (item) {
-            if (item.name || o.draw.display) {
+            if (item.name || item.display) {
                 itemText = item.name + ((item.name && item.display) ? ": " : "") + item.display;
                 c.drawText({
                     fontSize: boxFontSize,
                     fontFamily: boxFont,
                     fillStyle: item.c1,
-                    x: x, y: y - heightOffset + 16 * i_tc,
+                    x: x, y: y - heightOffset + 16 * textItemCount,
                     text: itemText
                 });
-                i_tc++;
+                textItemCount++;
             }
         });
     }
@@ -354,8 +327,8 @@ function updateTimers() {   // update calculations and assemble output -- called
     if (FrozenCookies.fancyUI === 0) {
         return  // skip doing any calculations if the infobox isn't turned on
     } else {
-        var chainPurchase, bankPercent, purchasePercent, bankMax, actualCps, t_draw,
-            maxColor, height, gcDelay, gcMaxDelay, gcMinDelay,
+        var chainPurchase, bankPercent, bankMax, actualCps, t_draw,
+            maxColor, gcDelay, gcMaxDelay, gcMinDelay,
             clotTime = buffTime('Clot'),
             clotMaxTime = buffMaxTime('Clot'),
             elderFrenzyTime = buffTime('Elder frenzy'),
