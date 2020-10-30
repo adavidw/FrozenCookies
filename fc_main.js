@@ -1739,8 +1739,184 @@ function buildingStats(recalculate) {
     return FrozenCookies.caches.buildings;
 }
 
+
+
+
+
+
+
+
+
+
+
+// recommendationList gets called three times on initial load or after ascension, even when nothing's being clicked or purchased.
+// what's calling it and why?
+// is there a case to store it in a variable so that other things don't need to rerun the function
+
+
+// If autobuy is off, and the infobox or menu aren't shown, why update?
+
+
+    // the two longest are upgradeToggle and effectiveCps
+    // and they're both called twice
+
+
+
+
+function testUpgradeStats(count) {
+    var bestBankV = 0;
+    var unfinishedUpgradePrereqsV = 0;
+    var isUnavailableV = 0;
+    var upgradePrereqCostV = 0;
+    var baseCpsV = 0;
+    var effectiveCpsV = 0;
+    var GameAchievementsByIdmapV = 0;
+    var totalDiscountV = 0;
+    var upgradeToggleV = 0;
+    var baseCps2V = 0;
+    var effectiveCps2V = 0;
+    var totalDiscount2V = 0;
+    var upgradeToggle2V = 0;
+    var purchaseEfficiencyV = 0;
+    var timer = 0;
+
+    var upgradeBlacklist = blacklist[FrozenCookies.blacklist].upgrades;
+
+    timer = performance.now();
+    for (i = 0; i < count; i++) {
+        var currentBank = bestBank(0).cost;
+    }
+    bestBankV += performance.now() - timer;
+
+    FrozenCookies.caches.upgrades = Game.UpgradesById.map(function (current) {
+
+        //everything seems to run, and then most run again as bought
+        if (!current.bought) {
+            // console.log(current.name);
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var needed = unfinishedUpgradePrereqs(current);
+            }
+            unfinishedUpgradePrereqsV += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                if (isUnavailable(current, upgradeBlacklist)) {
+                    isUnavailableV += performance.now() - timer;
+                    return null;
+                }
+            }
+            isUnavailableV += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var cost = upgradePrereqCost(current);
+            }
+            upgradePrereqCostV += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var baseCpsOrig = baseCps();
+            }
+            baseCpsV += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank)); // baseCpsOrig + gcPs(cookieValue(Math.min(Game.cookies, currentBank))) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
+            }
+            effectiveCpsV += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var existingAchievements = Game.AchievementsById.map(function (item) {
+                    return item.won
+                });
+            }
+            GameAchievementsByIdmapV += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var discounts = totalDiscount() + totalDiscount(true);
+            }
+            totalDiscountV += performance.now() - timer;
+
+            // this actually buys all the upgrades
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var reverseFunctions = upgradeToggle(current);
+            }
+            upgradeToggleV += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var baseCpsNew = baseCps();
+            }
+            baseCps2V += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var cpsNew = effectiveCps(currentBank); // baseCpsNew + gcPs(cookieValue(currentBank)) + baseClickingCps(FrozenCookies.autoClick * FrozenCookies.cookieClickSpeed);
+            }
+            effectiveCps2V += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var priceReduction = discounts == (totalDiscount() + totalDiscount(true)) ? 0 : checkPrices(current);
+            }
+            totalDiscount2V += performance.now() - timer;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                upgradeToggle(current, existingAchievements, reverseFunctions);
+            }
+            upgradeToggle2V += performance.now() - timer;
+
+            var deltaCps = cpsNew - cpsOrig;
+            var baseDeltaCps = baseCpsNew - baseCpsOrig;
+
+            timer = performance.now();
+            for (i = 0; i < count; i++) {
+                var efficiency = (current.season && current.season == seasons[FrozenCookies.defaultSeason]) ? cost / baseCpsOrig : (priceReduction > cost) ? 1 : purchaseEfficiency(cost, deltaCps, baseDeltaCps, cpsOrig);
+            }
+            purchaseEfficiencyV += performance.now() - timer;
+
+        } else {
+        console.log("     ******     " + current.pool + " upgrade: " + current.name + " bought")
+        }
+    });
+    console.log("bestBankV: " + Math.round(bestBankV));
+    console.log("unfinishedUpgradePrereqsV: " + Math.round(unfinishedUpgradePrereqsV));
+    console.log("isUnavailableV: " + Math.round(isUnavailableV));
+    console.log("upgradePrereqCostV: " + Math.round(upgradePrereqCostV));
+    console.log("baseCpsV: " + Math.round(baseCpsV));
+    console.log("effectiveCpsV: " + Math.round(effectiveCpsV));
+    console.log("GameAchievementsByIdmapV: " + Math.round(GameAchievementsByIdmapV));
+    console.log("totalDiscountV: " + Math.round(totalDiscountV));
+    console.log("upgradeToggleV: " + Math.round(upgradeToggleV));
+    console.log("baseCps2V: " + Math.round(baseCps2V));
+    console.log("effectiveCps2V: " + Math.round(effectiveCps2V));
+    console.log("totalDiscount2V: " + Math.round(totalDiscount2V));
+    console.log("upgradeToggle2V: " + Math.round(upgradeToggle2V));
+    console.log("purchaseEfficiencyV: " + Math.round(purchaseEfficiencyV));
+    for (i in Game.Objects) {
+        Game.Objects[i].sell(550);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 function upgradeStats(recalculate) {
-    console.time("upgradeStats");
+    // var timer = {current: 0, times: {}};
+    // console.time("upgradeStats");
     if (recalculate) {
         if (blacklist[FrozenCookies.blacklist].upgrades === true) {
             FrozenCookies.caches.upgrades = [];
@@ -1751,27 +1927,38 @@ function upgradeStats(recalculate) {
                     if (isUnavailable(current, upgradeBlacklist)) {
                         return null;
                     }
-                    // console.time("1"); console.log(current);
+                    // var i=0; timer.current = performance.now();
                     var currentBank = bestBank(0).cost;
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var cost = upgradePrereqCost(current);
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var baseCpsOrig = baseCps();
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var cpsOrig = effectiveCps(Math.min(Game.cookies, currentBank));
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var existingAchievements = Game.AchievementsById.map(function (item) {
                         return item.won
                     });
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var existingWrath = Game.elderWrath;
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var discounts = totalDiscount() + totalDiscount(true);
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var reverseFunctions = upgradeToggle(current);
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var baseCpsNew = baseCps();
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var cpsNew = effectiveCps(currentBank);
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var priceReduction = discounts == (totalDiscount() + totalDiscount(true)) ? 0 : checkPrices(current);
-                    // console.timeEnd("1"); console.time("2");
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     upgradeToggle(current, existingAchievements, reverseFunctions);
                     Game.elderWrath = existingWrath;
                     var deltaCps = cpsNew - cpsOrig;
                     var baseDeltaCps = baseCpsNew - baseCpsOrig;
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     var efficiency = (current.season && current.season == seasons[FrozenCookies.defaultSeason]) ? cost / baseCpsOrig : (priceReduction > cost) ? 1 : purchaseEfficiency(cost, deltaCps, baseDeltaCps, cpsOrig);
-                    // console.timeEnd("2");
+                    // if (!timer.times[String(i)]) {timer.times[String(i)] = 0}; timer.times[String(i)] += (performance.now() - timer.current); timer.current = performance.now(); i++;
                     return {
                         'id': current.id,
                         'efficiency': efficiency,
@@ -1787,9 +1974,14 @@ function upgradeStats(recalculate) {
             });
         }
     }
-    console.timeEnd("upgradeStats");
+    // console.timeEnd("upgradeStats");
+    // console.log(timer.times);
     return FrozenCookies.caches.upgrades;
 }
+
+
+
+
 
 function isUnavailable(upgrade, upgradeBlacklist) {
     var result = false;
