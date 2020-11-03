@@ -1,3 +1,6 @@
+// This variable builds a list of upgrades that have prerequisites.
+// With this list, the recommendation engine can include them even before the prerequisites are met.
+// (useful for determining chain strategies) or tracking what's left
 var upgradeJson = {
     // Cursor tiered upgrades
     0: {'buildings': [1], 'upgrades': []},
@@ -321,27 +324,27 @@ var upgradeJson = {
     696: {'buildings': [0,0,0,0,0,0,0,0,0,0,15,0,0,0,0,0,0,15], 'upgrades': [393]},
     697: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,75,0,75], 'upgrades': [394]},
 
-    // // Fortune upgrades
-    // 621: {'buildings': [15], 'upgrades': [643]},
-    // 622: {'buildings': [0,15], 'upgrades': [643]},
-    // 623: {'buildings': [0,0,15], 'upgrades': [643]},
-    // 624: {'buildings': [0,0,0,15], 'upgrades': [643]},
-    // 625: {'buildings': [0,0,0,0,15], 'upgrades': [643]},
-    // 626: {'buildings': [0,0,0,0,0,15], 'upgrades': [643]},
-    // 627: {'buildings': [0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 628: {'buildings': [0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 629: {'buildings': [0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 630: {'buildings': [0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 631: {'buildings': [0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 632: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 633: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 634: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 635: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 636: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 637: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
-    // 698: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    // Fortune upgrades - Requires "Fortune cookeies" heavenly upgrade (643)
+    621: {'buildings': [15], 'upgrades': [643]},
+    622: {'buildings': [0,15], 'upgrades': [643]},
+    623: {'buildings': [0,0,15], 'upgrades': [643]},
+    624: {'buildings': [0,0,0,15], 'upgrades': [643]},
+    625: {'buildings': [0,0,0,0,15], 'upgrades': [643]},
+    626: {'buildings': [0,0,0,0,0,15], 'upgrades': [643]},
+    627: {'buildings': [0,0,0,0,0,0,15], 'upgrades': [643]},
+    628: {'buildings': [0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    629: {'buildings': [0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    630: {'buildings': [0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    631: {'buildings': [0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    632: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    633: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    634: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    635: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    636: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    637: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
+    698: {'buildings': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': [643]},
 
-    // Reward cookies
+    // Reward cookies - Unlocked when all buildings reach a certain number
     334: {'buildings': [100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100], 'upgrades': []},
     335: {'buildings': [150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150,150], 'upgrades': []},
     336: {'buildings': [200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200], 'upgrades': []},
@@ -394,14 +397,14 @@ var upgradeJson = {
     166: {'buildings': [], 'upgrades': [152], 'santa': 1},
     168: {'buildings': [], 'upgrades': [152], 'santa': 14},
 
-    // Season switching - requires Season Switcher heavenly upgrade (181)
+    // Season switching - requires "Season switcher" heavenly upgrade (181)
     182: {'buildings': [], 'upgrades': [181]},      // Christmas
     183: {'buildings': [], 'upgrades': [181]},      // Halloween
     184: {'buildings': [], 'upgrades': [181]},      // Valentine's
     185: {'buildings': [], 'upgrades': [181]},      // Business Day
     209: {'buildings': [], 'upgrades': [181]},      // Easter
     
-    // Easter season - Requires Bunny biscuit (209)
+    // Easter season - Requires "Bunny biscuit" (209)
     210: {'buildings': [], 'upgrades': [209]},
     211: {'buildings': [], 'upgrades': [209]},
     212: {'buildings': [], 'upgrades': [209]},
@@ -423,7 +426,7 @@ var upgradeJson = {
     228: {'buildings': [], 'upgrades': [209]},
     229: {'buildings': [], 'upgrades': [209]},
 
-    // Halloween season - Requires Ghostly biscuit (183); actually getting rewards requires "One mind" and wrinklers
+    // Halloween season - Requires "Ghostly biscuit" (183); actually getting rewards requires "One mind" and wrinklers
     134: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
     135: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
     136: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
@@ -432,7 +435,7 @@ var upgradeJson = {
     139: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
     140: {'buildings': [], 'upgrades': [69,183], 'wrinklers': 1},
 
-    // Christmas season - Requires Festive biscuit (182)
+    // Christmas season - Requires "Festive biscuit" (182)
     143: {'buildings': [], 'upgrades': [182]},
     144: {'buildings': [], 'upgrades': [182]},
     145: {'buildings': [], 'upgrades': [182]},
@@ -441,14 +444,21 @@ var upgradeJson = {
     148: {'buildings': [], 'upgrades': [182]},
     149: {'buildings': [], 'upgrades': [182]},
 
-    // Valentine's Day season - Requires Lovesick biscuit (184); each Valentine's biscuit requires the previous one
+    // Valentine's Day season - Requires "Lovesick biscuit" (184); each Valentine's biscuit requires the previous one
     169: {'buildings': [], 'upgrades': [184]},
     170: {'buildings': [], 'upgrades': [169,184]},
     171: {'buildings': [], 'upgrades': [170,184]},
     172: {'buildings': [], 'upgrades': [171,184]},
     173: {'buildings': [], 'upgrades': [172,184]},
     174: {'buildings': [], 'upgrades': [173,184]},
-    645: {'buildings': [], 'upgrades': [174,184]}
+    645: {'buildings': [], 'upgrades': [174,184]},
+
+    // Dragon upgrades - Requires the "How to bake your dragon" heavenly upgrade (323); the gifts require A crumbly egg (324) and the "Pet the dragon" heavenly upgrade (647)
+    324: {'buildings': [], 'upgrades': [323]},
+    648: {'buildings': [], 'upgrades': [323,324,647]},
+    649: {'buildings': [], 'upgrades': [323,324,647]},
+    650: {'buildings': [], 'upgrades': [323,324,647]},
+    651: {'buildings': [], 'upgrades': [323,324,647]}
 };
 
 
@@ -464,8 +474,8 @@ var upgradeJson = {
 var testJson = {}
 for (i in Game.UpgradesById) {
     var me = Game.UpgradesById[i];
-    // testJson[i] = {tier: me.tier};
-    if (me.tier=="synergy1"||me.tier=="synergy2") {
+    testJson[i] = {id: me.id, name: me.name, tier: me.tier};
+    // if (me.tier=="synergy1"||me.tier=="synergy2") {
         testJson[i] = false
         for (ii in upgradeJson) {
             if (i == ii) {
@@ -476,7 +486,7 @@ for (i in Game.UpgradesById) {
             console.log(me.id + ": " + me.name + ", " + me.buildingTie.name);
             console.log(me);
         }
-    }
+    // }
 }
 
 
@@ -514,6 +524,16 @@ var blacklist = [
         'buildings': true
     }
 ];
+
+var recommendationBlacklist = [
+    227, // blacklist chocolate egg from being included in the recommendationList
+    331, 332, // blacklist golden switch from being included in the recommendationList
+    333, // blacklist milk selector from being included in the recommendationList
+    361, // blacklist golden cookie sound selector from being included in the recommendationList
+    414, // blacklist backgMath.round selector from being included in the recommendationList
+    452, // blacklist sugar frenzy from being included in the recommendationList
+    563, 564 // blacklist shimmering veil from being included in the recommendationList
+]
 
 var seasons = ['','fools','christmas','easter','halloween','valentines'];
 
