@@ -124,8 +124,8 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
         case 3: {
             getRadius();
             getBoxSize();
-            drawWheel(wheel.maxRadius);
             drawTextBox();
+            drawWheel(wheel.maxRadius);
             break;
         }
     }
