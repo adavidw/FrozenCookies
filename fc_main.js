@@ -22,7 +22,6 @@ function setOverrides() {
                     if (FrozenCookies.autoBulk == 2) { // Buy x100
                         document.getElementById('storeBulk100').click();
                     }
-                    FrozenCookies.autoBulkReady = 0;
                 }
             });
         }
