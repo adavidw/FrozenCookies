@@ -471,23 +471,23 @@ var upgradeJson = {
 
 
 
-var testJson = {}
-for (i in Game.UpgradesById) {
-    var me = Game.UpgradesById[i];
-    testJson[i] = {id: me.id, name: me.name, tier: me.tier};
-    // if (me.tier=="synergy1"||me.tier=="synergy2") {
-        testJson[i] = false
-        for (ii in upgradeJson) {
-            if (i == ii) {
-                testJson[i] = true;
-            }
-        }
-        if (testJson[i] == false) {
-            console.log(me.id + ": " + me.name + ", " + me.buildingTie.name);
-            console.log(me);
-        }
-    // }
-}
+// var testJson = {}
+// for (i in Game.UpgradesById) {
+//     var me = Game.UpgradesById[i];
+//     testJson[i] = {id: me.id, name: me.name, tier: me.tier};
+//     // if (me.tier=="synergy1"||me.tier=="synergy2") {
+//         testJson[i] = false
+//         for (ii in upgradeJson) {
+//             if (i == ii) {
+//                 testJson[i] = true;
+//             }
+//         }
+//         if (testJson[i] == false) {
+//             console.log(me.id + ": " + me.name + ", " + me.buildingTie.name);
+//             console.log(me);
+//         }
+//     // }
+// }
 
 
 
