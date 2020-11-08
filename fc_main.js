@@ -162,7 +162,7 @@ function setOverrides() {
                 }
             });
             Game.registerHook('reset', function (hard) {
-                console.log("hard");
+                console.log(hard);
             });
         }
     });
