@@ -317,125 +317,128 @@ function updateTimers() {   // update calculations and assemble output -- called
     if (FrozenCookies.fancyUI === 0) {
         return  // skip doing any calculations if the infobox isn't turned on
     } else {
-        var chainPurchase, bankPercent, bankMax, actualCps, t_draw,
-            maxColor, gcDelay, gcMaxDelay, gcMinDelay,
-            clotTime = buffTime('Clot'),
-            clotMaxTime = buffMaxTime('Clot'),
-            elderFrenzyTime = buffTime('Elder frenzy'),
-            elderFrenzyMaxTime = buffMaxTime('Elder frenzy'),
-            frenzyTime = buffTime('Frenzy'),
-            frenzyMaxTime = buffMaxTime('Frenzy'),
-            dragonHarvestTime = buffTime('Dragon Harvest'),
-            dragonHarvestMaxTime = buffMaxTime('Dragon Harvest'),
-            clickFrenzyTime = buffTime('Click frenzy'),
-            clickFrenzyMaxTime = buffMaxTime('Click frenzy'),
-            dragonflightTime = buffTime('Dragonflight'),
-            dragonflightMaxTime = buffMaxTime('Dragonflight'),
-            devastationTime = buffTime('Devastation'),
-            devastationMaxTime = buffMaxTime('Devastation'),
-            cursedFingerTime = buffTime('Cursed finger'),
-            cursedFingerMaxTime = buffMaxTime('Cursed finger'),
-            cookieStormTime = buffTime('Cookie storm'),
-            cookieStormMaxTime = buffMaxTime('Cookie storm'),
-            buildingSpecialTime = buildingSpecialBuffTime(),
-            buildingSpecialMaxTime = buildingSpecialBuffMaxTime(),
-            bankTotal = delayAmount(),
-            purchaseTotal = nextPurchase().cost,
+            // instead of going one by one through possible buffs, why not iterate through running buffs?
+            // Or, maybe, if you want to keep order and colors the same, maybe do an iteration at the end
+            // just to catch any new buffs created after the code is written?
+        var purchaseTotal = nextPurchase().cost;
+        var clotTime = buffTime("Clot"),
+            clotMaxTime = buffMaxTime("Clot"),
+            elderFrenzyTime = buffTime("Elder frenzy"),
+            elderFrenzyMaxTime = buffMaxTime("Elder frenzy"),
+            frenzyTime = buffTime("Frenzy"),
+            frenzyMaxTime = buffMaxTime("Frenzy"),
+            sugarFrenzyTime = buffTime("Sugar frenzy"),
+            sugarFrenzyMaxTime = buffMaxTime("Sugar frenzy"),
+            dragonHarvestTime = buffTime("Dragon Harvest"),
+            dragonHarvestMaxTime = buffMaxTime("Dragon Harvest"),
+            clickFrenzyTime = buffTime("Click frenzy"),
+            clickFrenzyMaxTime = buffMaxTime("Click frenzy"),
+            dragonflightTime = buffTime("Dragonflight"),
+            dragonflightMaxTime = buffMaxTime("Dragonflight"),
+            devastationTime = buffTime("Devastation"),
+            devastationMaxTime = buffMaxTime("Devastation"),
+            cursedFingerTime = buffTime("Cursed finger"),
+            cursedFingerMaxTime = buffMaxTime("Cursed finger"),
+            cookieStormTime = buffTime("Cookie storm"),
+            cookieStormMaxTime = buffMaxTime("Cookie storm");
+        var buildingSpecialTime = buildingSpecialBuffTime(),
+            buildingSpecialMaxTime = buildingSpecialBuffMaxTime();
+        var bankTotal = delayAmount(),
             purchaseCompletion = Game.cookies / (bankTotal + purchaseTotal),
-            chainTotal = 0,
-            chainFinished,
-            chainCompletion = 0;
+            bankPercent = Math.min(Game.cookies, bankTotal) / (bankTotal + purchaseTotal),
+            bankMax = bankTotal / (purchaseTotal + bankTotal),
+            actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
 
         // calculate min, max, and median expected times for golden cookie
         if (!Game.Has('Golden switch [off]')) { // when golden switch is on, golden cookies don't spawn, so only calculate time for them if they can actually appear
-            gcDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.5) - Game.shimmerTypes.golden.time),
-                gcMaxDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99) - Game.shimmerTypes.golden.time),
-                gcMinDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.01) - Game.shimmerTypes.golden.time);
+            var gcDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.5) - Game.shimmerTypes.golden.time);
+            var gcMaxDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.99) - Game.shimmerTypes.golden.time);
+            var gcMinDelay = (probabilitySpan('golden', Game.shimmerTypes.golden.time, 0.01) - Game.shimmerTypes.golden.time);
         }
-        if (nextChainedPurchase().cost > nextPurchase().cost) {
-            chainPurchase = nextChainedPurchase().purchase;
-            chainTotal = upgradePrereqCost(chainPurchase, true) - chainPurchase.getPrice();
-            chainFinished = chainTotal - (upgradePrereqCost(chainPurchase) - chainPurchase.getPrice());
-            chainCompletion = (chainFinished + Math.max(Game.cookies - bankTotal, 0)) / (bankTotal + chainTotal);
+        if (nextChainedPurchase().cost > purchaseTotal) {
+            var chainPurchase = nextChainedPurchase().purchase;
+            var chainTotal = upgradePrereqCost(chainPurchase, true) - chainPurchase.getPrice();
+            var chainFinished = chainTotal - (upgradePrereqCost(chainPurchase) - chainPurchase.getPrice());
+            var chainCompletion = (chainFinished + Math.max(Game.cookies - bankTotal, 0)) / (bankTotal + chainTotal);
         }
-        bankPercent = Math.min(Game.cookies, bankTotal) / (bankTotal + purchaseTotal);
-        purchasePercent = purchaseTotal / (purchaseTotal + bankTotal);
-        bankMax = bankTotal / (purchaseTotal + bankTotal);
-        actualCps = Game.cookiesPs + Game.mouseCps() * FrozenCookies.cookieClickSpeed;
+
 
         // create an array of all the elements to draw
-        t_draw = [];
+        var t_draw = [];
 
-        // if (chainTotal) {
-        //     t_draw.push({
-        //         f_percent: chainCompletion,
-        //         c1: 'rgba(77, 77, 77, 1)',
-        //         name: "Chain Completion Time (" + chainPurchase.name + ")",
-        //         display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps))
-        //     });
-        // }
+        if (FrozenCookies.blacklist != 4 || (purchaseTotal.type == "upgrade" && purchaseTotal.efficiency > 0)) {  // if there's really nothing to purchase, don't show the purchase rings
 
-        if (chainTotal) {
-            t_draw.push({
-                f_percent: chainCompletion,
-                c1: 'rgba(77, 88, 77, 1)',
-                name: "Chain Completion Time",
-                display: ""
-            });
-            t_draw.push({
-                f_percent: chainCompletion,
-                c1: 'rgba(77, 88, 77, 1)',
-                name: "(" + chainPurchase.name + ")",
-                display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps)),
-                overlay: true
-            });
-        }
+            // if (chainTotal) {
+            //     t_draw.push({
+            //         f_percent: chainCompletion,
+            //         c1: 'rgba(77, 77, 77, 1)',
+            //         name: "Chain Completion Time (" + chainPurchase.name + ")",
+            //         display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps))
+            //     });
+            // }
 
-        // if (purchaseTotal > 0) {
-        //     t_draw.push({
-        //         f_percent: purchaseCompletion,
-        //         c1: 'rgba(44, 44, 44, 1)',
-        //         name: "Purchase Time (" + nextPurchase().purchase.name + ")",
-        //         display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps))
-        //     });
-        // }
-
-        // if text is wider than some percentage, split it
-
-        if (purchaseTotal > 0) {
-            t_draw.push({
-                f_percent: purchaseCompletion,
-                c1: 'rgba(44, 44, 44, 1)',
-                name: "Purchase Completion Time",
-                display: ""
-            })
-            t_draw.push({
-                f_percent: purchaseCompletion,
-                c1: 'rgba(44, 44, 44, 1)',
-                name: "(" + nextPurchase().purchase.name + ")",
-                display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps)),
-                overlay: true
-            });
-        }
-        if (bankMax > 0) {
-            maxColor = (Game.cookies >= bankTotal) ? 'rgba(252, 212, 0, 1)' : 'rgba(201, 169, 0, 1)';
-            t_draw.push({
-                f_percent: bankMax,
-                name: !FrozenCookies.setHarvestBankPlant ? "Max Bank" : "Harvest Bank",
-                display: Beautify(bankTotal),
-                c1: maxColor,
-                overlay: true
-            });
-            if (bankPercent > 0 && Game.cookies < bankTotal) {
+            if (chainTotal) {
                 t_draw.push({
-                    f_percent: bankPercent,
-                    c1: 'rgba(252, 212, 0, 1)',
-                    name: "Bank Completion",
-                    display: timeDisplay(divCps(Math.max(bankTotal - Game.cookies, 0), actualCps)),
+                    f_percent: chainCompletion,
+                    c1: 'rgba(77, 88, 77, 1)',
+                    name: "Chain Completion Time",
+                    display: ""
+                });
+                t_draw.push({
+                    f_percent: chainCompletion,
+                    c1: 'rgba(77, 88, 77, 1)',
+                    name: "(" + chainPurchase.name + ")",
+                    display: timeDisplay(divCps(Math.max(chainTotal + bankTotal - Game.cookies - chainFinished, 0), actualCps)),
                     overlay: true
                 });
             }
+
+            // if (purchaseTotal > 0) {
+            //     t_draw.push({
+            //         f_percent: purchaseCompletion,
+            //         c1: 'rgba(44, 44, 44, 1)',
+            //         name: "Purchase Time (" + nextPurchase().purchase.name + ")",
+            //         display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps))
+            //     });
+            // }
+
+            // if text is wider than some percentage, split it
+
+            if (purchaseTotal > 0) {
+                t_draw.push({
+                    f_percent: purchaseCompletion,
+                    c1: 'rgba(44, 44, 44, 1)',
+                    name: "Purchase Completion Time",
+                    display: ""
+                })
+                t_draw.push({
+                    f_percent: purchaseCompletion,
+                    c1: 'rgba(44, 44, 44, 1)',
+                    name: "(" + nextPurchase().purchase.name + ")",
+                    display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps)),
+                    overlay: true
+                });
+            }
+            if (bankMax > 0) {
+                t_draw.push({
+                    f_percent: bankMax,
+                    name: !FrozenCookies.setHarvestBankPlant ? "Max Bank" : "Harvest Bank",
+                    display: Beautify(bankTotal),
+                    c1: (Game.cookies >= bankTotal) ? 'rgba(252, 212, 0, 1)' : 'rgba(201, 169, 0, 1)',
+                    overlay: true
+                });
+                if (bankPercent > 0 && Game.cookies < bankTotal) {
+                    t_draw.push({
+                        f_percent: bankPercent,
+                        c1: 'rgba(252, 212, 0, 1)',
+                        name: "Bank Completion",
+                        display: timeDisplay(divCps(Math.max(bankTotal - Game.cookies, 0), actualCps)),
+                        overlay: true
+                    });
+                }
+            }
         }
+
         if (gcMaxDelay > 0) {
             t_draw.push({
                 f_percent: gcMaxDelay / maxCookieDelay(),
@@ -472,6 +475,14 @@ function updateTimers() {   // update calculations and assemble output -- called
                 c1: "rgba(79, 0, 7, 1)",
                 name: "Elder Frenzy (x" + Game.buffs['Elder frenzy'].multCpS + ") Time",
                 display: timeDisplay(elderFrenzyTime / Game.fps)
+            });
+        }
+        if (sugarFrenzyTime > 0) {
+            t_draw.push({
+                f_percent: sugarFrenzyTime / sugarFrenzyMaxTime,
+                c1: "rgba(0, 255, 196, 1)",
+                name: "Sugar Frenzy (x" + Game.buffs['Sugar frenzy'].multCpS + ") Time",
+                display: timeDisplay(sugarFrenzyTime / Game.fps)
             });
         }
         if (frenzyTime > 0) {
