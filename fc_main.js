@@ -161,16 +161,18 @@ function setOverrides() {
             });
             Game.registerHook('draw', updateTimers);
         },
-        save: updateLocalStorage, // function () {
+        save: updateGameSave, // function () {
             // //note: we use stringified JSON for ease and clarity but you could store any type of string
             // return JSON.stringify({ text: Game.playerIntro })
         // },
         load: function (str) {
-            var data = JSON.parse(str);
-            if (data.text) Game.mods['test mod'].addIntro(data.text);
+            loadedData = JSON.parse(str);
+            // if (data.text) Game.mods['test mod'].addIntro(data.text);
         }
     });
 }
+
+var loadedData = {};
 
 function preferenceParse(setting, defaultVal) {
     var value = localStorage.getItem(setting);
@@ -402,7 +404,30 @@ function updateLocalStorage() {
     localStorage.manaMax = FrozenCookies.manaMax;
     localStorage.maxSpecials = FrozenCookies.maxSpecials;
     localStorage.prevLastHCTime = FrozenCookies.prevLastHCTime;
-    return "poop";
+}
+
+function updateGameSave() {
+    var saveString = {};
+    _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
+        saveString[preference] = FrozenCookies[preference];
+    });
+
+    saveString.frenzyClickSpeed = FrozenCookies.frenzyClickSpeed;
+    saveString.cookieClickSpeed = FrozenCookies.cookieClickSpeed;
+    saveString.HCAscendAmount = FrozenCookies.HCAscendAmount;
+    saveString.cursorMax = FrozenCookies.cursorMax;
+    saveString.farmMax = FrozenCookies.farmMax;
+    saveString.minCpSMult = FrozenCookies.minCpSMult;
+    saveString.frenzyTimes = JSON.stringify(FrozenCookies.frenzyTimes);
+    //  saveString.nonFrenzyTime = FrozenCookies.non_gc_time;
+    //  saveString.frenzyTime = FrozenCookies.gc_time;
+    saveString.lastHCAmount = FrozenCookies.lastHCAmount;
+    saveString.maxHCPercent = FrozenCookies.maxHCPercent;
+    saveString.lastHCTime = FrozenCookies.lastHCTime;
+    saveString.manaMax = FrozenCookies.manaMax;
+    saveString.maxSpecials = FrozenCookies.maxSpecials;
+    saveString.prevLastHCTime = FrozenCookies.prevLastHCTime;
+    return JSON.stringify(saveString);
 }
 
 function divCps(value, cps) {
