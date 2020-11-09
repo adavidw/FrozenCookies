@@ -156,8 +156,8 @@ function setOverrides() {
                     }
                 }
             });
-            Game.registerHook('reset', function (hard) {
-                console.log(hard);
+            Game.registerHook('reset', function (isThisHard) {
+                console.log("Reset hook - parameter passed: " + isThisHard);
             });
             Game.registerHook('draw', updateTimers);
         }
