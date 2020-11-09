@@ -11,24 +11,20 @@
     });
 })(this);
 
-function setOverrides() {
 
+
+function loadFCData() {
     // Set all cycleable preferences
     _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
         FrozenCookies[preference] = preferenceParse(preference, FrozenCookies.preferenceValues[preference].default);
     });
-
-    logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
-
-    FrozenCookies.frequency = 100;
-    FrozenCookies.efficiencyWeight = 1.0;
-
     // Separate because these are user-input values
     FrozenCookies.cookieClickSpeed = preferenceParse('cookieClickSpeed', 0);
     FrozenCookies.frenzyClickSpeed = preferenceParse('frenzyClickSpeed', 0);
     FrozenCookies.HCAscendAmount = preferenceParse('HCAscendAmount', 0);
     FrozenCookies.minCpSMult = preferenceParse('minCpSMult', 1);
     FrozenCookies.maxSpecials = preferenceParse('maxSpecials', 1);
+    
     // building max values
     FrozenCookies.cursorMax = preferenceParse('cursorMax', 500);
     // FrozenCookies.grandmaMax = preferenceParse('grandmaMax', 500);
@@ -48,20 +44,30 @@ function setOverrides() {
     // FrozenCookies.fractalEngineMax = preferenceParse('fractalEngineMax', 500);
     // FrozenCookies.consoleMax = preferenceParse('consoleMax', 500);
 
+        // Get historical data
+        FrozenCookies.frenzyTimes = JSON.parse(localStorage.getItem('frenzyTimes')) || {};
+        //  FrozenCookies.non_gc_time = Number(localStorage.getItem('nonFrenzyTime'));
+        //  FrozenCookies.gc_time = Number(localStorage.getItem('frenzyTime'));
+        FrozenCookies.lastHCAmount = Number(localStorage.getItem('lastHCAmount'));
+        FrozenCookies.lastHCTime = Number(localStorage.getItem('lastHCTime'));
+        FrozenCookies.prevLastHCTime = Number(localStorage.getItem('prevLastHCTime'));
+        FrozenCookies.maxHCPercent = Number(localStorage.getItem('maxHCPercent'));
+}
+
+
+function setOverrides() {
+    logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
+
+    loadFCData();
+
+    FrozenCookies.frequency = 100;
+    FrozenCookies.efficiencyWeight = 1.0;
+
     // Becomes 0 almost immediately after user input, so default to 0
     FrozenCookies.timeTravelAmount = 0;
 
     // Force redraw every 10 purchases
     FrozenCookies.autobuyCount = 0;
-
-    // Get historical data
-    FrozenCookies.frenzyTimes = JSON.parse(localStorage.getItem('frenzyTimes')) || {};
-    //  FrozenCookies.non_gc_time = Number(localStorage.getItem('nonFrenzyTime'));
-    //  FrozenCookies.gc_time = Number(localStorage.getItem('frenzyTime'));
-    FrozenCookies.lastHCAmount = Number(localStorage.getItem('lastHCAmount'));
-    FrozenCookies.lastHCTime = Number(localStorage.getItem('lastHCTime'));
-    FrozenCookies.prevLastHCTime = Number(localStorage.getItem('prevLastHCTime'));
-    FrozenCookies.maxHCPercent = Number(localStorage.getItem('maxHCPercent'));
 
     // Set default values for calculations
     FrozenCookies.hc_gain = 0;
@@ -120,13 +126,7 @@ function setOverrides() {
     Game.tooltip.oldDraw = Game.tooltip.draw;
     Game.tooltip.draw = fcDraw;
     Game.oldReset = Game.Reset;
-    Game.oldWriteSave = Game.WriteSave;
-    Game.oldLoadSave = Game.LoadSave;
     Game.Reset = fcReset;
-    Game.WriteSave = fcWriteSave;
-    //  if (FrozenCookies.saveWrinklers && localStorage.wrinklers) {
-    //    Game.wrinklers = JSON.parse(localStorage.wrinklers);
-    //  }
     Game.Win = fcWin;
     // Remove the following when turning on tooltop code
     nextPurchase(true);
@@ -161,9 +161,9 @@ function setOverrides() {
             });
             Game.registerHook('draw', updateTimers);
         },
-        save: updateGameSave, // function () {
-            // //note: we use stringified JSON for ease and clarity but you could store any type of string
-            // return JSON.stringify({ text: Game.playerIntro })
+        save: saveFCData, // function () {
+        // //note: we use stringified JSON for ease and clarity but you could store any type of string
+        // return JSON.stringify({ text: Game.playerIntro })
         // },
         load: function (str) {
             loadedData = JSON.parse(str);
@@ -377,13 +377,6 @@ function fcReset() {
     recommendationList(true);
 }
 
-function fcWriteSave(exporting) {
-    //  if (FrozenCookies.saveWrinklers && Game.wrinklers) {
-    //    localStorage.wrinklers = JSON.stringify(Game.wrinklers);
-    //  }
-    return Game.oldWriteSave(exporting);
-}
-
 function updateLocalStorage() {
     _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
         localStorage[preference] = FrozenCookies[preference];
@@ -406,7 +399,7 @@ function updateLocalStorage() {
     localStorage.prevLastHCTime = FrozenCookies.prevLastHCTime;
 }
 
-function updateGameSave() {
+function saveFCData() {
     var saveString = {};
     _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
         saveString[preference] = FrozenCookies[preference];
