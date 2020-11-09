@@ -160,6 +160,14 @@ function setOverrides() {
                 console.log("Reset hook - parameter passed: " + isThisHard);
             });
             Game.registerHook('draw', updateTimers);
+        },
+        save: updateLocalStorage, // function () {
+            // //note: we use stringified JSON for ease and clarity but you could store any type of string
+            // return JSON.stringify({ text: Game.playerIntro })
+        // },
+        load: function (str) {
+            var data = JSON.parse(str);
+            if (data.text) Game.mods['test mod'].addIntro(data.text);
         }
     });
 }
@@ -394,6 +402,7 @@ function updateLocalStorage() {
     localStorage.manaMax = FrozenCookies.manaMax;
     localStorage.maxSpecials = FrozenCookies.maxSpecials;
     localStorage.prevLastHCTime = FrozenCookies.prevLastHCTime;
+    return "poop";
 }
 
 function divCps(value, cps) {
