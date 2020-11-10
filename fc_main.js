@@ -373,30 +373,7 @@ function fcReset() {
     // really just for my own use. These next two don't make much sense for the general case
     FrozenCookies.blacklist = 3;
     FrozenCookies.autoBlacklistStop = 1;
-    updateLocalStorage();
     recommendationList(true);
-}
-
-function updateLocalStorage() {
-    _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
-        localStorage[preference] = FrozenCookies[preference];
-    });
-
-    localStorage.frenzyClickSpeed = FrozenCookies.frenzyClickSpeed;
-    localStorage.cookieClickSpeed = FrozenCookies.cookieClickSpeed;
-    localStorage.HCAscendAmount = FrozenCookies.HCAscendAmount;
-    localStorage.cursorMax = FrozenCookies.cursorMax;
-    localStorage.farmMax = FrozenCookies.farmMax;
-    localStorage.minCpSMult = FrozenCookies.minCpSMult;
-    localStorage.frenzyTimes = JSON.stringify(FrozenCookies.frenzyTimes);
-    //  localStorage.nonFrenzyTime = FrozenCookies.non_gc_time;
-    //  localStorage.frenzyTime = FrozenCookies.gc_time;
-    localStorage.lastHCAmount = FrozenCookies.lastHCAmount;
-    localStorage.maxHCPercent = FrozenCookies.maxHCPercent;
-    localStorage.lastHCTime = FrozenCookies.lastHCTime;
-    localStorage.manaMax = FrozenCookies.manaMax;
-    localStorage.maxSpecials = FrozenCookies.maxSpecials;
-    localStorage.prevLastHCTime = FrozenCookies.prevLastHCTime;
 }
 
 function saveFCData() {
@@ -507,7 +484,6 @@ function updateSpeed(base) {
     var newSpeed = getSpeed(FrozenCookies[base]);
     if (newSpeed != FrozenCookies[base]) {
         FrozenCookies[base] = newSpeed;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -524,7 +500,6 @@ function updateCpSMultMin(base) {
     var newMin = getCpSMultMin(FrozenCookies[base]);
     if (newMin != FrozenCookies[base]) {
         FrozenCookies[base] = newMin;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -541,7 +516,6 @@ function updateAscendAmount(base) {
     var newAmount = getAscendAmount(FrozenCookies[base]);
     if (newAmount != FrozenCookies[base]) {
         FrozenCookies[base] = newAmount;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -558,7 +532,6 @@ function updateManaMax(base) {
     var newMax = getManaMax(FrozenCookies[base]);
     if (newMax != FrozenCookies[base]) {
         FrozenCookies[base] = newMax;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -575,7 +548,6 @@ function updateMaxSpecials(base) {
     var newSpecials = getMaxSpecials(FrozenCookies[base]);
     if (newSpecials != FrozenCookies[base]) {
         FrozenCookies[base] = newSpecials;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -592,7 +564,6 @@ function updateCursorMax(base) {
     var newMax = getCursorMax(FrozenCookies[base]);
     if (newMax != FrozenCookies[base]) {
         FrozenCookies[base] = newMax;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -609,7 +580,6 @@ function updateGrandmaMax(base) {
     var newMax2 = getGrandmaMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -626,7 +596,6 @@ function updateFarmMax(base) {
     var newMax2 = getFarmMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -643,7 +612,6 @@ function updateMineMax(base) {
     var newMax2 = getMineMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -660,7 +628,6 @@ function updateFactoryMax(base) {
     var newMax2 = getFactoryMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -677,7 +644,6 @@ function updateBankMax(base) {
     var newMax2 = getBankMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -694,7 +660,6 @@ function updateTempleMax(base) {
     var newMax2 = getTempleMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -711,7 +676,6 @@ function updateShipmentMax(base) {
     var newMax2 = getShipmentMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -728,7 +692,6 @@ function updateLabMax(base) {
     var newMax2 = getLabMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -745,7 +708,6 @@ function updatePortalMax(base) {
     var newMax2 = getPortalMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -762,7 +724,6 @@ function updateTimeMachineMax(base) {
     var newMax2 = getTimeMachineMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -779,7 +740,6 @@ function updateCondensorMax(base) {
     var newMax2 = getCondensorMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -796,7 +756,6 @@ function updatePrismMax(base) {
     var newMax2 = getPrismMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -813,7 +772,6 @@ function updateChancemakerMax(base) {
     var newMax2 = getChancemakerMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -830,7 +788,6 @@ function updateFractalEngineMax(base) {
     var newMax2 = getFractalEngineMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -847,7 +804,6 @@ function updateConsoleMax(base) {
     var newMax2 = getConsoleMax(FrozenCookies[base]);
     if (newMax2 != FrozenCookies[base]) {
         FrozenCookies[base] = newMax2;
-        updateLocalStorage();
         FCStart();
     }
 }
@@ -870,7 +826,6 @@ function cyclePreference(preferenceName) {
             var newValue = (current + 1) % display.length;
             preferenceButton[0].innerText = display[newValue];
             FrozenCookies[preferenceName] = newValue;
-            updateLocalStorage();
             FrozenCookies.recalculateCaches = true;
             Game.RefreshStore();
             Game.RebuildUpgrades();
@@ -2958,7 +2913,6 @@ function autoCookie() {
                 FrozenCookies.maxHCPercent = currHCPercent;
             }
             FrozenCookies.hc_gain += changeAmount;
-            updateLocalStorage();
         }
         updateCaches();
         var recommendation = nextPurchase();
@@ -3093,7 +3047,6 @@ function autoCookie() {
             FrozenCookies.frenzyTimes[FrozenCookies.last_gc_state] += Date.now() - FrozenCookies.last_gc_time;
             FrozenCookies.last_gc_state = currentFrenzy;
             FrozenCookies.last_gc_time = Date.now();
-            updateLocalStorage();
         }
         FrozenCookies.processing = false;
         if (FrozenCookies.frequency) {
