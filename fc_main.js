@@ -947,19 +947,19 @@ function doubleCast(spell) {
     M.computeMagicM()
     if ((M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) >= 23) { // enough for another?
         if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate"); } else return false;
-        Game.Objects["Wizard tower"].sell(towerCount - 21);
+        Game.Objects["Wizard tower"].sell(towerCount - 14);
         M.computeMagicM()
         logEvent('AutoSpell', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount + '. Mana at ' + M.magic);
-        if (predictNextSpell(0) === secondSpell) {
-            if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return false;
-        } else {
-            logEvent('DoubleCast', "Spell changed. Was " + secondSpell +". Now it's " + predictNextSpell(0) + ".");
-            return false;
+        for (var i in Game.shimmers) {
+            if (Game.shimmers[i].type == 'golden') {
+                Game.shimmers[i].pop();
+            }
         }
+        if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return false;
         if (towerCount < 307) {
-            safeBuy(Game.Objects["Wizard tower"], towerCount - 21);
+            safeBuy(Game.Objects["Wizard tower"], towerCount - 14);
         } else {
-            safeBuy(Game.Objects["Wizard tower"], 307 - 21);
+            safeBuy(Game.Objects["Wizard tower"], 307 - 14);
         }
         logEvent('AutoSpell', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
         return true;
