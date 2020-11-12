@@ -943,7 +943,6 @@ function gardenToggle() {
 function doubleCast(spell) {
     if (suppressNextGC) return;
     var towerCount = Game.Objects["Wizard tower"].amount;
-    var secondSpell = predictNextSpell(1);
     M.computeMagicM()
     if ((M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) >= 23) { // enough for another?
         if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate"); } else return false;
