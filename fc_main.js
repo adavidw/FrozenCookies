@@ -943,10 +943,13 @@ function gardenToggle() {
 function doubleCast(spell) {
     if (suppressNextGC) return;
     var towerCount = Game.Objects["Wizard tower"].amount;
+    var minTowers = [307,303,298,294,309,357,386];
+    var minMinTowers = [21,14,8,3,1,1,1];
+    var lvl=Math.max(M.parent.level,1)-1;
     M.computeMagicM()
     if ((M.magic - Math.floor(spell.costMin + spell.costPercent * M.magicM)) >= 23) { // enough for another?
         if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate"); } else return false;
-        Game.Objects["Wizard tower"].sell(towerCount - 14);
+        Game.Objects["Wizard tower"].sell(towerCount - minMinTowers[lvl]);
         M.computeMagicM()
         logEvent('AutoSpell', 'Sold Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount + '. Mana at ' + M.magic);
         for (var i in Game.shimmers) {
@@ -955,11 +958,7 @@ function doubleCast(spell) {
             }
         }
         if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return false;
-        if (towerCount < 307) {
-            safeBuy(Game.Objects["Wizard tower"], towerCount - 14);
-        } else {
-            safeBuy(Game.Objects["Wizard tower"], 307 - 14);
-        }
+        safeBuy(Game.Objects["Wizard tower"], minTowers[lvl] - Game.Objects["Wizard tower"].amount);
         logEvent('AutoSpell', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
         return true;
     } else return false;
