@@ -30,7 +30,7 @@ function registerMod() {    // register with the modding API
             Game.registerHook('ticker', function () {   // called when determining news ticker text (about every ten seconds); should return an array of possible choices to add
                 return ["News: Debate about whether using Frozen Cookies constitutes cheating continues to rage. Violence escalating.", "News: Supreme Court rules that Frozen Cookies not unauthorized cheating after all."];
             });
-/*  other hooks that can be used
+            /*  other hooks that can be used
             Game.registerHook('logic', function () {   // called every logic tick. seems to correspond with fps
             });
             Game.registerHook('reset', function (hard) { // the parameter will be true if it's a hard reset, and false (not passed) if it's just an ascension
@@ -49,14 +49,10 @@ function registerMod() {    // register with the modding API
             });
             Game.registerHook('create', function () {   // called after the game declares all buildings, upgrades and achievs; use this to declare your own - note that saving/loading functionality for custom content is not explicitly implemented and may be unpredictable and broken
             });
-*/
+            */
         },
         save: saveFCData,
-        load: function (str) {  // receive game save data
-            setOverrides(JSON.parse(str));
-
-            // need to set it up so that the load function could be called at any time, so you have to redo all the prefs, maybe even setOverrides?
-        }
+        load: setOverrides
     });
 }
 
@@ -172,7 +168,7 @@ function registerMod() {    // register with the modding API
 function setOverrides(loadedData) {
     logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
 
-    loadFCData(loadedData);
+    loadFCData(JSON.parse(loadedData));
     FrozenCookies.frequency = 100;
     FrozenCookies.efficiencyWeight = 1.0;
 
@@ -305,8 +301,9 @@ function setOverrides(loadedData) {
             console.log("hit: " + setting);
             value = loadedData[setting];
         } else if (localStorage.getItem(setting)) { // if the setting isn't there, check localStorage
+            console.log("miss: " + setting);
             value = localStorage.getItem(setting);
-        }
+        } else console.log("default: " + setting);
         return Number(value);   // if not overridden by game save or localStorage, defaultVal is returned
     }
     FCStart();
