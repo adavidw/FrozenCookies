@@ -18,7 +18,7 @@ var suppressNextGC = false;
 function registerMod() {    // register with the modding API
     Game.registerMod("Frozen Cookies (mtarnuhal)", {
         init: function () {
-            Game.registerHook('reincarnate', function () {
+            Game.registerHook('reincarnate', function () {  // called when the player has reincarnated after an ascension
                 if (FrozenCookies.autoBulk != 0) {
                     if (FrozenCookies.autoBulk == 1) { // Buy x10
                         document.getElementById('storeBulk10').click();
@@ -28,27 +28,153 @@ function registerMod() {    // register with the modding API
                     }
                 }
             });
-            Game.registerHook('reset', function (isThisHard) {
-                console.log("Reset hook - parameter passed: " + isThisHard);
+            Game.registerHook('draw', updateTimers);    // called every draw tick
+            Game.registerHook('ticker', function () {   // called when determining news ticker text (about every ten seconds); should return an array of possible choices to add
+                return ["News: Debate about whether using Frozen Cookies constitutes cheating continues to rage. Violence escalating.", "News: Supreme Court rules that Frozen Cookies not unauthorized cheating after all."];
             });
-            Game.registerHook('draw', updateTimers);
+/*  other hooks that can be used
+            Game.registerHook('logic', function () {   // called every logic tick. seems to correspond with fps
+            });
+            Game.registerHook('reset', function (hard) { // the parameter will be true if it's a hard reset, and false (not passed) if it's just an ascension
+            });
+            Game.registerHook('reincarnate', function () {
+            });
+            Game.registerHook('check', function () {   // called every few seconds when we check for upgrade/achiev unlock conditions; you can also use this for other checks that you don't need happening every logic frame. called about every five seconds?
+            });
+            Game.registerHook('cps', function (cps) { // called when determining the CpS; parameter is the current CpS; should return the modified CpS. called on change or about every ten seconds
+                return cps;
+            });
+            Game.registerHook('cookiesPerClick', function (cookiesPerClick) { // called when determining the cookies per click; parameter is the current value; should return the modified value. called on change or about every ten seconds
+                return cookiesPerClick;
+            });
+            Game.registerHook('click', function () {    // called when the big cookie is clicked
+            });
+            Game.registerHook('create', function () {   // called after the game declares all buildings, upgrades and achievs; use this to declare your own - note that saving/loading functionality for custom content is not explicitly implemented and may be unpredictable and broken
+            });
+*/
         },
         save: saveFCData,
-        load: function (str) {
-            console.log("the load function got called");
-            loadFCData(JSON.parse(str));
+        load: function (str) {  // receive game save data
+            setOverrides(JSON.parse(str));
 
             // need to set it up so that the load function could be called at any time, so you have to redo all the prefs, maybe even setOverrides?
         }
     });
 }
 
-function setOverrides() {
+
+
+
+// //test function
+
+// var start = performance.now();
+// var logics = 0
+// var log = { init: true, save: true, load: true, logic: false, draw: false, reset: true, reincarnate: true, check: false, ticker: false, cps: false, cookiesPerClick: false, click: true, create: true };
+// function registerMod() {    // register with the modding API
+//     Game.registerMod("Frozen Cookies (mtarnuhal)", {
+//         init: function (param) {
+//             if (log.init) {
+//                 console.log("the init function got called");
+//                 console.log(param);
+//             }
+//             Game.registerHook('logic', function (param) {   // seems to correspond with fps
+//                 logics++;
+//                 if (log.logic) {
+//                     console.log("Logic hook - parameter passed:");
+//                     console.log(param);
+//                     console.log(logics / ((performance.now() - start) / 1000));
+//                     start = performance.now();
+//                     logics = 0;
+//                     log.logic = false;
+//                 }
+//             });
+//             Game.registerHook('draw', function (param) {    // about twice per second?
+//                 if (log.draw) {
+//                     console.log("Draw hook - parameter passed:");
+//                     console.log(param);
+//                 }
+//             });
+//             Game.registerHook('reset', function (param) {
+//                 if (log.reset) {
+//                     console.log("Reset hook - parameter passed:");
+//                     console.log(param);
+//                 }
+//             });
+//             Game.registerHook('reincarnate', function (param) {
+//                 if (log.reincarnate) {
+//                     console.log("reincarnate hook - parameter passed:");
+//                     console.log(param);
+//                 }
+//             });
+//             Game.registerHook('check', function (param) {   // about every five seconds?
+//                 if (log.check) {
+//                     console.log("check hook - parameter passed:");
+//                     console.log(param);
+//                 }
+//             });
+//             Game.registerHook('ticker', function (param) {  // about every ten seconds?
+//                 if (log.ticker) {
+//                     console.log("Ticker hook - parameter passed:");
+//                     console.log(param);
+//                 }
+//                 return ["poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd",
+//                     "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd",
+//                     "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd", "poop", "turd"];
+//             });
+//             Game.registerHook('cps', function (param) { // called on change or about every ten seconds
+//                 if (log.cps) {
+//                     console.log("CPS hook - parameter passed:");
+//                     console.log(param);
+//                 }
+//                 return param;
+//             });
+//             Game.registerHook('cookiesPerClick', function (param) { // called on change or about every ten seconds
+//                 if (log.cookiesPerClick) {
+//                     console.log("cookiesPerClick hook - parameter passed:");
+//                     console.log(param);
+//                 }
+//                 return param;
+//             });
+//             Game.registerHook('click', function (param) {
+//                 if (log.click) {
+//                     console.log("Click hook - parameter passed:");
+//                     console.log(param);
+//                 }
+//             });
+//             Game.registerHook('create', function (param) {
+//                 if (log.create) {
+//                     console.log("create hook - parameter passed:");
+//                     console.log(param);
+//                 }
+//             });
+//         },
+//         save: function (param) {
+//             if (log.save) {
+//                 console.log("the save function got called");
+//                 console.log(param);
+//             }
+//             return "a string to be saved";
+//         },
+//         load: function (param) {
+//             if (log.load) {
+//                 console.log("the load function got called");
+//                 console.log(param);
+//             }
+//         }
+//     });
+// }
+// registerMod();
+
+
+
+
+
+
+
+function setOverrides(loadedData) {
     logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
 
-    // register with the modding API and receive game save data
-    loadedData = registerMod();
-
+    loadFCData();
     FrozenCookies.frequency = 100;
     FrozenCookies.efficiencyWeight = 1.0;
 
@@ -185,6 +311,7 @@ function setOverrides() {
         }
         return Number(value);   // if not overridden by game save or localStorage, defaultVal is returned
     }
+    FCStart();
 }
 
 function scientificNotation(value) {
