@@ -45,6 +45,7 @@ FrozenCookies.loadInterval = setInterval(function () {
 
 function loadScript(id) {
     if (id >= script_list.length) {
+        registerMod();  // make sure that when the mod is registered it gets access to the save data
         setOverrides();
         FCStart();
     } else {

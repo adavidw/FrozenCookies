@@ -11,54 +11,43 @@
     });
 })(this);
 
+var suppressNextGC = false;
 
+// when a new save is loaded, will need to do setOverrides(); and FCStart();
 
-function loadFCData() {
-    // Set all cycleable preferences
-    _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
-        FrozenCookies[preference] = preferenceParse(preference, FrozenCookies.preferenceValues[preference].default);
+function registerMod() {    // register with the modding API
+    Game.registerMod("Frozen Cookies (mtarnuhal)", {
+        init: function () {
+            Game.registerHook('reincarnate', function () {
+                if (FrozenCookies.autoBulk != 0) {
+                    if (FrozenCookies.autoBulk == 1) { // Buy x10
+                        document.getElementById('storeBulk10').click();
+                    }
+                    if (FrozenCookies.autoBulk == 2) { // Buy x100
+                        document.getElementById('storeBulk100').click();
+                    }
+                }
+            });
+            Game.registerHook('reset', function (isThisHard) {
+                console.log("Reset hook - parameter passed: " + isThisHard);
+            });
+            Game.registerHook('draw', updateTimers);
+        },
+        save: saveFCData,
+        load: function (str) {
+            console.log("the load function got called");
+            loadFCData(JSON.parse(str));
+
+            // need to set it up so that the load function could be called at any time, so you have to redo all the prefs, maybe even setOverrides?
+        }
     });
-    // Separate because these are user-input values
-    FrozenCookies.cookieClickSpeed = preferenceParse('cookieClickSpeed', 0);
-    FrozenCookies.frenzyClickSpeed = preferenceParse('frenzyClickSpeed', 0);
-    FrozenCookies.HCAscendAmount = preferenceParse('HCAscendAmount', 0);
-    FrozenCookies.minCpSMult = preferenceParse('minCpSMult', 1);
-    FrozenCookies.maxSpecials = preferenceParse('maxSpecials', 1);
-    
-    // building max values
-    FrozenCookies.cursorMax = preferenceParse('cursorMax', 500);
-    // FrozenCookies.grandmaMax = preferenceParse('grandmaMax', 500);
-    FrozenCookies.farmMax = preferenceParse('farmMax', 500);
-    // FrozenCookies.mineMax = preferenceParse('mineMax', 500);
-    // FrozenCookies.factoryMax = preferenceParse('factoryMax', 500);
-    // FrozenCookies.bankMax = preferenceParse('bankMax', 500);
-    // FrozenCookies.templeMax = preferenceParse('templeMax', 500);
-    FrozenCookies.manaMax = preferenceParse('manaMax', 100);
-    // FrozenCookies.shipmentMax = preferenceParse('shipmentMax', 500);
-    // FrozenCookies.labMax = preferenceParse('labMax', 500);
-    // FrozenCookies.portalMax = preferenceParse('portalMax', 500);
-    // FrozenCookies.timeMachineMax = preferenceParse('timeMachineMax', 500);
-    // FrozenCookies.condensorMax = preferenceParse('condensorMax', 500);
-    // FrozenCookies.prismMax = preferenceParse('prismMax', 500);
-    // FrozenCookies.chancemakerMax = preferenceParse('chancemakerMax', 500);
-    // FrozenCookies.fractalEngineMax = preferenceParse('fractalEngineMax', 500);
-    // FrozenCookies.consoleMax = preferenceParse('consoleMax', 500);
-
-        // Get historical data
-        FrozenCookies.frenzyTimes = JSON.parse(localStorage.getItem('frenzyTimes')) || {};
-        //  FrozenCookies.non_gc_time = Number(localStorage.getItem('nonFrenzyTime'));
-        //  FrozenCookies.gc_time = Number(localStorage.getItem('frenzyTime'));
-        FrozenCookies.lastHCAmount = Number(localStorage.getItem('lastHCAmount'));
-        FrozenCookies.lastHCTime = Number(localStorage.getItem('lastHCTime'));
-        FrozenCookies.prevLastHCTime = Number(localStorage.getItem('prevLastHCTime'));
-        FrozenCookies.maxHCPercent = Number(localStorage.getItem('maxHCPercent'));
 }
-
 
 function setOverrides() {
     logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
 
-    loadFCData();
+    // register with the modding API and receive game save data
+    loadedData = registerMod();
 
     FrozenCookies.frequency = 100;
     FrozenCookies.efficiencyWeight = 1.0;
@@ -143,44 +132,59 @@ function setOverrides() {
         Game.Win('Third-party');
     }
 
-    // register with the modding API
-    Game.registerMod("Frozen Cookies (mtarnuhal)", {
-        init: function () {
-            Game.registerHook('reincarnate', function () {  // Automatically buy in bulk after reincarnation if setting turned on
-                if (FrozenCookies.autoBulk != 0) {
-                    if (FrozenCookies.autoBulk == 1) { // Buy x10
-                        document.getElementById('storeBulk10').click();
-                    }
-                    if (FrozenCookies.autoBulk == 2) { // Buy x100
-                        document.getElementById('storeBulk100').click();
-                    }
-                }
-            });
-            Game.registerHook('reset', function (isThisHard) {
-                console.log("Reset hook - parameter passed: " + isThisHard);
-            });
-            Game.registerHook('draw', updateTimers);
-        },
-        save: saveFCData, // function () {
-        // //note: we use stringified JSON for ease and clarity but you could store any type of string
-        // return JSON.stringify({ text: Game.playerIntro })
-        // },
-        load: function (str) {
-            loadedData = JSON.parse(str);
-            // if (data.text) Game.mods['test mod'].addIntro(data.text);
-        }
-    });
-}
 
-var loadedData = {};
+    function loadFCData(loadedData) {
+        console.log(loadedData);
+        // Set all cycleable preferences
+        _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
+            FrozenCookies[preference] = preferenceParse(preference, FrozenCookies.preferenceValues[preference].default);
+        });
+        // Separate because these are user-input values
+        FrozenCookies.cookieClickSpeed = preferenceParse('cookieClickSpeed', 0);
+        FrozenCookies.frenzyClickSpeed = preferenceParse('frenzyClickSpeed', 0);
+        FrozenCookies.HCAscendAmount = preferenceParse('HCAscendAmount', 0);
+        FrozenCookies.minCpSMult = preferenceParse('minCpSMult', 1);
+        FrozenCookies.maxSpecials = preferenceParse('maxSpecials', 1);
 
-function preferenceParse(setting, defaultVal) {
-    var value = localStorage.getItem(setting);
-    if (typeof (value) == 'undefined' || value == null || isNaN(Number(value))) {
-        value = defaultVal;
-        localStorage.setItem(setting, value);
+        // building max values
+        FrozenCookies.cursorMax = preferenceParse('cursorMax', 500);
+        // FrozenCookies.grandmaMax = preferenceParse('grandmaMax', 500);
+        FrozenCookies.farmMax = preferenceParse('farmMax', 500);
+        // FrozenCookies.mineMax = preferenceParse('mineMax', 500);
+        // FrozenCookies.factoryMax = preferenceParse('factoryMax', 500);
+        // FrozenCookies.bankMax = preferenceParse('bankMax', 500);
+        // FrozenCookies.templeMax = preferenceParse('templeMax', 500);
+        FrozenCookies.manaMax = preferenceParse('manaMax', 100);
+        // FrozenCookies.shipmentMax = preferenceParse('shipmentMax', 500);
+        // FrozenCookies.labMax = preferenceParse('labMax', 500);
+        // FrozenCookies.portalMax = preferenceParse('portalMax', 500);
+        // FrozenCookies.timeMachineMax = preferenceParse('timeMachineMax', 500);
+        // FrozenCookies.condensorMax = preferenceParse('condensorMax', 500);
+        // FrozenCookies.prismMax = preferenceParse('prismMax', 500);
+        // FrozenCookies.chancemakerMax = preferenceParse('chancemakerMax', 500);
+        // FrozenCookies.fractalEngineMax = preferenceParse('fractalEngineMax', 500);
+        // FrozenCookies.consoleMax = preferenceParse('consoleMax', 500);
+
+        // Get historical data
+        FrozenCookies.frenzyTimes = JSON.parse(loadedData.getItem('frenzyTimes') || localStorage.getItem('frenzyTimes')) || {};
+        //  FrozenCookies.non_gc_time = Number(localStorage.getItem('nonFrenzyTime'));
+        //  FrozenCookies.gc_time = Number(localStorage.getItem('frenzyTime'));
+        FrozenCookies.lastHCAmount = preferenceParse('lastHCAmount', 0);
+        FrozenCookies.lastHCTime = preferenceParse('lastHCTime', 0);
+        FrozenCookies.prevLastHCTime = preferenceParse('prevLastHCTime', 0);
+        FrozenCookies.maxHCPercent = preferenceParse('maxHCPercent', 0);
     }
-    return Number(value);
+
+    function preferenceParse(setting, defaultVal) {
+        var value = defaultVal;
+        if (loadedData[setting]) {  // first look in the data from the game save
+            console.log("hit: " + setting);
+            value = loadedData[setting];
+        } else if (localStorage.getItem(setting)) { // if the setting isn't there, check localStorage
+            value = localStorage.getItem(setting);
+        }
+        return Number(value);   // if not overridden by game save or localStorage, defaultVal is returned
+    }
 }
 
 function scientificNotation(value) {
