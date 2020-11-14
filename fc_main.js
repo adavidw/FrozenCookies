@@ -52,11 +52,13 @@ function registerMod() {    // register with the modding API
             */
         },
         save: saveFCData,
-        load: setOverrides
+        load: setOverrider
     });
 }
 
-
+function setOverrider(param) {
+    setOverrides(param);
+}
 
 
 // //test function
@@ -167,7 +169,8 @@ function registerMod() {    // register with the modding API
 
 function setOverrides(loadedData) {
     logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
-
+console.log("loadedData passed to the setOverride function:");
+console.log(loadedData);
     loadFCData(JSON.parse(loadedData));
     FrozenCookies.frequency = 100;
     FrozenCookies.efficiencyWeight = 1.0;
@@ -297,6 +300,7 @@ function setOverrides(loadedData) {
 
     function preferenceParse(setting, defaultVal) {
         var value = defaultVal;
+        console.log(loadedData[setting]);
         if (loadedData[setting]) {  // first look in the data from the game save
             console.log("hit: " + setting);
             value = loadedData[setting];
