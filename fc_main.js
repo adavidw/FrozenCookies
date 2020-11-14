@@ -13,8 +13,6 @@
 
 var suppressNextGC = false;
 
-// when a new save is loaded, will need to do setOverrides(); and FCStart();
-
 function registerMod() {    // register with the modding API
     Game.registerMod("Frozen Cookies (mtarnuhal)", {
         init: function () {
@@ -174,7 +172,7 @@ function registerMod() {    // register with the modding API
 function setOverrides(loadedData) {
     logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
 
-    loadFCData();
+    loadFCData(loadedData);
     FrozenCookies.frequency = 100;
     FrozenCookies.efficiencyWeight = 1.0;
 
@@ -292,7 +290,7 @@ function setOverrides(loadedData) {
         // FrozenCookies.consoleMax = preferenceParse('consoleMax', 500);
 
         // Get historical data
-        FrozenCookies.frenzyTimes = JSON.parse(loadedData.getItem('frenzyTimes') || localStorage.getItem('frenzyTimes')) || {};
+        FrozenCookies.frenzyTimes = JSON.parse(loadedData['frenzyTimes'] || localStorage.getItem('frenzyTimes')) || {};
         //  FrozenCookies.non_gc_time = Number(localStorage.getItem('nonFrenzyTime'));
         //  FrozenCookies.gc_time = Number(localStorage.getItem('frenzyTime'));
         FrozenCookies.lastHCAmount = preferenceParse('lastHCAmount', 0);
