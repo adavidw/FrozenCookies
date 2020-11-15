@@ -368,7 +368,7 @@ function updateTimers() {   // update calculations and assemble output -- called
         // create an array of all the elements to draw
         var t_draw = [];
 
-        if (FrozenCookies.blacklist != 4 || (purchase.type == "upgrade" && purchaseTotal.efficiency > 0)) {  // if there's really nothing to purchase, don't show the purchase rings
+        if (FrozenCookies.blacklist != 4 || (purchase.type == "upgrade" && purchase.efficiency > 0)) {  // if there's really nothing to purchase, don't show the purchase rings
 
             // if (chainTotal) {
             //     t_draw.push({
