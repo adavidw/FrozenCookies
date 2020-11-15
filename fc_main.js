@@ -956,11 +956,9 @@ function cyclePreference(preferenceName) {
 }
 
 function toggleFrozen(setting) {
-    if (!Number(localStorage.getItem(setting))) {
-        localStorage.setItem(setting, 1);
+    if (!FrozenCookies[setting]) {
         FrozenCookies[setting] = 1;
     } else {
-        localStorage.setItem(setting, 0);
         FrozenCookies[setting] = 0;
     }
     FCStart();
