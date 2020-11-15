@@ -52,12 +52,8 @@ function registerMod() {    // register with the modding API
             */
         },
         save: saveFCData,
-        load: setOverrider
+        load: setOverrides
     });
-}
-
-function setOverrider(param) {
-    setOverrides(param);
 }
 
 
@@ -167,11 +163,10 @@ function setOverrider(param) {
 
 
 
-function setOverrides(loadedData) {
+function setOverrides(gameSaveData) {
     logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
-console.log("loadedData passed to the setOverride function:");
-console.log(loadedData);
-    loadFCData(JSON.parse(loadedData));
+    var loadedData = JSON.parse(gameSaveData);
+    loadFCData();
     FrozenCookies.frequency = 100;
     FrozenCookies.efficiencyWeight = 1.0;
 
@@ -256,8 +251,7 @@ console.log(loadedData);
     }
 
 
-    function loadFCData(loadedData) {
-        console.log(loadedData);
+    function loadFCData() {
         // Set all cycleable preferences
         _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
             FrozenCookies[preference] = preferenceParse(preference, FrozenCookies.preferenceValues[preference].default);
@@ -300,14 +294,11 @@ console.log(loadedData);
 
     function preferenceParse(setting, defaultVal) {
         var value = defaultVal;
-        console.log(loadedData[setting]);
-        if (loadedData[setting]) {  // first look in the data from the game save
-            console.log("hit: " + setting);
+        if (setting in loadedData) {  // first look in the data from the game save
             value = loadedData[setting];
         } else if (localStorage.getItem(setting)) { // if the setting isn't there, check localStorage
-            console.log("miss: " + setting);
             value = localStorage.getItem(setting);
-        } else console.log("default: " + setting);
+        }
         return Number(value);   // if not overridden by game save or localStorage, defaultVal is returned
     }
     FCStart();
