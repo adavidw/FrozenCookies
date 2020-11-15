@@ -320,7 +320,9 @@ function updateTimers() {   // update calculations and assemble output -- called
             // instead of going one by one through possible buffs, why not iterate through running buffs?
             // Or, maybe, if you want to keep order and colors the same, maybe do an iteration at the end
             // just to catch any new buffs created after the code is written?
-        var purchaseTotal = nextPurchase().cost;
+        var purchase = nextPurchase();
+        purchase.name = purchase.purchase.name;
+        var purchaseTotal = purchase.cost;
         var clotTime = buffTime("Clot"),
             clotMaxTime = buffMaxTime("Clot"),
             elderFrenzyTime = buffTime("Elder frenzy"),
@@ -366,7 +368,7 @@ function updateTimers() {   // update calculations and assemble output -- called
         // create an array of all the elements to draw
         var t_draw = [];
 
-        if (FrozenCookies.blacklist != 4 || (purchaseTotal.type == "upgrade" && purchaseTotal.efficiency > 0)) {  // if there's really nothing to purchase, don't show the purchase rings
+        if (FrozenCookies.blacklist != 4 || (purchase.type == "upgrade" && purchaseTotal.efficiency > 0)) {  // if there's really nothing to purchase, don't show the purchase rings
 
             // if (chainTotal) {
             //     t_draw.push({
@@ -414,7 +416,7 @@ function updateTimers() {   // update calculations and assemble output -- called
                 t_draw.push({
                     f_percent: purchaseCompletion,
                     c1: 'rgba(44, 44, 44, 1)',
-                    name: "(" + nextPurchase().purchase.name + ")",
+                    name: "(" + purchase.name + ")",
                     display: timeDisplay(divCps(Math.max(purchaseTotal + bankTotal - Game.cookies, 0), actualCps)),
                     overlay: true
                 });
