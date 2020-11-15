@@ -284,8 +284,8 @@ function setOverrides(gameSaveData) {
 
         // Get historical data
         FrozenCookies.frenzyTimes = JSON.parse(loadedData['frenzyTimes'] || localStorage.getItem('frenzyTimes')) || {};
-        //  FrozenCookies.non_gc_time = Number(localStorage.getItem('nonFrenzyTime'));
-        //  FrozenCookies.gc_time = Number(localStorage.getItem('frenzyTime'));
+        //  FrozenCookies.non_gc_time = Number(loadedData['nonFrenzyTime']) || Number(localStorage.getItem('nonFrenzyTime')) || 0;
+        //  FrozenCookies.gc_time = Number(loadedData['frenzyTime']) || Number(localStorage.getItem('frenzyTime')) || 0;;
         FrozenCookies.lastHCAmount = preferenceParse('lastHCAmount', 0);
         FrozenCookies.lastHCTime = preferenceParse('lastHCTime', 0);
         FrozenCookies.prevLastHCTime = preferenceParse('prevLastHCTime', 0);
