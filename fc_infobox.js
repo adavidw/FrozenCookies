@@ -6,6 +6,8 @@ var previousBoxSize = {
     maxBoxHeight: 0,
 };
 
+var showMaxDrawArea = false;
+
 function drawInfobox(infoboxItems) {   // draw the wheel and text box
     var itemText;
     var textBox = {
@@ -77,19 +79,21 @@ function drawInfobox(infoboxItems) {   // draw the wheel and text box
 
 
     // testing maxDraw
-    c.drawRect({
-        fillStyle: 'rgba(200, 200, 255, 0.2)',
-        x: maxDrawArea.center.x, y: maxDrawArea.center.y,
-        width: maxDrawArea.width, height: maxDrawArea.height
-    });
-    c.drawText({
-        fontSize: "48px",
-        fontFamily: boxFont,
-        fillStyle: 'rgba(200, 200, 255, 0.1)',
-        x: maxDrawArea.center.x, y: maxDrawArea.center.y,
-        text: "maxDrawArea",
-        rotate: -30
-    });
+    if (showMaxDrawArea) {
+        c.drawRect({
+            fillStyle: 'rgba(200, 200, 255, 0.2)',
+            x: maxDrawArea.center.x, y: maxDrawArea.center.y,
+            width: maxDrawArea.width, height: maxDrawArea.height
+        });
+        c.drawText({
+            fontSize: "48px",
+            fontFamily: boxFont,
+            fillStyle: 'rgba(200, 200, 255, 0.1)',
+            x: maxDrawArea.center.x, y: maxDrawArea.center.y,
+            text: "maxDrawArea",
+            rotate: -30
+        });
+    }
 
 
     // // testing old wheel placement
