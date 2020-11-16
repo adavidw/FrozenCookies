@@ -30,7 +30,7 @@ function registerMod() {    // register with the modding API
             Game.registerHook('ticker', function () {   // called when determining news ticker text (about every ten seconds); should return an array of possible choices to add
                 return [
                     "News: Debate about whether using Frozen Cookies constitutes cheating continues to rage. Violence escalating.",
-                    "News: Supreme Court rules that Frozen Cookies not unauthorized cheating after all."
+                    "News: Supreme Court rules Frozen Cookies not unauthorized cheating after all."
                 ];
             });
             /*  other hooks that can be used
@@ -555,6 +555,8 @@ function getBuildingSpread() {
     }).join('/')
 }
 
+// need to fix and make a preference
+
 // todo: add bind for autoascend
 // Press 'a' to toggle autobuy.
 // Press 'b' to pop up a copyable window with building spread.
@@ -563,34 +565,35 @@ function getBuildingSpread() {
 // Press 'r' to pop up the reset window
 // Press 's' to do a manual save
 // Press 'w' to display a wrinkler-info window
-document.addEventListener('keydown', function (event) {
-    if (!Game.promptOn) {
-        if (event.keyCode == 65) {
-            Game.Toggle('autoBuy', 'autobuyButton', 'Autobuy OFF', 'Autobuy ON');
-            toggleFrozen('autoBuy');
-        }
-        if (event.keyCode == 66) {
-            copyToClipboard(getBuildingSpread());
-        }
-        if (event.keyCode == 67) {
-            Game.Toggle('autoGC', 'autogcButton', 'Autoclick GC OFF', 'Autoclick GC ON');
-            toggleFrozen('autoGC');
-        }
-        if (event.keyCode == 69) {
-            copyToClipboard(Game.WriteSave(true));
-        }
-        if (event.keyCode == 82) {
-            Game.Reset();
-        }
-        if (event.keyCode == 83) {
-            Game.WriteSave();
-        }
-        if (event.keyCode == 87) {
-            Game.Notify('Wrinkler Info', 'Popping all wrinklers will give you ' + Beautify(wrinklerValue())
-                + ' cookies. <input type="button" value="Click here to pop all wrinklers" onclick="Game.CollectWrinklers()"></input>', [19, 8], 7);
-        }
-    }
-});
+
+// document.addEventListener('keydown', function (event) {
+//     if (!Game.promptOn) {
+//         if (event.keyCode == 65) {
+//             Game.Toggle('autoBuy', 'autobuyButton', 'Autobuy OFF', 'Autobuy ON');
+//             toggleFrozen('autoBuy');
+//         }
+//         if (event.keyCode == 66) {
+//             copyToClipboard(getBuildingSpread());
+//         }
+//         if (event.keyCode == 67) {
+//             Game.Toggle('autoGC', 'autogcButton', 'Autoclick GC OFF', 'Autoclick GC ON');
+//             toggleFrozen('autoGC');
+//         }
+//         if (event.keyCode == 69) {
+//             copyToClipboard(Game.WriteSave(true));
+//         }
+//         if (event.keyCode == 82) {
+//             Game.Reset();
+//         }
+//         if (event.keyCode == 83) {
+//             Game.WriteSave();
+//         }
+//         if (event.keyCode == 87) {
+//             Game.Notify('Wrinkler Info', 'Popping all wrinklers will give you ' + Beautify(wrinklerValue())
+//                 + ' cookies. <input type="button" value="Click here to pop all wrinklers" onclick="Game.CollectWrinklers()"></input>', [19, 8], 7);
+//         }
+//     }
+// });
 
 function writeFCButton(setting) {
     var current = FrozenCookies[setting];
