@@ -521,6 +521,7 @@ function saveFCData() {
     saveString.manaMax = FrozenCookies.manaMax;
     saveString.maxSpecials = FrozenCookies.maxSpecials;
     saveString.prevLastHCTime = FrozenCookies.prevLastHCTime;
+    saveString.saveVersion = FrozenCookies.version;
     return JSON.stringify(saveString);
 }
 
