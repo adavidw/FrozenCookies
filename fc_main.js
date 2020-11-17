@@ -54,11 +54,15 @@ function registerMod() {    // register with the modding API
             });
             */
             console.log(FrozenCookies);
+            console.log("init function calling setOverrides");
             setOverrides();
             logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
         },
         save: saveFCData,
-        load: setOverrides
+        load: function(poop) {
+            console.log("load function called");
+            setOverrides(poop);
+        }
     });
 }
 
