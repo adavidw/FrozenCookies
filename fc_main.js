@@ -168,10 +168,11 @@ function registerMod() {    // register with the modding API
 
 
 function setOverrides(gameSaveData) {
-    console.log ("well, this works");
     logEvent("Load", "Restoring Frozen Cookies settings");
-    var loadedData = JSON.parse(gameSaveData);
-    loadFCData();
+    if (gameSaveData) {
+        var loadedData = JSON.parse(gameSaveData);
+        loadFCData();
+    }
     FrozenCookies.frequency = 100;
     FrozenCookies.efficiencyWeight = 1.0;
 
