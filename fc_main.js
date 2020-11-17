@@ -33,10 +33,13 @@ function registerMod() {    // register with the modding API
                     "News: Supreme Court rules Frozen Cookies not unauthorized cheating after all."
                 ];
             });
+            Game.registerHook('reset', function (hard) { // the parameter will be true if it's a hard reset, and false (not passed) if it's just an ascension
+                if (hard) {
+                    emptyCaches();
+                }
+            });
             /*  other hooks that can be used
             Game.registerHook('logic', function () {   // called every logic tick. seems to correspond with fps
-            });
-            Game.registerHook('reset', function (hard) { // the parameter will be true if it's a hard reset, and false (not passed) if it's just an ascension
             });
             Game.registerHook('reincarnate', function () {
             });
@@ -171,7 +174,6 @@ function registerMod() {    // register with the modding API
 
 
 function setOverrides(gameSaveData) {
-    console.log(gameSaveData);
     if (gameSaveData) {
         FrozenCookies.loadedData = JSON.parse(gameSaveData);
     } else {
@@ -224,12 +226,7 @@ function setOverrides(gameSaveData) {
     FrozenCookies.delayPurchaseCount = 0;
 
     // Caching
-    FrozenCookies.recalculateCaches = true;
-    FrozenCookies.caches = {};
-    FrozenCookies.caches.nextPurchase = {};
-    FrozenCookies.caches.recommendationList = [];
-    FrozenCookies.caches.buildings = [];
-    FrozenCookies.caches.upgrades = [];
+    emptyCaches();
 
     //Whether to currently display achievement popups
     FrozenCookies.showAchievements = true;
@@ -320,6 +317,15 @@ function setOverrides(gameSaveData) {
         return Number(value);   // if not overridden by game save or localStorage, defaultVal is returned
     }
     FCStart();
+}
+
+function emptyCaches() {
+    FrozenCookies.recalculateCaches = true;
+    FrozenCookies.caches = {};
+    FrozenCookies.caches.nextPurchase = {};
+    FrozenCookies.caches.recommendationList = [];
+    FrozenCookies.caches.buildings = [];
+    FrozenCookies.caches.upgrades = [];
 }
 
 function scientificNotation(value) {
