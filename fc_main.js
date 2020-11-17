@@ -53,17 +53,11 @@ function registerMod() {    // register with the modding API
             Game.registerHook('create', function () {   // called after the game declares all buildings, upgrades and achievs; use this to declare your own - note that saving/loading functionality for custom content is not explicitly implemented and may be unpredictable and broken
             });
             */
-            console.log(FrozenCookies);
-            console.log("init function calling setOverrides");
-            setOverrides();
-            logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
         },
         save: saveFCData,
-        load: function(poop) {
-            console.log("load function called");
-            setOverrides(poop);
-        }
+        load: setOverrides
     });
+    logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
 }
 
 
@@ -176,9 +170,9 @@ function registerMod() {    // register with the modding API
 function setOverrides(gameSaveData) {
     console.log(gameSaveData);
     if (gameSaveData) {
-        var loadedData = JSON.parse(gameSaveData);
+        FrozenCookies.loadedData = JSON.parse(gameSaveData);
     } else {
-        var loadedData = {};
+        FrozenCookies.loadedData = {};
     }
     loadFCData();
     FrozenCookies.frequency = 100;
@@ -270,7 +264,6 @@ function setOverrides(gameSaveData) {
 
 
     function loadFCData() {
-        console.log(JSON.stringify(FrozenCookies));
         // Set all cycleable preferences
         _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
             FrozenCookies[preference] = preferenceParse(preference, FrozenCookies.preferenceValues[preference].default);
@@ -302,26 +295,27 @@ function setOverrides(gameSaveData) {
         // FrozenCookies.consoleMax = preferenceParse('consoleMax', 500);
 
         // Get historical data
-        FrozenCookies.frenzyTimes = JSON.parse(loadedData['frenzyTimes'] || localStorage.getItem('frenzyTimes')) || {};
-        //  FrozenCookies.non_gc_time = Number(loadedData['nonFrenzyTime']) || Number(localStorage.getItem('nonFrenzyTime')) || 0;
-        //  FrozenCookies.gc_time = Number(loadedData['frenzyTime']) || Number(localStorage.getItem('frenzyTime')) || 0;;
+        FrozenCookies.frenzyTimes = JSON.parse(FrozenCookies.loadedData['frenzyTimes'] || localStorage.getItem('frenzyTimes')) || {};
+        //  FrozenCookies.non_gc_time = Number(FrozenCookies.loadedData['nonFrenzyTime']) || Number(localStorage.getItem('nonFrenzyTime')) || 0;
+        //  FrozenCookies.gc_time = Number(FrozenCookies.loadedData['frenzyTime']) || Number(localStorage.getItem('frenzyTime')) || 0;;
         FrozenCookies.lastHCAmount = preferenceParse('lastHCAmount', 0);
         FrozenCookies.lastHCTime = preferenceParse('lastHCTime', 0);
         FrozenCookies.prevLastHCTime = preferenceParse('prevLastHCTime', 0);
         FrozenCookies.maxHCPercent = preferenceParse('maxHCPercent', 0);
-        logEvent("Load", "Restored Frozen Cookies settings");
+        if (Object.keys(FrozenCookies.loadedData).length > 0) {
+            logEvent("Load", "Restored Frozen Cookies settings from previous save");
+        }
     }
 
     function preferenceParse(setting, defaultVal) {
         var value = defaultVal;
-        if (setting in loadedData) {  // first look in the data from the game save
-            value = loadedData[setting];
+        if (setting in FrozenCookies.loadedData) {  // first look in the data from the game save
+            value = FrozenCookies.loadedData[setting];
         } else if (localStorage.getItem(setting)) { // if the setting isn't there, check localStorage
             value = localStorage.getItem(setting);
         }
         return Number(value);   // if not overridden by game save or localStorage, defaultVal is returned
     }
-    console.log(JSON.stringify(FrozenCookies));
     FCStart();
 }
 
