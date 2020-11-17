@@ -263,7 +263,7 @@ function setOverrides(gameSaveData) {
 
 
     function loadFCData() {
-        console.log(FrozenCookies.preferenceValues);
+        console.log(FrozenCookies);
         // Set all cycleable preferences
         _.keys(FrozenCookies.preferenceValues).forEach(function (preference) {
             FrozenCookies[preference] = preferenceParse(preference, FrozenCookies.preferenceValues[preference].default);
@@ -313,7 +313,7 @@ function setOverrides(gameSaveData) {
         }
         return Number(value);   // if not overridden by game save or localStorage, defaultVal is returned
     }
-    console.log(FrozenCookies.preferenceValues);
+    console.log(FrozenCookies);
     FCStart();
 }
 
