@@ -168,7 +168,6 @@ function registerMod() {    // register with the modding API
 
 
 function setOverrides(gameSaveData) {
-    logEvent("Load", "Restoring Frozen Cookies settings");
     console.log(gameSaveData);
     if (gameSaveData) {
         var loadedData = JSON.parse(gameSaveData);
@@ -302,6 +301,7 @@ function setOverrides(gameSaveData) {
         FrozenCookies.lastHCTime = preferenceParse('lastHCTime', 0);
         FrozenCookies.prevLastHCTime = preferenceParse('prevLastHCTime', 0);
         FrozenCookies.maxHCPercent = preferenceParse('maxHCPercent', 0);
+        logEvent("Load", "Restored Frozen Cookies settings");
     }
 
     function preferenceParse(setting, defaultVal) {
