@@ -16,6 +16,7 @@ var suppressNextGC = false;
 function registerMod() {    // register with the modding API
     Game.registerMod("Frozen Cookies (mtarnuhal)", {
         init: function () {
+            logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
             Game.registerHook('reincarnate', function () {  // called when the player has reincarnated after an ascension
                 if (FrozenCookies.autoBulk != 0) {
                     if (FrozenCookies.autoBulk == 1) { // Buy x10
@@ -167,7 +168,7 @@ function registerMod() {    // register with the modding API
 
 
 function setOverrides(gameSaveData) {
-    logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
+    logEvent("Load", "Restoring Frozen Cookies settings");
     var loadedData = JSON.parse(gameSaveData);
     loadFCData();
     FrozenCookies.frequency = 100;
