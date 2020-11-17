@@ -63,7 +63,6 @@ function registerMod() {    // register with the modding API
     if (!FrozenCookies.loadedData) {
         setOverrides();
     }
-    logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
 }
 
 
