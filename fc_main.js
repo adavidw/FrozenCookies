@@ -172,8 +172,8 @@ function setOverrides(gameSaveData) {
     console.log(gameSaveData);
     if (gameSaveData) {
         var loadedData = JSON.parse(gameSaveData);
-        loadFCData();
     }
+    loadFCData();
     FrozenCookies.frequency = 100;
     FrozenCookies.efficiencyWeight = 1.0;
 
