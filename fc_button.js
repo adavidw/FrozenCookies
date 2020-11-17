@@ -142,7 +142,9 @@ Game.RebuildStore(true);
 Game.RebuildUpgrades(true);
 */
 
-Game.oldUpdateMenu = Game.UpdateMenu;
+if (typeof (Game.oldUpdateMenu) != "function") {
+    Game.oldUpdateMenu = Game.UpdateMenu;
+}
 
 function FCMenu() {
     Game.UpdateMenu = function () {
