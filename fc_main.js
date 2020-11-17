@@ -53,6 +53,7 @@ function registerMod() {    // register with the modding API
             Game.registerHook('create', function () {   // called after the game declares all buildings, upgrades and achievs; use this to declare your own - note that saving/loading functionality for custom content is not explicitly implemented and may be unpredictable and broken
             });
             */
+            console.log(FrozenCookies);
             setOverrides();
             logEvent("Load", "Initial Load of Frozen Cookies v " + FrozenCookies.branch + "." + FrozenCookies.version + ". (You should only ever see this once.)");
         },
@@ -62,7 +63,7 @@ function registerMod() {    // register with the modding API
 }
 
 
-// //test function
+// // test function
 
 // var start = performance.now();
 // var logics = 0
