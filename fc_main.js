@@ -2125,11 +2125,7 @@ function upgradeStats(recalculate) {
     return FrozenCookies.caches.upgrades;
 }
 
-
-
-
-
-function isUnavailable(upgrade, upgradeBlacklist, log) {
+function isUnavailable(upgrade, upgradeBlacklist) {
     // should we even recommend upgrades at all?
     if (upgradeBlacklist === true) {
         return true;
@@ -2139,20 +2135,15 @@ function isUnavailable(upgrade, upgradeBlacklist, log) {
     if (upgradeBlacklist.concat(recommendationBlacklist).includes(upgrade.id)) {
         return true;
     }
-    
-
 
     var result = false;
 
     var needed = unfinishedUpgradePrereqs(upgrade);
     result = result || !upgrade.unlocked && !needed;
-
     result = result || (_.find(needed, function (a) {
         return a.type == "wrinklers"
     }) != null) && needed;
-    
     result = result || (upgrade.season && (!haveAll(Game.season) || (upgrade.season != seasons[FrozenCookies.defaultSeason] && haveAll(upgrade.season))));
-    if (log) {console.log(result);}
 
     return result;
 }

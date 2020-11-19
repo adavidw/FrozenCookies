@@ -2,71 +2,8 @@
 // With this list, the recommendation engine can include them even before the prerequisites are met.
 // (useful for determining chain strategies) or tracking what's left
 
-
-
-
-// for (k = 0; k < 18; k++) {
-//     for (i in upgradeJson) {
-//         if (Game.UpgradesById[i].buildingTie.id === k &&
-//             Game.UpgradesById[i].pool != "tech" &&
-//             Game.UpgradesById[i].tier != "fortune" &&
-//             Game.UpgradesById[i].noPerm != 1) {
-//             var tiers = [0, 1, 1, 10, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600]
-//             var zeros = "[";
-//             while (zeros.length < (k * 2 + 1)) {
-//                 zeros += "0,";
-//             }
-
-//             var string = (i + ": {'buildings': " + zeros + "15], 'upgrades': [643]},");
-//             console.log(string + (
-//                 (string.length % 4) ?
-//                     ((string.length % 4 == 1) ? "   " : ((string.length % 4 == 2) ? "  " : " "))
-//                     : "    "
-//             ) +
-//                 "// " + Game.UpgradesById[i].name);
-//         }
-
-//     }
-// }
-
-var list = {
-    57: {'buildings': [0,1,15], 'upgrades': []},
-    58: {'buildings': [0,1,0,15], 'upgrades': []},
-    59: {'buildings': [0,1,0,0,15], 'upgrades': []},
-    60: {'buildings': [0,1,0,0,0,15], 'upgrades': []},
-    61: {'buildings': [0,1,0,0,0,0,15], 'upgrades': []},
-    62: {'buildings': [0,1,0,0,0,0,0,15], 'upgrades': []},
-    63: {'buildings': [0,1,0,0,0,0,0,0,15], 'upgrades': []},
-    103: {'buildings': [0,1,0,0,0,0,0,0,0,15], 'upgrades': []},
-    180: {'buildings': [0,1,0,0,0,0,0,0,0,0,15], 'upgrades': []},
-    250: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
-    251: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
-    252: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
-    415: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
-    521: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
-    593: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
-    683: {'buildings': [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15], 'upgrades': []},
-};
-
-function comment(list) {
-    for (i in list) {
-        var string = i + ": {";
-        for (j in list[i]) {
-            string += "'" + j + "': " + JSON.stringify(list[i][j]) + ", ";
-        }
-        string += "---}"
-        var comment = (
-            (string.length % 4) ?
-                ((string.length % 4 == 1) ? "   " : ((string.length % 4 == 2) ? "  " : " "))
-                : "    "
-        ) +
-            "// " + Game.UpgradesById[i].name;
-        console.log(string + comment);
-    }
-}
-
-
 var upgradeJson = {
+    // Cursor tiered upgrades
     0: {'buildings': [1], 'upgrades': []},      // Reinforced index finger
     1: {'buildings': [1], 'upgrades': []},      // Carpal tunnel prevention cream
     2: {'buildings': [10], 'upgrades': []},     // Ambidextrous
@@ -523,47 +460,6 @@ var upgradeJson = {
     650: {'buildings': [], 'upgrades': [323,324,647]},  // Dragon fang
     651: {'buildings': [], 'upgrades': [323,324,647]}   // Dragon teddy bear
 };
-
-
-
-
-
-
-
-
-
-
-
-// var testJson = {}
-// for (i in Game.UpgradesById) {
-//     var me = Game.UpgradesById[i];
-//     testJson[i] = {id: me.id, name: me.name, tier: me.tier};
-//     // if (me.tier=="synergy1"||me.tier=="synergy2") {
-//         testJson[i] = false
-//         for (ii in upgradeJson) {
-//             if (i == ii) {
-//                 testJson[i] = true;
-//             }
-//         }
-//         if (testJson[i] == false) {
-//             console.log(me.id + ": " + me.name + ", " + me.buildingTie.name);
-//             console.log(me);
-//         }
-//     // }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 var blacklist = [
     {
