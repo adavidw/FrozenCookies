@@ -1130,16 +1130,20 @@ function safeCast(spell) {
     if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Sugar Lump") {   // if it's a cookie where the multiplier has no effect, just cast the spell and get it out of the way (regardless of CPS)
         return M.castSpell(spell);
     } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's an actual detrimental effect, cast the spell and temporarily suppress AutoGC
-        if (cpsBonus() <= 1 && Game.shimmers.length === 0) { // should we also check to see if the next GC is at least some minimum amount of time away?
-            suppressNextGC = true;
-            if (M.castSpell(spell)) {
-                logEvent('SafeCast', "Force the Hand of Fate -- Don't click on this next cookie");
-                return true;
-            }
-            // if casting failed and these next two lines get executed, rewind
-            suppressNextGC = false;
-            return false;
-        } return false;
+        // if (cpsBonus() <= 1 && Game.shimmers.length === 0) { // should we also check to see if the next GC is at least some minimum amount of time away?
+        //     suppressNextGC = true;
+        //     if (M.castSpell(spell)) {
+        //         logEvent('SafeCast', "Force the Hand of Fate -- Don't click on this next cookie");
+        //         return true;
+        //     }
+        //     // if casting failed and these next two lines get executed, rewind
+        //     suppressNextGC = false;
+        //     return false;
+        // } else return false;
+        if (M.castSpell(M.spellsById(4))) {
+            logEvent('SafeCast', "Cast Haggler's Charm to skip a detrimental spell");
+            return true;
+        } else return false;
         // otherwise wait until we have the right multiplier
     } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy" || predictNextSpell(0) === "Cursed Finger") &&
                (predictNextSpell(1) === "Building Special" || predictNextSpell(1) === "Click Frenzy" || predictNextSpell(1) === "Elder Frenzy" || predictNextSpell(1) === "Cursed Finger") &&
