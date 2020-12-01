@@ -1140,7 +1140,7 @@ function safeCast(spell) {
         //     suppressNextGC = false;
         //     return false;
         // } else return false;
-        if (M.castSpell(M.spellsById(4))) {
+        if (M.castSpell(M.spellsById[4])) {
             logEvent('SafeCast', "Cast Haggler's Charm to skip a detrimental spell");
             return true;
         } else return false;
