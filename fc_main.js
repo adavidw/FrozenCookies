@@ -1845,6 +1845,10 @@ function buildingStats(recalculate) {
             if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax) {
                 buildingBlacklist.push(7);
             }
+            // Only buy wizard towers as magic approaches max Mana (lets Mana recharge faster)
+            if (M && FrozenCookies.towerLimit && M.magic < (M.magicM - 1) ) {
+                buildingBlacklist.push(7);
+            }
             //Stop buying Cursors if at set limit
             if (FrozenCookies.cursorLimit && Game.Objects['Cursor'].amount >= FrozenCookies.cursorMax) {
                 buildingBlacklist.push(0);
