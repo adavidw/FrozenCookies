@@ -3106,8 +3106,8 @@ function autoGodzamokActionWithLogging() {
 
 
 function measureDevastation(lastCookies) {
-    logEvent("AutoGodzamok", "*** Cookies increased by: " + Beautify(Game.cookies - lastCookies) + " cookies ***");
-    logEvent("AutoGodzamok", "Measured clicks per second: " + measureClicks());
+    // logEvent("AutoGodzamok", "*** Cookies increased by: " + Beautify(Game.cookies - lastCookies) + " cookies ***");
+    // logEvent("AutoGodzamok", "Measured clicks per second: " + measureClicks());
     lastCookies.Cookies = Game.cookies;
     timerRunning = null;
 }
