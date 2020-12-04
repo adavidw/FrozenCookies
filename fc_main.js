@@ -1127,9 +1127,9 @@ function safeCast(spell) {
     M.computeMagicM()
     if (M.magicM < Math.floor(spell.costMin + spell.costPercent * M.magicM)) return;
     if (suppressNextGC) return;
-    if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Sugar Lump" || predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {   // if it's a cookie where the multiplier has no effect, just cast the spell and get it out of the way (regardless of CPS)
-    //     return M.castSpell(spell);
-    // } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's a neutral or detrimental effect, cast HC instead to move through
+    if (predictNextSpell(0) === "Sugar Lump") {   // if it's a cookie where the multiplier has no effect, just cast the spell and get it out of the way (regardless of CPS)
+        return M.castSpell(spell);
+    } else if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's a neutral or detrimental effect, cast HC instead to move through
         // if (cpsBonus() <= 1 && Game.shimmers.length === 0) { // should we also check to see if the next GC is at least some minimum amount of time away?
         //     suppressNextGC = true;
         //     if (M.castSpell(spell)) {
@@ -2908,6 +2908,101 @@ function measureClicks() {
 
 
 function autoGodzamokAction() {
+    if (!T || !FrozenCookies.autoGodzamok || !Game.hasGod("ruin")) {
+        return; // Just leave if Pantheon isn't here yet, or autoGodzamok isn't turned on, or you don't worship Godzamok
+    }
+
+    if (timerRunning) {
+        // clearTimeout(timerRunning);
+        // measureDevastation(lastCookies);
+        return; // just go
+    }
+
+    if ((!Game.hasBuff("Devastation"))) { // && hasClickBuff()) {
+        if (Date.now() - previousClickTime > 30000) {
+            measureClicks();
+        }
+
+        Game.CalculateGains();                      // make sure we have the most up to date
+        Game.Objects.Farm.minigame.computeEffs()    // numbers to do the calculations
+        var clickBuffTime = 10;     // default length of Devastation buff
+        var clickCps = Game.computedMouseCps * Math.min(measuredClicksPS, FrozenCookies.cookieClickSpeed);
+        var actualCps = Game.cookiesPs + clickCps;
+        var godzamokMultiplier = 2 / Math.pow(2, Game.hasGod("ruin")) / 100;
+        var totalSold = 0;
+        var startCookies = Game.cookies;
+                        // var startClicks = Game.cookieClicks;
+                        // console.log("Start cookies: " +startCookies+ " / "+ Game.cookies);
+
+        // see how long the shortest buff will last
+        for (var i in Game.buffs) {
+            if ((Game.buffs[i].time / Game.fps) < clickBuffTime) {
+                clickBuffTime = (Game.buffs[i].time / Game.fps)
+            }
+        }
+
+        // calculate which buildings provide a big enough payback to be sold
+        for (var i in Game.Objects) {
+            if (i === "Cursor") {
+                if (i != "Wizard tower" || (!FrozenCookies.towerLimit && !FrozenCookies.autoSpell)) {  // leave Wizard tower out if you've set the mana-related limit or autoCast, since selling messes with mana
+                    var toRemain = Game.Objects[i].minigameLoaded   // leave one of each building to avoid messing with minigames
+                    var sellCount = Game.Objects[i].amount - toRemain;
+                    var cpsModifier = 1 + (sellCount * godzamokMultiplier);
+                    var deltaCps = clickCps * cpsModifier - clickCps;
+                    var cost = newCumulativeBuildingCost(Game.Objects[i], toRemain, Game.Objects[i].amount);
+                    // cost -= (cost * Game.Objects[i].getSellMultiplier()); // calculate a net cost by subtracting sales gains
+                    cost -= (Game.Objects[i].getReverseSumPrice(sellCount)); // calculate a net cost by subtracting sales gains
+
+                    if ((cost < (deltaCps * clickBuffTime) * .5) && (sellCount >= 10)) {   // cost/cookies comparison includes a buffer to make sure that it's really obviously better
+                        if (cost < Game.cookies) {  // check against remaining bank to ensure you don't get stuck buying fewer buildings than expected
+                            // sell the buildings
+                                                        var cookiesBefore = Game.cookies;
+                            Game.Objects[i].sell(sellCount);
+                            totalSold += sellCount;
+
+                            // do some goofy looping
+                            var mult = Math.min(Math.ceil((deltaCps * clickBuffTime) / cost), 500);
+                            multSellCount = Math.ceil(sellCount / 10);
+                            if (cost * mult < Game.cookies) {
+                                for (ii = 0; ii < mult; ii++) {
+                                    if (Game.Objects[i].amount < 10) {
+                                        safeBuy(Game.Objects[i], multSellCount);
+                                    }
+                                    if (Game.Objects[i].amount >= 10) {
+                                        Game.Objects[i].sell(multSellCount);
+                                        totalSold += multSellCount;
+                                    }
+                                }
+                            }
+
+                            // buy everything back
+                            if (Game.Objects[i].amount < 10) {
+                                safeBuy(Game.Objects[i], sellCount);
+                            }
+                        } 
+                    }
+                }
+            }
+        }
+
+        // console.log("Current cookies: " + Game.cookies);
+        if (startCookies != Game.cookies) { // something must have been sold/bought
+            // console.log("not equal");
+            // console.log("Current cookies: " + Game.cookies);
+            logEvent("AutoGodzamok", "Total spent on this ridiculousness: " + Beautify(startCookies - Game.cookies));
+            logEvent("AutoGodzamok", "Expected production without Devastation: " + Beautify(actualCps * clickBuffTime));
+            logEvent("AutoGodzamok", "Devastation buff total of +" + (totalSold) + " percent");
+            // lastCookies = Game.cookies;
+            // console.log("Clicks: " + (Game.cookieClicks - previousClickCount));
+            // previousClickCount = Game.cookieClicks;
+            // previousClickTime = Date.now();
+            timerRunning = setTimeout(measureDevastation,clickBuffTime*999,Game.cookies);
+        }
+    }
+}
+
+// here's all the logging turned on still
+function autoGodzamokActionWithLogging() {
     if (!T || !FrozenCookies.autoGodzamok || !Game.hasGod("ruin")) {
         return; // Just leave if Pantheon isn't here yet, or autoGodzamok isn't turned on, or you don't worship Godzamok
     }
