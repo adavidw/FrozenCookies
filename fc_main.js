@@ -1112,7 +1112,7 @@ function doubleCast(spell) {
             }
         }
         if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return false;
-        safeBuy(Game.Objects["Wizard tower"], minTowers[lvl] - Game.Objects["Wizard tower"].amount);
+        // safeBuy(Game.Objects["Wizard tower"], minTowers[lvl] - Game.Objects["Wizard tower"].amount);
         logEvent('AutoSpell', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
         return true;
     } else return false;
@@ -1145,14 +1145,14 @@ function safeCast(spell) {
         } else return false;
         // otherwise wait until we have the right multiplier
     } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy" || predictNextSpell(0) === "Cursed Finger") &&
-               (predictNextSpell(1) === "Building Special" || predictNextSpell(1) === "Click Frenzy" || predictNextSpell(1) === "Elder Frenzy" || predictNextSpell(1) === "Cursed Finger") &&
-                (cpsBonus() > FrozenCookies.minCpSMult)) {
+        (predictNextSpell(1) === "Building Special" || predictNextSpell(1) === "Click Frenzy" || predictNextSpell(1) === "Elder Frenzy" || predictNextSpell(1) === "Cursed Finger") &&
+        (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
         return doubleCast(spell);
     } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy") &&
-                (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
+        (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
         return M.castSpell(spell);
     } else if ((predictNextSpell(0) != "Building Special" && predictNextSpell(0) != "Click Frenzy" && predictNextSpell(0) != "Elder Frenzy") &&
-                (cpsBonus() >= FrozenCookies.minCpSMult && !Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))  && !Game.hasBuff('Dragonflight')) {
+        (cpsBonus() >= FrozenCookies.minCpSMult && !Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) && !Game.hasBuff('Dragonflight')) {
         return M.castSpell(spell);
     } return false;
 }
@@ -1846,7 +1846,7 @@ function buildingStats(recalculate) {
                 buildingBlacklist.push(7);
             }
             // Only buy wizard towers as magic approaches max Mana (lets Mana recharge faster)
-            if (M && FrozenCookies.towerLimit && M.magic < (M.magicM - 1) ) {
+            if (M && FrozenCookies.towerLimit && M.magic < (M.magicM - 1)) {
                 buildingBlacklist.push(7);
             }
             //Stop buying Cursors if at set limit
