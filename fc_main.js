@@ -2989,9 +2989,6 @@ function autoGodzamokAction() {
         if (startCookies != Game.cookies) { // something must have been sold/bought
             // console.log("not equal");
             // console.log("Current cookies: " + Game.cookies);
-            logEvent("AutoGodzamok", "Total spent on this ridiculousness: " + Beautify(startCookies - Game.cookies));
-            logEvent("AutoGodzamok", "Expected production without Devastation: " + Beautify(actualCps * clickBuffTime));
-            logEvent("AutoGodzamok", "Devastation buff total of +" + (totalSold) + " percent");
             // lastCookies = Game.cookies;
             // console.log("Clicks: " + (Game.cookieClicks - previousClickCount));
             // previousClickCount = Game.cookieClicks;
