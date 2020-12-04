@@ -1127,9 +1127,9 @@ function safeCast(spell) {
     M.computeMagicM()
     if (M.magicM < Math.floor(spell.costMin + spell.costPercent * M.magicM)) return;
     if (suppressNextGC) return;
-    if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Sugar Lump") {   // if it's a cookie where the multiplier has no effect, just cast the spell and get it out of the way (regardless of CPS)
-        return M.castSpell(spell);
-    } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's an actual detrimental effect, cast the spell and temporarily suppress AutoGC
+    if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Sugar Lump" || predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {   // if it's a cookie where the multiplier has no effect, just cast the spell and get it out of the way (regardless of CPS)
+    //     return M.castSpell(spell);
+    // } else if (predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's a neutral or detrimental effect, cast HC instead to move through
         // if (cpsBonus() <= 1 && Game.shimmers.length === 0) { // should we also check to see if the next GC is at least some minimum amount of time away?
         //     suppressNextGC = true;
         //     if (M.castSpell(spell)) {
