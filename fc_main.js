@@ -1123,7 +1123,6 @@ function doubleCast(spell) {
 
 
 function safeCast(spell) {
-    // need to keep something from being cast during a Dragonflight if it's a click frenzy in disguise (or anything similar)
     M.computeMagicM()
     if (M.magicM < Math.floor(spell.costMin + spell.costPercent * M.magicM)) return;
     if (suppressNextGC) return;
@@ -1153,7 +1152,7 @@ function safeCast(spell) {
                 (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
         return M.castSpell(spell);
     } else if ((predictNextSpell(0) != "Building Special" && predictNextSpell(0) != "Click Frenzy" && predictNextSpell(0) != "Elder Frenzy") &&
-                (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Click frenzy'))  && !Game.hasBuff('Dragonflight')) {
+                (cpsBonus() >= FrozenCookies.minCpSMult && !Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))  && !Game.hasBuff('Dragonflight')) {
         return M.castSpell(spell);
     } return false;
 }
