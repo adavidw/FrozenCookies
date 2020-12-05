@@ -1112,7 +1112,7 @@ function doubleCast(spell) {
             }
         }
         if (M.castSpell(spell)) { logEvent('DoubleCast', "Cast Force the Hand of Fate - AGAIN"); } else return false;
-        // safeBuy(Game.Objects["Wizard tower"], minTowers[lvl] - Game.Objects["Wizard tower"].amount);
+        safeBuy(Game.Objects["Wizard tower"], minTowers[lvl] - Game.Objects["Wizard tower"].amount);
         logEvent('AutoSpell', 'Bought Wizard towers. Towers now at ' + Game.Objects["Wizard tower"].amount);
         return true;
     } else return false;
@@ -1128,7 +1128,7 @@ function safeCast(spell) {
     if (suppressNextGC) return;
     if (predictNextSpell(0) === "Sugar Lump") {   // if it's a cookie where the multiplier has no effect, just cast the spell and get it out of the way (regardless of CPS)
         return M.castSpell(spell);
-    } else if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies") {  // if there's a neutral or detrimental effect, cast HC instead to move through
+    } else if (predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies" || predictNextSpell(0) === "Lucky") {  // if there's a neutral or detrimental effect, cast HC instead to move through
         // if (cpsBonus() <= 1 && Game.shimmers.length === 0) { // should we also check to see if the next GC is at least some minimum amount of time away?
         //     suppressNextGC = true;
         //     if (M.castSpell(spell)) {
@@ -1843,10 +1843,6 @@ function buildingStats(recalculate) {
             }
             //Stop buying wizard towers at max Mana if enabled
             if (M && FrozenCookies.towerLimit && M.magicM >= FrozenCookies.manaMax) {
-                buildingBlacklist.push(7);
-            }
-            // Only buy wizard towers as magic approaches max Mana (lets Mana recharge faster)
-            if (M && FrozenCookies.towerLimit && M.magic < (M.magicM - 1)) {
                 buildingBlacklist.push(7);
             }
             //Stop buying Cursors if at set limit
