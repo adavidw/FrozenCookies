@@ -1140,6 +1140,7 @@ function safeCast(spell) {
         //     suppressNextGC = false;
         //     return false;
         // } else return false;
+        logEvent('AutoSpell', 'Casting ' + predictNextSpell(0));
         if (M.castSpell(M.spellsById[4])) {
             logEvent('SafeCast', "Cast Haggler's Charm to skip a detrimental spell");
             return true;
@@ -1148,12 +1149,15 @@ function safeCast(spell) {
     } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy" || predictNextSpell(0) === "Cursed Finger") &&
         (predictNextSpell(1) === "Building Special" || predictNextSpell(1) === "Click Frenzy" || predictNextSpell(1) === "Elder Frenzy" || predictNextSpell(1) === "Cursed Finger") &&
         (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
+        logEvent('AutoSpell', 'Casting ' + predictNextSpell(0));
         return doubleCast(spell);
     } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy") &&
         (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
+        logEvent('AutoSpell', 'Casting ' + predictNextSpell(0));
         return M.castSpell(spell);
     } else if ((predictNextSpell(0) != "Building Special" && predictNextSpell(0) != "Click Frenzy" && predictNextSpell(0) != "Elder Frenzy") &&
         (cpsBonus() >= FrozenCookies.minCpSMult && !Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) && !Game.hasBuff('Dragonflight')) {
+        logEvent('AutoSpell', 'Casting ' + predictNextSpell(0));
         return M.castSpell(spell);
     } return false;
 }
@@ -1177,7 +1181,6 @@ function autoCast() {
                 var FTHOF = M.spellsById[1];
                 if (M.magicM < Math.floor(FTHOF.costMin + FTHOF.costPercent * M.magicM)) return;
                 // if (cpsBonus() >= FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) {
-                    logEvent('AutoSpell', 'Casting ' + predictNextSpell(0));
                     if (safeCast(FTHOF)) {
                         logEvent('AutoSpell', 'Cast Force the Hand of Fate. Next spell: ' + predictNextSpell(0));
                     }
