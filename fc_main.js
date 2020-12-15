@@ -1017,9 +1017,9 @@ function swapIn(godId, targetSlot) { // mostly code copied from minigamePantheon
     T.useSwap(1);
     T.lastSwapT = 0;
     var div = l('templeGod' + godId);
-    var prev = T.slot[targetSlot] //id of God currently in slot
-    if (prev != -1) { //when something's in there already
-        prev = T.godsById[prev]; //prev becomes god object
+    var prev = T.slot[targetSlot] // id of God currently in slot
+    if (prev != -1) { // when something's in there already
+        prev = T.godsById[prev]; // prev becomes god object
         var prevDiv = l('templeGod' + prev.id);
         if (T.godsById[godId].slot != -1) l('templeSlot' + T.godsById[godId].slot).appendChild(prevDiv);
         else {
@@ -1037,7 +1037,67 @@ function swapIn(godId, targetSlot) { // mostly code copied from minigamePantheon
     Game.SparkleAt((rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2 - 24);
 }
 
-
+function autoCyclius() {    // swap in Cyclius at the most opportune time
+    if (!T) return; // Exit if pantheon doesnt even exist
+    var godLvl = Game.hasGod('ages');
+    var slot = 0;
+    // var mults = [];
+    // mults.push(1 * 0.15 * Math.sin((Date.now() / 1000 / (60 * 60 * 3)) * Math.PI * 2));
+    // mults.push(1 * 0.15 * Math.sin((Date.now() / 1000 / (60 * 60 * 12)) * Math.PI * 2));
+    // mults.push(1 * 0.15 * Math.sin((Date.now() / 1000 / (60 * 60 * 24)) * Math.PI * 2));
+    // if (mults[mults.indexOf(Math.max(...mults))] < 0) {
+    //     return;
+    // } else return mults;
+    var d = new Date();
+    if (d.getUTCHours() === 0) {
+        console.log("put god in 2");
+        slot = 2;
+    } else if (d.getUTCHours() >= 4 && d.getUTCHours() < 8) {
+        console.log("put god in 3");
+        slot = 3;
+    } else if (d.getUTCHours() >= 12 && d.getUTCHours() < 15) {
+        console.log("put god back in 2");
+        slot = 2;
+    }
+    switch (slot) {
+        case 0: {   // god shouldn't be in there
+            if (T.swaps < 2 || (T.swaps == 1 && T.slot[slot] == -1)) return; //Don't do anything if we can't swap Rigidel in
+            if (timeToRipe < 60) {
+                var prev = T.slot[0] //cache whatever god you have equipped
+                swapIn(10, 0); //swap in rigidel
+                Game.computeLumpTimes();
+                rigiSell(); //Meet the %10 condition
+                Game.clickLump(); //harvest the ripe lump, AutoSL probably covers this but this should avoid issues with autoBuy going first and disrupting Rigidel
+                if (prev != -1) swapIn(prev, 0); //put the old one back
+            }
+            break;
+        }
+        case 1: {   // god is already in Diamond slot
+            if (timeToRipe < 60 && Game.BuildingsOwned % 10) {
+                rigiSell();
+                Game.computeLumpTimes();
+                Game.clickLump();
+            }
+            break;
+        }
+        case 2: {   // god is already in Ruby slot
+            if (timeToRipe < 40 && Game.BuildingsOwned % 10) {
+                rigiSell();
+                Game.computeLumpTimes();
+                Game.clickLump();
+            }
+            break;
+        }
+        case 3: {   // god is already in Jade slot
+            if (timeToRipe < 20 && Game.BuildingsOwned % 10) {
+                rigiSell();
+                Game.computeLumpTimes();
+                Game.clickLump();
+            }
+            break;
+        }
+    }
+}
 
 function autoRigidel() {
     if (!T) return; // Exit if pantheon doesnt even exist
