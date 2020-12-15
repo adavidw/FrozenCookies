@@ -323,7 +323,11 @@ function setOverrides(gameSaveData) {   // load settings and initialize variable
         }
         return Number(value);   // if not overridden by game save or localStorage, defaultVal is returned
     }
+    T = "Tpoop1";
+    M = "Mpoop1";
     FCStart();
+    T = "Tpoop2";
+    M = "Mpoop2";
 }
 
 function decodeHtml(html) {
