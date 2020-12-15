@@ -326,6 +326,12 @@ function setOverrides(gameSaveData) {   // load settings and initialize variable
     FCStart();
 }
 
+function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+
 function emptyCaches() {
     FrozenCookies.recalculateCaches = true;
     FrozenCookies.caches = {};
