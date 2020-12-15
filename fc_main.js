@@ -181,6 +181,7 @@ function setOverrides(gameSaveData) {   // load settings and initialize variable
     // If gameSaveData wasn't passed to this function, it means that there was nothing for this mod in the game save when the mod was loaded
     // In that case, set the "loadedData" var to an empty object. When the loadFCData() function runs and finds no data from the game save,
     // it pulls data from local storage or sets default values
+    var saveData = gameSaveData;
     if (gameSaveData) {
         FrozenCookies.loadedData = JSON.parse(gameSaveData);
     } else {
