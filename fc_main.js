@@ -3453,10 +3453,9 @@ function FCStart() {
             smartTrackingStats(FrozenCookies.minDelay * 8)
         }, FrozenCookies.minDelay);
     }
-    T = "Tpoop2";
-    M = "Mpoop2";
-    // T = Game.Objects['Temple'].minigame;
-    // M = Game.Objects['Wizard tower'].minigame;
+
+    T = Game.Objects['Temple'].minigame;
+    M = Game.Objects['Wizard tower'].minigame;
 
     FCMenu();
 }
