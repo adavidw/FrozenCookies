@@ -326,8 +326,6 @@ function setOverrides(gameSaveData) {   // load settings and initialize variable
     T = "Tpoop1";
     M = "Mpoop1";
     FCStart();
-    T = "Tpoop2";
-    M = "Mpoop2";
 }
 
 function decodeHtml(html) {
@@ -3455,9 +3453,10 @@ function FCStart() {
             smartTrackingStats(FrozenCookies.minDelay * 8)
         }, FrozenCookies.minDelay);
     }
-
-    T = Game.Objects['Temple'].minigame;
-    M = Game.Objects['Wizard tower'].minigame;
+    T = "Tpoop2";
+    M = "Mpoop2";
+    // T = Game.Objects['Temple'].minigame;
+    // M = Game.Objects['Wizard tower'].minigame;
 
     FCMenu();
 }
