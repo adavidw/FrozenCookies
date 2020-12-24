@@ -1196,7 +1196,7 @@ function safeCast(spell) {
     if (suppressNextGC) return;
     if (predictNextSpell(0) === "Sugar Lump") {   // if it's a cookie where the multiplier has no effect, just cast the spell and get it out of the way (regardless of CPS)
         return M.castSpell(spell);
-    } else if ((predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies" || predictNextSpell(0) === "Lucky" || predictNextSpell(0) === "Frenzy") &&
+    } else if ((predictNextSpell(0) === "Blab" || predictNextSpell(0) === "Clot" || predictNextSpell(0) === "Ruin Cookies" || predictNextSpell(0) === "Lucky" || predictNextSpell(0) === "Frenzy" || predictNextSpell(0) === "Cookie Storm (Drop)") &&
         !Game.hasBuff('Dragonflight')) {  // if there's a neutral or detrimental effect, cast HC instead to move through
         // if (cpsBonus() <= 1 && Game.shimmers.length === 0) { // should we also check to see if the next GC is at least some minimum amount of time away?
         //     suppressNextGC = true;
