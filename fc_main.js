@@ -1217,7 +1217,7 @@ function safeCast(spell) {
     } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy" || predictNextSpell(0) === "Cursed Finger") &&
         (predictNextSpell(1) === "Building Special" || predictNextSpell(1) === "Click Frenzy" || predictNextSpell(1) === "Elder Frenzy" || predictNextSpell(1) === "Cursed Finger") &&
         (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
-        logEvent('AutoSpell', 'Casting ' + predictNextSpell(0));
+        logEvent('AutoSpell', 'Double Casting ' + predictNextSpell(0));
         return doubleCast(spell);
     } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy") &&
         (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
