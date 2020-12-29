@@ -1219,11 +1219,11 @@ function safeCast(spell) {
         (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
         logEvent('AutoSpell', 'Double Casting ' + predictNextSpell(0));
         return doubleCast(spell);
-    } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy") &&
+    } else if ((predictNextSpell(0) === "Building Special" || predictNextSpell(0) === "Click Frenzy" || predictNextSpell(0) === "Elder Frenzy" || predictNextSpell(0) === "Cursed Finger") &&
         (cpsBonus() > FrozenCookies.minCpSMult || Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy'))) {
         logEvent('AutoSpell', 'Casting ' + predictNextSpell(0));
         return M.castSpell(spell);
-    } else if ((predictNextSpell(0) != "Building Special" && predictNextSpell(0) != "Click Frenzy" && predictNextSpell(0) != "Elder Frenzy") &&
+    } else if ((predictNextSpell(0) != "Building Special" && predictNextSpell(0) != "Click Frenzy" && predictNextSpell(0) != "Elder Frenzy" || predictNextSpell(0) != "Cursed Finger") &&
         (cpsBonus() >= FrozenCookies.minCpSMult && !Game.hasBuff('Dragonflight') || Game.hasBuff('Click frenzy')) && !Game.hasBuff('Dragonflight')) {
         logEvent('AutoSpell', 'Casting ' + predictNextSpell(0));
         return M.castSpell(spell);
